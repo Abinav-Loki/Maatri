@@ -14,6 +14,13 @@ const isValidUrl = (url) => {
     }
 };
 
+// Aggressive Debugging for Production
+console.log('🔍 Environment Check:', {
+    all_vite_keys: Object.keys(import.meta.env).filter(key => key.startsWith('VITE_')),
+    has_url: !!supabaseUrl,
+    has_key: !!supabaseAnonKey
+});
+
 const finalUrl = supabaseUrl && isValidUrl(supabaseUrl)
     ? (supabaseUrl.startsWith('http') ? supabaseUrl : `https://${supabaseUrl}`)
     : null;
