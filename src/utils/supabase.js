@@ -18,8 +18,16 @@ const finalUrl = supabaseUrl && isValidUrl(supabaseUrl)
     ? (supabaseUrl.startsWith('http') ? supabaseUrl : `https://${supabaseUrl}`)
     : null;
 
+if (!supabaseUrl) console.error('🔴 VITE_SUPABASE_URL is missing in environment');
+if (!supabaseAnonKey) console.error('🔴 VITE_SUPABASE_ANON_KEY is missing in environment');
+
 if (!finalUrl || !supabaseAnonKey) {
-    console.warn('Supabase credentials missing or invalid. External storage will not work.');
+    console.warn('⚠️ Supabase credentials missing or invalid. External storage will not work.');
+    console.log('Current URL state:', {
+        urlLength: supabaseUrl ? supabaseUrl.length : 0,
+        isValid: !!finalUrl,
+        hasKey: !!supabaseAnonKey
+    });
 }
 
 // Complete mock to prevent crashes like "Cannot read properties of undefined (reading 'signUp')"
