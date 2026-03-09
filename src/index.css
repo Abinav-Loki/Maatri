@@ -1,0 +1,128 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-brand-50: #faf5ff;
+  --color-brand-100: #f3e8ff;
+  --color-brand-200: #e9d5ff;
+  --color-brand-300: #d8b4fe;
+  --color-brand-400: #c084fc;
+  --color-brand-500: #a855f7;
+  --color-brand-600: #9333ea;
+  --color-brand-700: #7e22ce;
+  --color-brand-800: #6b21a8;
+  --color-brand-900: #581c87;
+
+  --color-accent-50: #f5f3ff;
+  --color-accent-100: #ede9fe;
+  --color-accent-200: #ddd6fe;
+  --color-accent-300: #c4b5fd;
+  --color-accent-400: #a78bfa;
+  --color-accent-500: #8b5cf6;
+  --color-accent-600: #7c3aed;
+  --color-accent-700: #6d28d9;
+
+  --font-family-sans: 'Plus Jakarta Sans', Inter, system-ui, sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-slate-100 text-slate-900 antialiased;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  }
+}
+
+@layer components {
+  .glass {
+    @apply bg-[#F8F7FF] backdrop-blur-xl border border-white/60 border-l-4 border-l-brand-500 rounded-[2.5rem] transition-all duration-500;
+    box-shadow:
+      10px 10px 20px rgba(0, 0, 0, 0.03),
+      -10px -10px 20px rgba(255, 255, 255, 0.8),
+      inset 0 1px 1px rgba(255, 255, 255, 1);
+  }
+
+  .glass:hover {
+    @apply scale-[1.03] border-white/80 border-l-brand-500;
+    box-shadow:
+      15px 15px 30px rgba(139, 92, 246, 0.08),
+      -15px -15px 30px rgba(255, 255, 255, 1),
+      inset 0 1px 2px rgba(255, 255, 255, 1);
+  }
+
+  .btn-primary {
+    @apply bg-gradient-to-r from-[#8B5CF6] to-[#A78BFA] hover:from-[#7c3aed] hover:to-[#8B5CF6] text-white font-semibold py-3 px-6 rounded-full transition-all duration-300 transform hover:scale-[1.05] active:scale-[0.95] shadow-[0_4px_15px_#8b5cf666] hover:shadow-[0_8px_25px_#8b5cf699];
+  }
+
+  .btn-secondary {
+    @apply bg-white hover:bg-slate-50 text-slate-900 border border-slate-200 font-semibold py-3 px-6 rounded-xl transition-all duration-300 shadow-sm hover:shadow-md;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-3 rounded-xl border border-slate-200 bg-white/50 focus:bg-white focus:ring-2 focus:ring-brand-500 focus:border-transparent outline-none transition-all duration-200;
+  }
+}
+
+.gradient-bg {
+  background: radial-gradient(circle at top right, #f3e8ff, transparent),
+    radial-gradient(circle at bottom left, #ede9fe, transparent);
+}
+
+/* Print Styles for Clinical Reports */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  .fixed.inset-0.z-\[110\],
+  .fixed.inset-0.z-\[110\] * {
+    visibility: visible;
+  }
+
+  .fixed.inset-0.z-\[110\] {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: auto;
+    background: white !important;
+  }
+
+  .fixed.inset-0.z-\[110\] .absolute.inset-0.bg-slate-900\/60 {
+    display: none !important;
+  }
+
+  .fixed.inset-0.z-\[110\] .relative.bg-white {
+    width: 100% !important;
+    max-width: none !important;
+    max-height: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+  }
+
+  /* Hide close/print buttons during actual print */
+  .fixed.inset-0.z-\[110\] .flex.gap-3,
+  .fixed.inset-0.z-\[110\] button {
+    display: none !important;
+  }
+}
+
+/* Custom Scrollbar Utility */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #e2e8f0;
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #cbd5e1;
+}

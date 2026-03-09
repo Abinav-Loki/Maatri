@@ -1,0 +1,200 @@
+﻿                                        // Immediate UI feedback for notifications
+                                        setClinicalNotifications(prev => prev.map(n => ({ ...n, read: true })));
+                                        if (currentUser) await storage.markNotificationsAsRead(currentUser.email);
+                                    }}
+                                    className={`p-4 bg-white/50 backdrop-blur-xl rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-white transition-all border border-slate-200 shadow-sm relative ${clinicalNotifications.some(n => !n.read) ? 'animate-pulse text-brand-500 border-brand-200' : ''}`}
+                                >
+                                    <Bell size={24} />
+                                    {clinicalNotifications.filter(n => !n.read && (role !== 'doctor' || n.type !== 'water')).length > 0 && (
+                                        <span className="absolute -top-1 -right-1 w-6 h-6 bg-rose-500 text-white text-[10px] font-black rounded-lg flex items-center justify-center border-2 border-white shadow-lg animate-bounce">
+                                            {clinicalNotifications.filter(n => !n.read && (role !== 'doctor' || n.type !== 'water')).length}
+                                        </span>
+                                    )}
+                                </button>
+                            </div>
+                            <AnimatePresence>
+                                {showRequestsDropdown && (
+                                    <>
+                                        <div className="fixed inset-0 z-40" onClick={() => setShowRequestsDropdown(false)}></div>
+                                        <motion.div
+                                            initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                                            exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                                            className="absolute right-0 top-12 w-80 glass p-4 rounded-3xl shadow-2xl z-50 border border-white/40 backdrop-blur-xl"
+                                        >
+                                            <h4 className="text-sm font-black text-slate-900 mb-4 px-2 flex justify-between items-center">
+                                                Pending Requests
+                                                <span className="text-[10px] bg-slate-100 px-2 py-0.5 rounded-full">{pendingRequests.length}</span>
+                                            </h4>
+
+                                            <div className="space-y-2 max-h-[300px] overflow-y-auto">
+                                                {pendingRequests.length > 0 && (
+                                                    <div className="pb-2 border-b border-slate-100 mb-2">
+                                                        <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest mb-2 px-2">Clinical Requests</p>
+                                                        {pendingRequests.map(req => {
+                                                            const senderName = req.senderName || 'Loading...';
+                                                            return (
+                                                                <div key={req.id} className="bg-white/50 p-3 rounded-2xl border border-white/50 flex items-center gap-3 mb-2">
+                                                                    <div className="w-10 h-10 rounded-xl bg-brand-100 flex items-center justify-center text-brand-600 font-bold">
+                                                                        {senderName[0]?.toUpperCase()}
+                                                                    </div>
+                                                                    <div className="flex-1 min-w-0">
+                                                                        <p className="text-xs font-bold text-slate-800 truncate">{senderName}</p>
+                                                                        <p className="text-[10px] text-slate-400 truncate">{req?.from_email}</p>
+                                                                    </div>
+                                                                    <div className="flex gap-1">
+                                                                        <button onClick={() => handleRequestAction(req.id, 'accepted')} className="p-1.5 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"><Plus size={14} /></button>
+                                                                        <button onClick={() => handleRequestAction(req.id, 'rejected')} className="p-1.5 bg-slate-200 text-slate-500 rounded-lg hover:bg-slate-300 transition-colors"><LogOut size={14} className="rotate-90" /></button>
+                                                                    </div>
+                                                                </div>
+                                                            );
+                                                        })}
+                                                    </div>
+                                                )}
+
+                                                {clinicalNotifications.filter(n => !n.read).length > 0 && (
+                                                    <div className="space-y-2">
+                                                        <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest mb-2 px-2">Health Reminders</p>
+                                                        {clinicalNotifications.filter(n => !n.read).slice(0, 3).map(note => (
+                                                            <div key={note.id} className="bg-brand-50/50 p-3 rounded-2xl border border-brand-100 flex items-center gap-3">
+                                                                <div className="p-2 bg-brand-100 text-brand-600 rounded-xl">
+                                                                    {note.type === 'water' ? <Droplets size={14} /> : <Activity size={14} />}
+                                                                </div>
+                                                                <p className="text-xs font-bold text-slate-700 leading-tight">{note.message}</p>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                )}
+
+                                                {pendingRequests.length === 0 && clinicalNotifications.filter(n => !n.read).length === 0 && (
+                                                    <div className="py-8 text-center text-slate-400">
+                                                        <Activity className="mx-auto mb-2 opacity-10" size={32} />
+                                                        <p className="text-xs font-bold uppercase tracking-widest text-slate-300">All caught up</p>
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <button
+                                                onClick={() => { setShowRequestsDropdown(false); setActiveTab('notifications'); }}
+                                                className="w-full mt-4 py-2 text-[10px] font-black uppercase tracking-widest text-brand-600 hover:text-brand-700 transition-colors"
+                                            >
+                                                View All Notifications
+                                            </button>
+                                        </motion.div>
+                                    </>
+                                )}
+                            </AnimatePresence>
+                        </div>
+
+                        {/* Interactive Avatar Button */}
+                        <button
+                            onClick={() => setShowQuickProfile(!showQuickProfile)}
+                            className={`w-12 h-12 rounded-full border-2 border-white flex items-center justify-center font-bold text-white shadow-md transition-all hover:scale-110 active:scale-95 overflow-hidden ring-offset-2 hover:ring-2 ${role === 'doctor' ? 'bg-blue-600 ring-blue-100' :
+                                role === 'guardian' ? 'bg-purple-600 ring-purple-100' :
+                                    'bg-brand-600 ring-brand-100'
+                                }`}
+                        >
+                            {currentUser?.photo ? (
+                                <img src={currentUser.photo} alt="Profile" className="w-full h-full object-cover" />
+                            ) : (
+                                currentUser?.name?.[0]?.toUpperCase() || currentUser?.email?.[0]?.toUpperCase() || 'U'
+                            )}
+                        </button>
+
+                        {/* Quick Profile Dropdown */}
+                        <AnimatePresence>
+                            {showQuickProfile && (
+                                <>
+                                    <div className="fixed inset-0 z-40" onClick={() => setShowQuickProfile(false)}></div>
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                                        className="absolute right-0 top-16 w-72 glass p-6 rounded-[2.5rem] shadow-2xl z-50 border border-white/40 backdrop-blur-xl"
+                                    >
+                                        <div className="flex flex-col items-center mb-6">
+                                            <div className={`w-20 h-20 rounded-3xl mb-4 border-4 border-white shadow-lg flex items-center justify-center text-white text-3xl font-black overflow-hidden ${role === 'doctor' ? 'bg-blue-600' :
+                                                role === 'guardian' ? 'bg-purple-600' :
+                                                    'bg-brand-600'
+                                                }`}>
+                                                {currentUser?.photo ? (
+                                                    <img src={currentUser.photo} alt="Profile" className="w-full h-full object-cover" />
+                                                ) : (
+                                                    currentUser?.name?.[0]?.toUpperCase() || currentUser?.email?.[0]?.toUpperCase() || 'U'
+                                                )}
+                                            </div>
+                                            <h3 className="font-black text-xl text-slate-900 leading-tight">{currentUser?.name || 'User'}</h3>
+                                            <p className="text-slate-400 text-[10px] uppercase font-bold tracking-[0.2em] mt-1">{role}</p>
+                                        </div>
+
+                                        <div className="space-y-3 mb-6">
+                                            {role === 'doctor' && currentUser?.hospitalName && (
+                                                <div className="bg-brand-50/50 p-3 rounded-2xl border border-brand-100">
+                                                    <p className="text-[9px] text-brand-600 uppercase font-black mb-1">Clinic / Hospital</p>
+                                                    <p className="text-sm font-black text-slate-800">{currentUser?.hospitalName || 'Clinical Facility'}</p>
+                                                </div>
+                                            )}
+                                            <div className="bg-slate-50/50 p-3 rounded-2xl border border-white/50">
+                                                <p className="text-[9px] text-slate-400 uppercase font-black mb-1">Email Identifier</p>
+                                                <p className="text-xs font-bold text-slate-700 truncate">{currentUser?.email || '...'}</p>
+                                            </div>
+                                            <div className="bg-slate-50/50 p-3 rounded-2xl border border-white/50">
+                                                <p className="text-[9px] text-slate-400 uppercase font-black mb-1">Contact Status</p>
+                                                <p className="text-xs font-bold text-slate-700">{currentUser?.mobile || 'Not provided'}</p>
+                                            </div>
+                                        </div>
+
+                                        <button
+                                            onClick={() => {
+                                                handleProfileEdit();
+                                                setShowQuickProfile(false);
+                                            }}
+                                            className="w-full py-3.5 bg-brand-600 rounded-2xl text-white font-bold hover:bg-brand-700 transition-all flex items-center justify-center gap-2 shadow-lg shadow-brand-100"
+                                        >
+                                            <Edit size={16} /> Edit Settings
+                                        </button>
+
+                                    </motion.div>
+                                </>
+                            )}
+                        </AnimatePresence>
+                    </div>
+                </header >
+
+                {activeTab === 'find-doctors' && (
+                    <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-8">
+                        <div>
+                            <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 mb-2">Connect with Doctors</h2>
+                            <p className="text-slate-500">Search by Name, Hospital, or Mobile Number to request data sharing.</p>
+                        </div>
+
+                        <div className="relative group max-w-2xl">
+                            <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-brand-600 transition-colors" size={24} />
+                            <input
+                                type="text"
+                                placeholder="Search e.g. 'City Life Hospital' or '9876543210'..."
+                                className="w-full pl-16 pr-6 py-6 bg-white rounded-[2rem] border-2 border-slate-200 focus:border-brand-500 focus:ring-4 focus:ring-brand-50 shadow-sm transition-all text-lg font-medium"
+                                value={doctorSearchQuery}
+                                onChange={(e) => handleDoctorSearch(e.target.value)}
+                            />
+                        </div>
+
+                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                            {doctorSearchResults.length > 0 ? (
+                                doctorSearchResults.map(doc => {
+                                    const status = searchStatuses[doc.email];
+                                    return (
+                                        <motion.div
+                                            key={doc.email}
+                                            layout
+                                            initial={{ opacity: 0, scale: 0.95 }}
+                                            animate={{ opacity: 1, scale: 1 }}
+                                            className="glass p-4 rounded-[2rem] flex flex-col items-center text-center cursor-pointer hover:border-brand-300 transition-colors group"
+                                            onClick={() => handleViewDoctorDetails(doc)}
+                                        >
+                                            <div className="w-20 h-20 rounded-2xl bg-blue-100 border-4 border-white shadow-md mb-3 flex items-center justify-center text-blue-600 text-2xl font-black overflow-hidden uppercase">
+                                                {doc.photo ? <img src={doc.photo} alt={doc.name} className="w-full h-full object-cover" /> : (doc.name?.[0] || 'D')}
+                                            </div>
+                                            <h4 className="font-black text-base text-slate-900 leading-tight group-hover:text-brand-600 transition-colors">{doc.name}</h4>
+                                            <p className="text-[9px] text-brand-600 font-bold uppercase tracking-widest mt-1 mb-2">{doc.hospitalName || 'Independent Practice'}</p>
+
+                                            <div className="w-full space-y-2 mb-4 text-xs">
