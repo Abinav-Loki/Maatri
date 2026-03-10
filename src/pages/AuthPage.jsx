@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Mail, Lock, ArrowLeft, HeartPulse, CheckCircle2, XCircle, User, Phone, Calendar, Home, Users as UsersIcon, ShieldCheck } from 'lucide-react';
+import { Mail, Lock, ArrowLeft, HeartPulse, CheckCircle2, XCircle, User, Phone, Calendar, Home, Users as UsersIcon, ShieldCheck, Eye, EyeOff } from 'lucide-react';
 import logo from '../assets/maatri_shield_logo.png';
 import storage from '../utils/storage';
 
@@ -13,6 +13,7 @@ const AuthPage = () => {
     // Registration States
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     const [name, setName] = useState('');
     const [age, setAge] = useState('');
     const [mobile, setMobile] = useState('');
@@ -361,13 +362,20 @@ const AuthPage = () => {
                             <div className="relative">
                                 <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
                                 <input
-                                    type="password"
+                                    type={showPassword ? "text" : "password"}
                                     placeholder="••••••••"
-                                    className="w-full bg-white/60 border border-white/50 focus:border-brand-500/50 focus:ring-4 focus:ring-brand-500/10 rounded-2xl py-4 pl-12 pr-4 outline-none transition-all placeholder:text-slate-300 font-bold"
+                                    className="w-full bg-white/60 border border-white/50 focus:border-brand-500/50 focus:ring-4 focus:ring-brand-500/10 rounded-2xl py-4 pl-12 pr-12 outline-none transition-all placeholder:text-slate-300 font-bold"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     required
                                 />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-brand-600 transition-colors p-1"
+                                >
+                                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                                </button>
                             </div>
                         </div>
 

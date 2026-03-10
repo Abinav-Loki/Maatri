@@ -515,22 +515,25 @@ const storage = {
             .and(m => (m.to_email === e1 || m.to_email === e2))
             .toArray();
 
-        // 3. Merge and Deduplicate by timestamp/text/from/to
-        const remoteMessages = remoteData || [];
-        const localMessages = localData || [];
+        // 3. Merge and Deduplicate
+        // Use a more robust key for deduplication: from + to + text + timestamp (rounded to seconds)
+        const getFuzzyKey = (m) => {
+            const date = new Date(m.timestamp);
+            const roundedTime = Math.floor(date.getTime() / 1000); // precision to 1 second
+            return `${m.from_email.toLowerCase()}|${m.to_email.toLowerCase()}|${m.text}|${roundedTime}`;
+        };
 
-        const merged = [...remoteMessages];
+        const merged = [...(remoteData || [])];
+        const remoteKeys = new Set(merged.map(getFuzzyKey));
 
-        localMessages.forEach(localMsg => {
-            const exists = merged.some(remoteMsg =>
-                remoteMsg.timestamp === localMsg.timestamp &&
-                remoteMsg.from_email.toLowerCase() === localMsg.from_email.toLowerCase() &&
-                remoteMsg.text === localMsg.text
-            );
-            if (!exists) {
-                merged.push(localMsg);
-            }
-        });
+        if (localData) {
+            localData.forEach(localMsg => {
+                const localKey = getFuzzyKey(localMsg);
+                if (!remoteKeys.has(localKey)) {
+                    merged.push(localMsg);
+                }
+            });
+        }
 
         return merged.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
     },

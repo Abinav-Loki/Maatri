@@ -1767,7 +1767,7 @@ const Dashboard = () => {
                                                 >
                                                     <span className={`text-lg font-black ${isToday ? 'text-brand-600' : 'text-slate-700'}`}>{day?.getDate()}</span>
                                                     {hasAppointment && (
-                                                        <div className="mt-1 w-2 h-2 rounded-full bg-[#F8F7FF]0 shadow-lg shadow-brand-100 animate-pulse"></div>
+                                                        <div className="mt-1 w-2 h-2 rounded-full bg-brand-500 shadow-lg shadow-brand-100 animate-pulse"></div>
                                                     )}
                                                 </div>
                                             );
@@ -1996,7 +1996,7 @@ const Dashboard = () => {
                                                 {alert.includes('Monitoring active') ? (
                                                     <div className="flex flex-col gap-1">
                                                         <p className="font-black text-brand-900 text-sm flex items-center gap-2">
-                                                            <span className="w-2 h-2 rounded-full bg-[#F8F7FF]0 animate-ping"></span>
+                                                            <span className="w-2 h-2 rounded-full bg-teal-500 animate-ping"></span>
                                                             SYSTEM STATUS: LIVE
                                                         </p>
                                                         <p className="font-bold text-teal-800">{alert}</p>
@@ -2025,7 +2025,7 @@ const Dashboard = () => {
                                                             transition={{ repeat: Infinity, duration: 2 }}
                                                             className={`${stat.status.includes('Today') ? 'bg-teal-100 text-teal-700 border-teal-200' : 'bg-slate-100 text-slate-500 border-slate-200'} text-[10px] font-black px-2.5 py-1 rounded-lg uppercase tracking-wider border shadow-sm flex items-center gap-1`}
                                                         >
-                                                            {stat.status.includes('Today') && <span className="w-1.5 h-1.5 rounded-full bg-[#F8F7FF]0"></span>}
+                                                            {stat.status.includes('Today') && <span className="w-1.5 h-1.5 rounded-full bg-teal-500"></span>}
                                                             {stat.status.includes('Today') ? 'Today' : 'Latest'}
                                                         </motion.span>
                                                     )}
@@ -2037,7 +2037,7 @@ const Dashboard = () => {
                                                         <motion.span
                                                             animate={{ scale: [1, 1.2, 1] }}
                                                             transition={{ repeat: Infinity, duration: 1.5 }}
-                                                            className="w-2 h-2 rounded-full bg-[#F8F7FF]0 shadow-lg shadow-brand-200"
+                                                            className="w-2 h-2 rounded-full bg-brand-500 shadow-lg shadow-brand-200"
                                                         ></motion.span>
                                                     )}
                                                 </div>
@@ -2378,8 +2378,8 @@ const Dashboard = () => {
                                                 <ResponsiveContainer width="100%" height="100%">
                                                     <AreaChart data={weeklyTrends}>
                                                         <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f8fafc" />
-                                                        <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fill: '#cbd5e1', fontSize: 10, fontWeight: 700 }} />
-                                                        <YAxis axisLine={false} tickLine={false} tick={{ fill: '#cbd5e1', fontSize: 10, fontWeight: 700 }} />
+                                                        <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fill: '#64748b', fontSize: 10, fontWeight: 700 }} />
+                                                        <YAxis axisLine={false} tickLine={false} tick={{ fill: '#64748b', fontSize: 10, fontWeight: 700 }} />
                                                         <Tooltip contentStyle={{ borderRadius: '24px', border: 'none', boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1)' }} />
                                                         <Area type="monotone" dataKey="sys" stroke="#f43f5e" strokeWidth={3} fill="url(#colorSys)" fillOpacity={0.1} />
                                                         <Area type="monotone" dataKey="dia" stroke="#fbbf24" strokeWidth={3} fill="url(#colorDia)" fillOpacity={0.1} />
@@ -2432,8 +2432,8 @@ const Dashboard = () => {
                                                 <ResponsiveContainer width="100%" height="100%">
                                                     <LineChart data={weeklyTrends}>
                                                         <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f8fafc" />
-                                                        <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fill: '#cbd5e1', fontSize: 10, fontWeight: 700 }} />
-                                                        <YAxis axisLine={false} tickLine={false} tick={{ fill: '#cbd5e1', fontSize: 10, fontWeight: 700 }} />
+                                                        <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fill: '#64748b', fontSize: 10, fontWeight: 700 }} />
+                                                        <YAxis axisLine={false} tickLine={false} tick={{ fill: '#64748b', fontSize: 10, fontWeight: 700 }} />
                                                         <Tooltip contentStyle={{ borderRadius: '24px', border: 'none' }} />
                                                         <Line type="monotone" dataKey="hr" stroke="#14b8a6" strokeWidth={4} dot={{ r: 4, fill: '#14b8a6', strokeWidth: 0 }} activeDot={{ r: 8, strokeWidth: 4, stroke: '#fff' }} />
                                                     </LineChart>
@@ -2451,8 +2451,8 @@ const Dashboard = () => {
                                                 <ResponsiveContainer width="100%" height="100%">
                                                     <LineChart data={weeklyTrends}>
                                                         <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f8fafc" />
-                                                        <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fill: '#cbd5e1', fontSize: 10, fontWeight: 700 }} />
-                                                        <YAxis axisLine={false} tickLine={false} tick={{ fill: '#cbd5e1', fontSize: 10, fontWeight: 700 }} />
+                                                        <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fill: '#64748b', fontSize: 10, fontWeight: 700 }} />
+                                                        <YAxis axisLine={false} tickLine={false} tick={{ fill: '#64748b', fontSize: 10, fontWeight: 700 }} />
                                                         <Tooltip contentStyle={{ borderRadius: '24px', border: 'none' }} />
                                                         <Line type="monotone" dataKey="g" stroke="#6366f1" strokeWidth={4} dot={{ r: 4, fill: '#6366f1', strokeWidth: 0 }} activeDot={{ r: 8, strokeWidth: 4, stroke: '#fff' }} />
                                                     </LineChart>
@@ -2460,8 +2460,7 @@ const Dashboard = () => {
                                             </div>
                                         </div>
 
-                                        {/* Symptoms Card */}
-                                        <div className="glass p-8 shadow-sm hover:border-brand-400/50 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer">
+                                        <div className="glass p-8 shadow-sm hover:border-brand-400 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
                                             <h3 className="text-xl font-black text-slate-900 mb-8">Symptoms</h3>
                                             <div className="space-y-5">
                                                 {[
@@ -2473,29 +2472,28 @@ const Dashboard = () => {
                                                         <div className="relative flex items-center justify-center">
                                                             <input
                                                                 type="checkbox"
-                                                                className="peer appearance-none w-7 h-7 rounded-xl border-2 border-slate-100 checked:bg-[#F8F7FF]0 checked:border-teal-500 transition-all cursor-pointer"
+                                                                className="peer appearance-none w-7 h-7 rounded-xl border-2 border-slate-300 checked:bg-teal-500 checked:border-teal-500 transition-all cursor-pointer"
                                                                 defaultChecked={s.id === 'swelling'}
                                                             />
                                                             <CheckCircle2 size={16} className="absolute text-white scale-0 peer-checked:scale-100 transition-transform pointer-events-none" />
                                                         </div>
-                                                        <span className="text-base font-bold text-slate-400 peer-checked:text-slate-900 transition-colors">{s.label}</span>
+                                                        <span className="text-base font-bold text-slate-600 peer-checked:text-slate-900 transition-colors">{s.label}</span>
                                                     </label>
                                                 ))}
                                             </div>
                                         </div>
 
-                                        {/* Weight Trend Card */}
-                                        <div className="glass p-8 shadow-sm flex flex-col justify-between hover:border-brand-400/50 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer">
+                                        <div className="glass p-8 shadow-md border-brand-200 flex flex-col justify-between hover:border-brand-400 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
                                             <div>
-                                                <h3 className="text-xl font-black text-slate-900 mb-2">Weight Trend</h3>
-                                                <p className="text-sm text-slate-400">Regular tracking active</p>
+                                                <h3 className="text-xl font-black text-slate-900 mb-2">Clinical Insights</h3>
+                                                <p className="text-sm text-slate-500 font-medium">Generate your latest health summary</p>
                                             </div>
 
                                             <div className="mt-8">
                                                 <button
                                                     onClick={handleGenerateReport}
                                                     disabled={isGeneratingReport}
-                                                    className="w-full py-5 bg-[#F8F7FF]0 text-white rounded-[1.5rem] font-bold text-lg hover:bg-teal-600 active:scale-95 transition-all shadow-xl shadow-brand-100 flex items-center justify-center gap-3 disabled:opacity-50"
+                                                    className="w-full py-5 bg-teal-600 text-white rounded-[1.5rem] font-bold text-lg hover:bg-teal-700 active:scale-95 transition-all shadow-xl shadow-teal-100/50 flex items-center justify-center gap-3 disabled:opacity-50"
                                                 >
                                                     {isGeneratingReport ? (
                                                         <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -2510,12 +2508,12 @@ const Dashboard = () => {
                                     <div className="bg-[linear-gradient(to_bottom,#6A4C93,#7C5BB3,#8E6BBF)] text-white rounded-[3.5rem] p-12 relative overflow-hidden shadow-2xl mt-8">
                                         <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-12">
                                             <div className="max-w-xl">
-                                                <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#F8F7FF]0/10 text-brand-300 rounded-2xl border border-teal-500/20 mb-6">
+                                                <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 text-brand-300 rounded-2xl border border-teal-500/20 mb-6">
                                                     <Sparkles size={16} />
                                                     <span className="text-xs font-black uppercase tracking-widest">AI Clinical Insight</span>
                                                 </div>
                                                 <h3 className="text-4xl font-black mb-6 leading-tight">Patient Stability Index</h3>
-                                                <p className="text-slate-400 text-lg font-medium leading-relaxed">
+                                                <p className="text-white opacity-90 text-lg font-medium leading-relaxed">
                                                     {logs.length > 0 ? (
                                                         getRiskStatus(logs[0]).level === 'normal'
                                                             ? "Current vital indicators show high stability. Monitoring should continue at the current frequency with standard prenatal precautions."
@@ -2525,17 +2523,17 @@ const Dashboard = () => {
                                             </div>
                                             <div className="flex gap-6">
                                                 <div className="bg-white/5 backdrop-blur-xl p-8 rounded-[2.5rem] border border-white/10 text-center min-w-[180px]">
-                                                    <div className="w-12 h-12 bg-[#F8F7FF]0/20 rounded-2xl flex items-center justify-center mx-auto mb-4 text-brand-300">
+                                                    <div className="w-12 h-12 bg-teal-500/20 rounded-2xl flex items-center justify-center mx-auto mb-4 text-brand-300">
                                                         <CheckCircle2 size={24} />
                                                     </div>
-                                                    <p className="text-[10px] uppercase font-black tracking-[0.2em] text-slate-500 mb-2">Weekly Goal</p>
+                                                    <p className="text-[10px] uppercase font-black tracking-[0.2em] text-white/50 mb-2">Weekly Goal</p>
                                                     <p className="text-3xl font-black">92%</p>
                                                 </div>
                                                 <div className="bg-white/5 backdrop-blur-xl p-8 rounded-[2.5rem] border border-white/10 text-center min-w-[180px]">
                                                     <div className="w-12 h-12 bg-indigo-500/20 rounded-2xl flex items-center justify-center mx-auto mb-4 text-indigo-400">
                                                         <TrendingUp size={24} />
                                                     </div>
-                                                    <p className="text-[10px] uppercase font-black tracking-[0.2em] text-slate-500 mb-2">Stability</p>
+                                                    <p className="text-[10px] uppercase font-black tracking-[0.2em] text-white/50 mb-2">Stability</p>
                                                     <p className="text-3xl font-black">High</p>
                                                 </div>
                                             </div>
@@ -2714,7 +2712,7 @@ const Dashboard = () => {
                                                         : 'bg-white border-brand-200 hover:border-brand-400'
                                                         }`}
                                                 >
-                                                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold overflow-hidden border ${selectedPatient?.email === p.email ? 'bg-[#F8F7FF]0 text-white border-brand-400' : 'bg-brand-50 text-brand-600 border-brand-100'}`}>
+                                                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold overflow-hidden border ${selectedPatient?.email === p.email ? 'bg-brand-600 text-white border-brand-400' : 'bg-brand-50 text-brand-600 border-brand-100'}`}>
                                                         {p.photo ? <img src={p.photo} alt={p.name} className="w-full h-full object-cover" /> : (p.name?.[0]?.toUpperCase() || 'P')}
                                                     </div>
                                                     <div className="min-w-0">
@@ -3731,7 +3729,7 @@ const Dashboard = () => {
                         <div className="bg-slate-900/90 backdrop-blur-xl border border-slate-700 rounded-[2rem] shadow-2xl overflow-hidden flex flex-col">
                             <div className="p-4 bg-slate-800/50 border-b border-slate-700 flex justify-between items-center">
                                 <div className="flex items-center gap-2">
-                                    <div className="w-2 h-2 rounded-full bg-[#F8F7FF]0 animate-pulse" />
+                                    <div className="w-2 h-2 rounded-full bg-teal-500 animate-pulse" />
                                     <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest">Simulation Logs</span>
                                 </div>
                                 <div className="flex gap-2">
