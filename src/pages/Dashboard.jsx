@@ -61,6 +61,7 @@ const Dashboard = () => {
     const [isChatOpen, setIsChatOpen] = useState(false);
     const [activeChatPartner, setActiveChatPartner] = useState(null);
     const [chatMessages, setChatMessages] = useState([]);
+    const chatEndRef = React.useRef(null);
     const [newMessage, setNewMessage] = useState('');
     const [chatSearchQuery, setChatSearchQuery] = useState('');
     const [isRecording, setIsRecording] = useState(false);
@@ -81,6 +82,7 @@ const Dashboard = () => {
     const [aiChatHistory, setAiChatHistory] = useState([]);
     const [aiNewMessage, setAiNewMessage] = useState('');
     const [isAiLoading, setIsAiLoading] = useState(false);
+    const aiChatEndRef = React.useRef(null);
     const [patientFilter, setPatientFilter] = useState('all'); // 'all', 'urgent', 'help', 'normal'
     const [isReportModalOpen, setIsReportModalOpen] = useState(false);
     const [reportContent, setReportContent] = useState('');
@@ -110,6 +112,16 @@ const Dashboard = () => {
     // Guardian Connection State
     const [guardianConnectionStatus, setGuardianConnectionStatus] = useState('none'); // 'none' | 'pending' | 'accepted'
     const [guardianPatientEmail, setGuardianPatientEmail] = useState('');
+
+    // Health Profile State
+    const [isHealthProfileOpen, setIsHealthProfileOpen] = useState(false);
+    const [isSavingHealthProfile, setIsSavingHealthProfile] = useState(false);
+    const [healthProfileForm, setHealthProfileForm] = useState({
+        weight: '', height: '', bloodType: '',
+        currentConditions: [],
+        pastConditions: '', allergies: '', currentMedications: '', notes: ''
+    });
+    const [patientHealthProfiles, setPatientHealthProfiles] = useState({}); // { email: healthProfile }
 
     const getDaysInMonth = (year, month) => new Date(year, month + 1, 0).getDate();
     const getFirstDayOfMonth = (year, month) => new Date(year, month, 1).getDay();
@@ -505,6 +517,24 @@ const Dashboard = () => {
                     setConnectedPartners(partners);
                 }
 
+                if (user.role === 'guardian') {
+                    const { data: allConns } = await supabase
+                        .from('connections')
+                        .select('*')
+                        .eq('from_email', user.email.toLowerCase());
+
+                    const acceptedConn = (allConns || []).find(c => c.status === 'accepted');
+                    if (acceptedConn && guardianConnectionStatus === 'pending') {
+                        setGuardianConnectionStatus('accepted');
+                        setGuardianPatientEmail(acceptedConn.to_email);
+                        const patient = await storage.getPatientByEmail(acceptedConn.to_email);
+                        if (patient) {
+                            setSelectedPatient(patient);
+                            await updateDashboardData('guardian', patient);
+                        }
+                    }
+                }
+
                 // Real-time message/call polling
                 if (activeChatPartner && isChatOpen) {
                     await storage.markMessagesAsRead(activeChatPartner.email, user.email);
@@ -624,6 +654,20 @@ const Dashboard = () => {
         fetchReports();
     }, [role, activeTab, selectedPatient]);
 
+    // Auto-scroll AI Chat
+    useEffect(() => {
+        if (isAiAssistantOpen) {
+            aiChatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+        }
+    }, [aiChatHistory, isAiLoading, isAiAssistantOpen]);
+
+    // Auto-scroll Telemedicine Chat
+    useEffect(() => {
+        if (isChatOpen) {
+            chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+        }
+    }, [chatMessages, isChatOpen]);
+
     const handleDoctorSearch = async (query) => {
         setDoctorSearchQuery(query);
         const results = await storage.searchDoctors(query);
@@ -641,9 +685,7 @@ const Dashboard = () => {
         console.log(`[Dashboard] Sending follow request to ${toEmail}`);
         const success = await storage.sendConnectionRequest(currentUser.email, toEmail);
         if (success) {
-            alert("Follow request sent! Access will be granted once they accept.");
-        } else {
-            alert("Failed to send request. Check console for details.");
+            setSearchStatuses(prev => ({ ...prev, [toEmail]: 'pending' }));
         }
     };
 
@@ -996,6 +1038,49 @@ const Dashboard = () => {
         }
     };
 
+    const handleDeleteMessage = async (messageId) => {
+        // Optimistically remove from UI first for instant feedback
+        setChatMessages(prev => prev.filter(m => m.id !== messageId));
+        // Then delete from storage
+        await storage.deleteMessage(messageId);
+    };
+
+    // --- Health Profile Handlers ---
+    const handleOpenHealthProfile = async () => {
+        if (!currentUser) return;
+        const profile = await storage.getHealthProfile(currentUser.email);
+        if (profile) {
+            setHealthProfileForm({
+                weight: profile.weight || '',
+                height: profile.height || '',
+                bloodType: profile.blood_type || '',
+                currentConditions: profile.current_conditions || [],
+                pastConditions: profile.past_conditions || '',
+                allergies: profile.allergies || '',
+                currentMedications: profile.current_medications || '',
+                notes: profile.notes || ''
+            });
+        }
+        setIsHealthProfileOpen(true);
+    };
+
+    const handleSaveHealthProfile = async (e) => {
+        e.preventDefault();
+        setIsSavingHealthProfile(true);
+        await storage.saveHealthProfile(currentUser.email, healthProfileForm);
+        setIsSavingHealthProfile(false);
+        setIsHealthProfileOpen(false);
+    };
+
+    const toggleCondition = (condition) => {
+        setHealthProfileForm(prev => ({
+            ...prev,
+            currentConditions: prev.currentConditions.includes(condition)
+                ? prev.currentConditions.filter(c => c !== condition)
+                : [...prev.currentConditions, condition]
+        }));
+    };
+
     const handleSelectPatient = async (patient) => {
         console.log("Patient Selected:", patient.email);
         setSelectedPatient(patient);
@@ -1008,9 +1093,13 @@ const Dashboard = () => {
         }
 
         if (role === 'doctor' && activeTab !== 'reports') {
+            // Also load the patient's health profile for the doctor to view
+            const hp = await storage.getHealthProfile(patient.email);
+            setPatientHealthProfiles(prev => ({ ...prev, [patient.email]: hp }));
             setIsPatientModalOpen(true);
         }
     };
+
 
     const handleLinkPatient = async (e) => {
         e.preventDefault();
@@ -1356,9 +1445,14 @@ const Dashboard = () => {
                     <div className="flex items-center gap-4 relative">
                         <CloudStatus />
                         {role === 'patient' && (
-                            <button onClick={() => setIsLogModalOpen(true)} className="btn-primary flex items-center gap-2 py-2 px-4 shadow-brand-100">
-                                <Plus size={20} /> <span>Add Log</span>
-                            </button>
+                            <div className="flex items-center gap-2">
+                                <button onClick={() => setIsLogModalOpen(true)} className="btn-primary flex items-center gap-2 py-2 px-4 shadow-brand-100">
+                                    <Plus size={20} /> <span>Add Log</span>
+                                </button>
+                                <button onClick={handleOpenHealthProfile} className="flex items-center gap-2 py-2 px-4 bg-white border border-brand-200 text-brand-700 rounded-2xl font-bold text-sm hover:bg-brand-50 transition-all shadow-sm">
+                                    <Heart size={18} /> <span>Health Profile</span>
+                                </button>
+                            </div>
                         )}
                         {role === 'guardian' && !currentUser?.linkedPatientEmail && (
                             <form onSubmit={handleLinkPatient} className="flex gap-2">
@@ -2212,9 +2306,7 @@ const Dashboard = () => {
                                                 </button>
                                             ))}
                                         </div>
-                                    </div>
-
-                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                    </div>                                    <div className="flex flex-col gap-4">
                                         {patients
                                             .filter(p => {
                                                 if (patientFilter === 'all') return true;
@@ -2223,36 +2315,59 @@ const Dashboard = () => {
                                             })
                                             .map((p) => {
                                                 const pData = patientHealthData[p.email] || { latestLog: null, risk: getRiskStatus(null) };
+                                                const risk = pData.risk;
                                                 return (
-                                                    <motion.button
-                                                        key={p.email}
-                                                        whileHover={{ y: -5 }}
-                                                        onClick={() => handleSelectPatient(p)}
-                                                        className={`p-6 rounded-[2.5rem] bg-white/70 backdrop-blur-md border border-slate-200 text-left transition-all hover:shadow-xl hover:border-brand-200 group relative overflow-hidden`}
-                                                    >
-                                                        <div className="flex items-center gap-4 mb-4">
-                                                            <div className="w-14 h-14 rounded-2xl bg-brand-50 border-2 border-brand-100 flex items-center justify-center text-brand-600 text-xl font-black overflow-hidden shadow-inner flex-shrink-0">
-                                                                {p.photo ? (
-                                                                    <img src={p.photo} alt={p.name} className="w-full h-full object-cover" />
-                                                                ) : (p.name?.[0]?.toUpperCase() || 'P')}
+                                                    <div key={p.email} className="relative group/card">
+                                                        <button
+                                                            onClick={() => handleSelectPatient(p)}
+                                                            className={`p-6 rounded-[2rem] text-left transition-all border-2 w-full flex flex-col md:flex-row items-center gap-6 shadow-sm hover:shadow-xl bg-white text-slate-600 border-white shadow-slate-200/30`}
+                                                        >
+                                                            <div className="flex items-center gap-6 flex-1 w-full">
+                                                                <div className={`w-16 h-16 rounded-2xl flex-shrink-0 flex items-center justify-center text-2xl font-black border-2 bg-brand-50 text-brand-600 border-brand-100 shadow-inner overflow-hidden`}>
+                                                                    {p.photo ? <img src={p.photo} alt={p.name} className="w-full h-full object-cover" /> : (p.name?.[0]?.toUpperCase() || 'P')}
+                                                                </div>
+                                                                <div className="flex-1 min-w-0">
+                                                                    <div className="flex items-center gap-3 mb-1">
+                                                                        <p className="font-black text-xl leading-tight truncate">{p.name || 'Anonymous'}</p>
+                                                                        <div className={`px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider ${risk.bg} ${risk.color} border ${risk.border}`}>
+                                                                            {risk.label}
+                                                                        </div>
+                                                                    </div>
+                                                                    <p className={`text-sm font-medium text-slate-400`}>
+                                                                        Registry ID: {p.email} • Age {p.age} • {p.pregnancyType}
+                                                                    </p>
+                                                                </div>
                                                             </div>
-                                                            <div className="min-w-0">
-                                                                <h4 className="text-lg font-black text-slate-800 truncate whitespace-nowrap">{p.name}</h4>
-                                                                <p className="text-xs font-bold text-slate-400">{p.age} Yrs � {p.pregnancyType}</p>
+
+                                                            <div className="flex items-center gap-8 px-6 border-l border-slate-100 h-10">
+                                                                <div className="text-center">
+                                                                    <p className={`text-[10px] font-black uppercase tracking-widest text-slate-400`}>Latest HR</p>
+                                                                    <p className="font-bold text-lg">{pData.latestLog?.heartRate || '--'} <span className="text-[10px] opacity-70">bpm</span></p>
+                                                                </div>
+                                                                <div className="text-center">
+                                                                    <p className={`text-[10px] font-black uppercase tracking-widest text-slate-400`}>BP Gauge</p>
+                                                                    <p className="font-bold text-lg">{pData.latestLog ? `${pData.latestLog.systolic}/${pData.latestLog.diastolic}` : '--/--'}</p>
+                                                                </div>
+                                                                <div className="hidden lg:block text-center">
+                                                                    <p className={`text-[10px] font-black uppercase tracking-widest text-slate-400`}>Last Assessment</p>
+                                                                    <p className="font-bold text-lg">{pData.latestLog ? new Date(pData.latestLog.timestamp).toLocaleDateString([], { month: 'short', day: 'numeric' }) : 'Never'}</p>
+                                                                </div>
                                                             </div>
-                                                        </div>
 
-                                                        <div className="flex items-center justify-between mt-auto pt-4 border-t border-slate-100">
-                                                            <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${pData.risk.bg} ${pData.risk.color}`}>
-                                                                {pData.risk.label}
-                                                            </span>
-                                                            <ChevronRight size={16} className="text-slate-300 group-hover:text-brand-500 transition-colors" />
-                                                        </div>
-
-                                                        <Sparkles className="absolute -right-4 -bottom-4 w-16 h-16 text-brand-500/5 rotate-12" />
-                                                    </motion.button>
+                                                            <div className={`ml-4 p-3 rounded-2xl bg-slate-50 text-slate-400 group-hover/card:bg-brand-50 group-hover/card:text-brand-600 transition-all`}>
+                                                                <ChevronRight size={20} />
+                                                            </div>
+                                                        </button>
+                                                    </div>
                                                 );
                                             })}
+
+                                        {patients.length === 0 && (
+                                            <div className="col-span-full py-20 text-center bg-white/50 rounded-[3rem] border-2 border-dashed border-slate-200">
+                                                <UsersIcon size={48} className="mx-auto mb-4 text-slate-200" />
+                                                <p className="text-slate-400 font-bold">Your patient directory is empty.</p>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             ) : (
@@ -3299,6 +3414,70 @@ const Dashboard = () => {
                                         </div>
                                     )}
                                 </section>
+
+                                {/* Patient Health Profile */}
+                                <section>
+                                    <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-6 flex items-center gap-2">
+                                        <Heart className="text-brand-600" size={16} /> Health Profile
+                                    </h4>
+                                    {patientHealthProfiles[selectedPatient.email] ? (() => {
+                                        const hp = patientHealthProfiles[selectedPatient.email];
+                                        return (
+                                            <div className="space-y-5">
+                                                {/* Body Metrics */}
+                                                <div className="grid grid-cols-3 gap-4">
+                                                    {[
+                                                        { label: 'Weight', value: hp.weight ? `${hp.weight} kg` : null, icon: Activity, color: 'text-rose-500', bg: 'bg-rose-50' },
+                                                        { label: 'Height', value: hp.height ? `${hp.height} cm` : null, icon: TrendingUp, color: 'text-blue-500', bg: 'bg-blue-50' },
+                                                        { label: 'Blood Type', value: hp.blood_type, icon: Droplets, color: 'text-brand-600', bg: 'bg-brand-50' }
+                                                    ].map((item, i) => (
+                                                        <div key={i} className="bg-slate-50 p-5 rounded-3xl border border-slate-200 flex flex-col items-center text-center">
+                                                            <div className={`p-3 rounded-2xl ${item.bg} ${item.color} mb-3`}><item.icon size={18} /></div>
+                                                            <p className="text-[9px] font-black text-slate-400 uppercase mb-1">{item.label}</p>
+                                                            <p className="text-lg font-black text-slate-900">{item.value || <span className="text-slate-300 text-sm font-bold">—</span>}</p>
+                                                        </div>
+                                                    ))}
+                                                </div>
+
+                                                {/* Current Conditions */}
+                                                {hp.current_conditions?.length > 0 && (
+                                                    <div className="bg-orange-50/60 p-6 rounded-3xl border border-orange-100">
+                                                        <p className="text-[9px] text-orange-600 font-black uppercase mb-3 flex items-center gap-1"><AlertTriangle size={10} /> Current Medical Conditions</p>
+                                                        <div className="flex flex-wrap gap-2">
+                                                            {hp.current_conditions.map(c => (
+                                                                <span key={c} className="px-3 py-1.5 bg-orange-100 text-orange-700 text-xs font-black rounded-xl border border-orange-200">{c}</span>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                )}
+
+                                                {/* Past Conditions, Allergies, Medications, Notes */}
+                                                <div className="grid grid-cols-1 gap-3">
+                                                    {[
+                                                        { label: 'Past Conditions', value: hp.past_conditions },
+                                                        { label: 'Allergies', value: hp.allergies },
+                                                        { label: 'Current Medications', value: hp.current_medications },
+                                                        { label: 'Additional Notes', value: hp.notes }
+                                                    ].filter(i => i.value).map((item, i) => (
+                                                        <div key={i} className="bg-white p-5 rounded-3xl border border-slate-200">
+                                                            <p className="text-[9px] text-slate-400 font-black uppercase mb-1">{item.label}</p>
+                                                            <p className="text-sm font-bold text-slate-800">{item.value}</p>
+                                                        </div>
+                                                    ))}
+                                                </div>
+
+                                                <p className="text-[9px] text-slate-400 font-bold text-center">
+                                                    Last updated: {hp.updated_at ? new Date(hp.updated_at).toLocaleDateString() : 'Unknown'}
+                                                </p>
+                                            </div>
+                                        );
+                                    })() : (
+                                        <div className="py-12 text-center text-slate-300 border-2 border-dashed border-slate-200 rounded-[3rem]">
+                                            <Heart size={40} className="mx-auto mb-3 opacity-20" />
+                                            <p className="font-bold">Patient has not filled their health profile yet.</p>
+                                        </div>
+                                    )}
+                                </section>
                             </div>
                         </motion.div >
                     </div >
@@ -3417,6 +3596,7 @@ const Dashboard = () => {
                                         </div>
                                     </div>
                                 )}
+                                <div ref={aiChatEndRef} />
                             </div>
 
                             {/* AI Input */}
@@ -3572,6 +3752,15 @@ const Dashboard = () => {
                                                 </div>
                                             )}
                                             <div className={`max-w-[80%] group relative flex flex-col ${isMine ? 'items-end' : 'items-start'}`}>
+                                                {isMine && (
+                                                    <button
+                                                        onClick={() => handleDeleteMessage(msg.id)}
+                                                        className="absolute -left-8 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity p-1.5 text-slate-300 hover:text-rose-500 hover:bg-rose-50 rounded-full"
+                                                        title="Delete message"
+                                                    >
+                                                        <Trash2 size={14} />
+                                                    </button>
+                                                )}
                                                 <div className={`rounded-[1.5rem] text-sm leading-relaxed transition-all shadow-sm ${isMine
                                                     ? 'bg-gradient-to-br from-brand-500 to-brand-700 text-white rounded-br-[0.3rem]'
                                                     : 'bg-slate-100 text-slate-900 rounded-bl-[0.3rem]'
@@ -3618,6 +3807,7 @@ const Dashboard = () => {
                                         </div>
                                     );
                                 })}
+                                <div ref={chatEndRef} />
                             </div>
 
                             {/* Instagram Input */}
@@ -3958,6 +4148,108 @@ const Dashboard = () => {
                     </motion.div>
                 )}
             </AnimatePresence >
+            
+            {/* Patient Health Profile Modal */}
+            <AnimatePresence>
+                {isHealthProfileOpen && (
+                    <div className="fixed inset-0 z-[120] flex items-center justify-center p-4">
+                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setIsHealthProfileOpen(false)} className="absolute inset-0 bg-slate-900/50 backdrop-blur-md" />
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                            className="relative bg-white w-full max-w-2xl rounded-[3rem] overflow-hidden shadow-2xl flex flex-col max-h-[90vh]"
+                        >
+                            {/* Header */}
+                            <div className="p-8 bg-gradient-to-r from-brand-600 to-brand-700 text-white flex items-center justify-between shrink-0">
+                                <div className="flex items-center gap-4">
+                                    <div className="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-md">
+                                        <Heart size={26} />
+                                    </div>
+                                    <div>
+                                        <h3 className="text-xl font-black tracking-tight">Health Profile</h3>
+                                        <p className="text-brand-200 text-xs font-bold">Your complete medical background</p>
+                                    </div>
+                                </div>
+                                <button onClick={() => setIsHealthProfileOpen(false)} className="p-3 hover:bg-white/10 rounded-2xl transition-colors"><X size={24} /></button>
+                            </div>
+
+                            {/* Form */}
+                            <form onSubmit={handleSaveHealthProfile} className="flex-1 overflow-y-auto p-8 space-y-6">
+                                {/* Body Metrics */}
+                                <div>
+                                    <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2"><Activity size={14} className="text-brand-500" /> Body Metrics</p>
+                                    <div className="grid grid-cols-3 gap-4">
+                                        <div className="bg-slate-50 p-4 rounded-3xl border border-slate-100">
+                                            <label className="block text-[10px] font-black text-slate-400 mb-2 uppercase">Weight (kg)</label>
+                                            <input type="number" placeholder="65" className="input-field bg-white border-none shadow-none focus:ring-0 text-lg font-black" value={healthProfileForm.weight} onChange={e => setHealthProfileForm({ ...healthProfileForm, weight: e.target.value })} />
+                                        </div>
+                                        <div className="bg-slate-50 p-4 rounded-3xl border border-slate-100">
+                                            <label className="block text-[10px] font-black text-slate-400 mb-2 uppercase">Height (cm)</label>
+                                            <input type="number" placeholder="162" className="input-field bg-white border-none shadow-none focus:ring-0 text-lg font-black" value={healthProfileForm.height} onChange={e => setHealthProfileForm({ ...healthProfileForm, height: e.target.value })} />
+                                        </div>
+                                        <div className="bg-slate-50 p-4 rounded-3xl border border-slate-100">
+                                            <label className="block text-[10px] font-black text-slate-400 mb-2 uppercase">Blood Type</label>
+                                            <select className="input-field bg-white border-none shadow-none focus:ring-0 text-lg font-black" value={healthProfileForm.bloodType} onChange={e => setHealthProfileForm({ ...healthProfileForm, bloodType: e.target.value })}>
+                                                <option value="">Select</option>
+                                                {['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'].map(t => <option key={t} value={t}>{t}</option>)}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Current Medical Conditions */}
+                                <div>
+                                    <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2"><AlertTriangle size={14} className="text-orange-400" /> Current Medical Conditions</p>
+                                    <div className="flex flex-wrap gap-2">
+                                        {['Thyroid', 'Diabetes', 'Hypertension', 'Anaemia', 'PCOS', 'Gestational Diabetes', 'Preeclampsia', 'Asthma', 'Heart Disease', 'Depression/Anxiety', 'Other'].map(cond => (
+                                            <button
+                                                key={cond}
+                                                type="button"
+                                                onClick={() => toggleCondition(cond)}
+                                                className={`px-4 py-2 rounded-2xl text-xs font-black transition-all border ${healthProfileForm.currentConditions.includes(cond)
+                                                    ? 'bg-brand-600 text-white border-brand-600 shadow-md'
+                                                    : 'bg-slate-50 text-slate-600 border-slate-200 hover:border-brand-300 hover:text-brand-600'
+                                                }`}
+                                            >
+                                                {cond}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* Past Conditions */}
+                                <div>
+                                    <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-2"><TrendingUp size={14} className="text-blue-400" /> Past Medical Conditions</p>
+                                    <textarea rows={2} placeholder="e.g. Surgery in 2019, Dengue in 2022..." className="input-field min-h-[60px] resize-none" value={healthProfileForm.pastConditions} onChange={e => setHealthProfileForm({ ...healthProfileForm, pastConditions: e.target.value })} />
+                                </div>
+
+                                {/* Allergies */}
+                                <div>
+                                    <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-2"><Thermometer size={14} className="text-rose-400" /> Allergies</p>
+                                    <input type="text" placeholder="e.g. Penicillin, Peanuts, Pollen..." className="input-field" value={healthProfileForm.allergies} onChange={e => setHealthProfileForm({ ...healthProfileForm, allergies: e.target.value })} />
+                                </div>
+
+                                {/* Current Medications */}
+                                <div>
+                                    <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-2"><Droplets size={14} className="text-indigo-400" /> Current Medications</p>
+                                    <input type="text" placeholder="e.g. Folic Acid 5mg, Iron supplement, T4..." className="input-field" value={healthProfileForm.currentMedications} onChange={e => setHealthProfileForm({ ...healthProfileForm, currentMedications: e.target.value })} />
+                                </div>
+
+                                {/* Notes */}
+                                <div>
+                                    <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-2"><Edit size={14} className="text-slate-400" /> Additional Notes</p>
+                                    <textarea rows={2} placeholder="Any other relevant health info for your doctor..." className="input-field min-h-[60px] resize-none" value={healthProfileForm.notes} onChange={e => setHealthProfileForm({ ...healthProfileForm, notes: e.target.value })} />
+                                </div>
+
+                                <button type="submit" disabled={isSavingHealthProfile} className="btn-primary w-full py-4 text-base flex items-center justify-center gap-2">
+                                    {isSavingHealthProfile ? <><div className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" /> Saving...</> : <><CheckCircle2 size={20} /> Save Health Profile</>}
+                                </button>
+                            </form>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
         </div >
     );
 };

@@ -737,6 +737,63 @@ const storage = {
         return true;
     },
 
+    deleteMessage: async (messageId) => {
+        // 1. Delete from local IndexedDB
+        await db.messages.delete(messageId);
+
+        // 2. Delete from Supabase
+        const { error } = await supabase
+            .from('messages')
+            .delete()
+            .eq('id', messageId);
+
+        if (error) {
+            console.error('Error deleting message from cloud:', error);
+        }
+
+        return true;
+    },
+
+    // --- Health Profile ---
+    getHealthProfile: async (patientEmail) => {
+        const email = patientEmail.toLowerCase();
+        const { data, error } = await supabase
+            .from('health_profiles')
+            .select('*')
+            .eq('patient_email', email)
+            .maybeSingle();
+        if (error && error.code !== 'PGRST116') {
+            console.error('Error fetching health profile:', error);
+        }
+        return data || null;
+    },
+
+    saveHealthProfile: async (patientEmail, profile) => {
+        const email = patientEmail.toLowerCase();
+        const payload = {
+            patient_email: email,
+            weight: profile.weight || null,
+            height: profile.height || null,
+            blood_type: profile.bloodType || null,
+            current_conditions: profile.currentConditions || [],
+            past_conditions: profile.pastConditions || null,
+            allergies: profile.allergies || null,
+            current_medications: profile.currentMedications || null,
+            notes: profile.notes || null,
+            updated_at: new Date().toISOString()
+        };
+
+        const { error } = await supabase
+            .from('health_profiles')
+            .upsert(payload, { onConflict: 'patient_email' });
+
+        if (error) {
+            console.error('Error saving health profile:', error);
+            return false;
+        }
+        return true;
+    },
+
     // --- AI History Persistence ---
     getAiHistory: async (email) => {
         const { data, error } = await supabase
