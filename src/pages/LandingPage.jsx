@@ -46,16 +46,16 @@ const LandingPage = () => {
                     <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-50 text-brand-600 font-medium mb-8 shadow-sm">
                         <span>Advanced Maternal Monitoring</span>
                     </div>
-                    <h1 className="text-5xl md:text-7xl font-extrabold mb-6 tracking-tight text-slate-900 flex flex-col items-center gap-4">
+                    <h1 className="text-4xl md:text-7xl font-extrabold mb-6 tracking-tight text-slate-900 flex flex-col items-center gap-4">
                         <span>Empowering Every</span>
-                        <div className="flex items-center gap-5">
-                            <div className="w-14 h-14 md:w-20 md:h-20 rounded-2xl bg-brand-600 flex items-center justify-center p-2 shadow-xl border border-white/20">
+                        <div className="flex items-center gap-3 md:gap-5 flex-wrap justify-center">
+                            <div className="w-12 h-12 md:w-20 md:h-20 rounded-2xl bg-brand-600 flex items-center justify-center p-2 shadow-xl border border-white/20">
                                 <img src={logo} alt="Maatri Shield Logo" className="w-full h-full object-contain mix-blend-screen filter brightness-110" />
                             </div>
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#6D28D9] to-[#8B5CF6]">Maatri Shield</span>
                         </div>
                     </h1>
-                    <p className="text-xl text-slate-600 max-w-2xl mx-auto font-medium">
+                    <p className="text-lg md:text-xl text-slate-600 max-w-2xl mx-auto font-medium px-4">
                         AI-driven risk detection and continuous monitoring for a safer, healthier experience for mother and child.
                     </p>
                 </motion.div>

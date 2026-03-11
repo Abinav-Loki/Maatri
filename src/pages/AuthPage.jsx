@@ -132,10 +132,10 @@ const AuthPage = () => {
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_80%,rgba(139,92,246,0.03)_0%,transparent_50%)]" />
                 <Link
                     to="/"
-                    className="absolute top-8 left-8 flex items-center gap-2 text-slate-400 hover:text-brand-600 transition-all font-bold group z-20"
+                    className="absolute top-4 left-4 md:top-8 md:left-8 flex items-center gap-2 text-slate-400 hover:text-brand-600 transition-all font-bold group z-20 text-xs md:text-sm"
                 >
-                    <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
-                    Back to portal selection
+                    <ArrowLeft size={16} className="md:w-5 md:h-5 group-hover:-translate-x-1 transition-transform" />
+                    Back to portals
                 </Link>
 
                 <motion.div
@@ -145,7 +145,7 @@ const AuthPage = () => {
                         boxShadow: '20px 20px 60px #d1d1d1, -20px -20px 60px #ffffff, inset 0 1px 1px rgba(255,255,255,1)',
                         background: '#F8F7FF'
                     }}
-                    className="w-full max-w-md rounded-[2.5rem] overflow-hidden relative p-8 md:p-10 border-2 border-brand-200"
+                    className="w-full max-w-md rounded-[2rem] md:rounded-[2.5rem] overflow-hidden relative p-6 md:p-10 border-2 border-brand-200"
                 >
                     <div className="text-center mb-10">
                         <div className="flex justify-center mb-6">

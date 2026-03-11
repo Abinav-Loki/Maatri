@@ -95,6 +95,7 @@ const Dashboard = () => {
     const [demoRiskPercent, setDemoRiskPercent] = useState(0);
     const [simMessages, setSimMessages] = useState([]);
     const [showSimLogs, setShowSimLogs] = useState(true);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     // Appointments State
     const [appointments, setAppointments] = useState([]);
@@ -1320,9 +1321,22 @@ const Dashboard = () => {
     if (!currentUser) return <div className="min-h-screen bg-slate-50 flex items-center justify-center font-bold text-slate-300">Loading Clinical Interface...</div>;
 
     return (
-        <div className="min-h-screen bg-white flex font-sans">
+        <div className="min-h-screen bg-white flex font-sans relative">
+            {/* Mobile Menu Overlay */}
+            <AnimatePresence>
+                {isMobileMenuOpen && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-40 lg:hidden"
+                    />
+                )}
+            </AnimatePresence>
+
             {/* Sidebar */}
-            <aside className="w-20 md:w-64 bg-[linear-gradient(to_bottom,#6A4C93,#7C5BB3,#8E6BBF)] h-screen flex flex-col p-4 fixed left-0 top-0 z-30 shadow-2xl">
+            <aside className={`fixed lg:relative w-64 bg-[linear-gradient(to_bottom,#6A4C93,#7C5BB3,#8E6BBF)] h-screen flex flex-col p-4 z-50 transition-transform duration-300 lg:translate-x-0 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'} shadow-2xl`}>
                 <div className="p-4 flex flex-col items-center gap-2 mb-8 text-center">
                     <img src={logo} alt="Maatri Shield" className="w-16 h-16 object-contain mix-blend-screen shrink-0" />
                     <span className="hidden md:block font-black text-sm uppercase tracking-[0.3em] text-white/90">Maatri Shield</span>
@@ -1408,11 +1422,18 @@ const Dashboard = () => {
             </aside>
 
             {/* Main Content */}
-            <main className={`flex-1 ml-20 md:ml-64 p-8 transition-colors duration-500 ${activeTab === 'analytics' ? 'bg-white' : ''}`}>
-                <header className="flex justify-between items-center mb-12">
-                    <div>
-                        <h1 className="text-3xl font-extrabold tracking-tight text-purple-600 capitalize">{role} Dashboard</h1>
-                        <div className="text-slate-500 mt-1 flex items-center flex-wrap gap-2">
+            <main className={`flex-1 min-w-0 transition-all duration-500 ${activeTab === 'analytics' ? 'bg-white' : ''} p-4 md:p-8`}>
+                <header className="flex justify-between items-center mb-12 gap-4">
+                    <div className="flex items-center gap-4">
+                        <button 
+                            onClick={() => setIsMobileMenuOpen(true)}
+                            className="lg:hidden p-2 bg-slate-100 rounded-xl text-slate-600 shadow-sm"
+                        >
+                            <Zap size={24} />
+                        </button>
+                        <div>
+                            <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-purple-600 capitalize">{role} Dashboard</h1>
+                            <div className="text-slate-500 mt-1 flex items-center flex-wrap gap-2 text-xs md:text-sm">
                             {role === 'doctor' ? `Overseeing ${patients.length} patients` :
                                 role === 'guardian' ? (selectedPatient ? `Monitoring ${selectedPatient.name}` : "Connect to a patient") :
                                     <>
@@ -1442,7 +1463,8 @@ const Dashboard = () => {
                                     </>}
                         </div>
                     </div>
-                    <div className="flex items-center gap-4 relative">
+                </div>
+                <div className="flex items-center gap-4 relative">
                         <CloudStatus />
                         {role === 'patient' && (
                             <div className="flex items-center gap-2">
