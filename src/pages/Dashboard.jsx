@@ -1336,7 +1336,7 @@ const Dashboard = () => {
                 )}
             </AnimatePresence>
 
-            <aside className={`fixed w-64 bg-[#0f172a] h-screen flex flex-col py-8 px-4 z-50 transition-transform duration-300 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'} shadow-[20px_0_60px_rgba(0,0,0,0.6)] border-r border-white/10`}>
+            <aside className={`fixed w-64 bg-[#0f172a] h-screen flex flex-col py-8 px-4 z-50 transition-transform duration-300 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'} shadow-[4px_0_24px_rgba(0,0,0,0.15)] border-r border-white/5`}>
                 <div className="py-1 flex flex-col items-center gap-1 mb-8 text-center select-none shrink-0 border-b border-white/5 pb-6">
                     <div className="relative w-16 h-16 mb-2 group">
                         <img 
@@ -2159,7 +2159,8 @@ const Dashboard = () => {
                                                 key={i}
                                                 initial={{ opacity: 0, scale: 0.95 }}
                                                 animate={{ opacity: 1, scale: 1 }}
-                                                transition={{ delay: i * 0.1 }}
+                                                whileHover={{ y: -8, scale: 1.02, boxShadow: "0 25px 50px -12px rgba(0,0,0,0.1)" }}
+                                                 transition={{ delay: i * 0.1 }}
                                                 className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-all cursor-pointer group relative overflow-hidden"
                                             >
                                                 <div className="flex items-center justify-between mb-4">
@@ -2544,7 +2545,7 @@ const Dashboard = () => {
 
                                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                                         {/* Blood Pressure Card - Redesigned */}
-                                        <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 group relative overflow-hidden">
+                                        <motion.div whileHover={{ y: -10, scale: 1.01 }} className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-500 group relative overflow-hidden">
                                             <div className="absolute top-0 left-0 w-1.5 h-full bg-rose-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                                             <div className="flex items-start justify-between mb-6">
                                                 <div>
@@ -2675,10 +2676,10 @@ const Dashboard = () => {
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </motion.div>
 
                                         {/* Heart Rate Card - Redesigned */}
-                                        <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 group relative">
+                                        <motion.div whileHover={{ y: -10, scale: 1.01 }} className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-500 group relative">
                                             <div className="flex items-start justify-between mb-6">
                                                 <div>
                                                     <div className="flex items-center gap-2 mb-1.5">
@@ -2746,10 +2747,10 @@ const Dashboard = () => {
                                                     />
                                                 )}
                                             </div>
-                                        </div>
+                                        </motion.div>
 
                                         {/* Blood Sugar Card - Redesigned */}
-                                        <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 group relative overflow-hidden">
+                                        <motion.div whileHover={{ y: -10, scale: 1.01 }} className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-500 group relative overflow-hidden">
                                             <div className="absolute top-0 left-0 w-1.5 h-full bg-indigo-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                                             <div className="flex items-start justify-between mb-6">
                                                 <div>
@@ -2818,7 +2819,7 @@ const Dashboard = () => {
                                                     />
                                                 )}
                                             </div>
-                                        </div>
+                                        </motion.div>
 
                                         {/* Symptoms Card - Redesigned */}
                                         <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-[0_10px_30px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.05)] transition-all duration-500 group relative overflow-hidden">
@@ -3306,9 +3307,9 @@ const Dashboard = () => {
                                                      className={`w-full h-14 px-6 bg-slate-50 border rounded-2xl font-bold text-slate-700 transition-all shadow-sm ${profileForm.emergencyContact && !profileForm.emergencyContact.startsWith('+') ? 'border-rose-400 bg-rose-50' : 'border-slate-100 focus:bg-white focus:border-brand-500'}`}
                                                      value={profileForm.emergencyContact}
                                                      onChange={e => setProfileForm({ ...profileForm, emergencyContact: e.target.value })}
-                                                 />
-                                             </div>
-                                         </div>
+                                                  />
+                                              </div>
+                                          </div>
                                      </div>
  
                                      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8 border-t border-slate-50">
