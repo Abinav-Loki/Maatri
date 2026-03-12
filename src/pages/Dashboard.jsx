@@ -1414,25 +1414,27 @@ const Dashboard = () => {
                 </nav>
 
                 <div className="mt-auto px-1 pt-6 border-t border-white/5">
-                    <div className="p-4 rounded-2xl bg-gradient-to-br from-[#1e293b] to-[#0f172a] border border-white/10 shadow-2xl relative overflow-hidden group transition-all duration-500 hover:shadow-brand-500/10">
-                        <div className="absolute top-0 right-0 w-24 h-24 bg-brand-500/10 rounded-full -mr-12 -mt-12 blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
-                        <div className="flex items-center gap-3 mb-3 relative z-10">
-                            <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-brand-400 border border-white/10">
-                                <Shield size={16} />
+                    {role === 'doctor' && (
+                        <div className="p-4 rounded-2xl bg-gradient-to-br from-[#1e293b] to-[#0f172a] border border-white/10 shadow-2xl relative overflow-hidden group transition-all duration-500 hover:shadow-brand-500/10">
+                            <div className="absolute top-0 right-0 w-24 h-24 bg-brand-500/10 rounded-full -mr-12 -mt-12 blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
+                            <div className="flex items-center gap-3 mb-3 relative z-10">
+                                <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-brand-400 border border-white/10">
+                                    <Shield size={16} />
+                                </div>
+                                <p className="text-[10px] font-black text-white uppercase tracking-widest">Clinical Intelligence</p>
                             </div>
-                            <p className="text-[10px] font-black text-white uppercase tracking-widest">Clinical Intelligence</p>
+                            <div className="flex items-end justify-between relative z-10">
+                                <div>
+                                    <h4 className="text-2xl font-black text-white tabular-nums">98.4<span className="text-[10px] text-slate-400 ml-1">%</span></h4>
+                                    <p className="text-[9px] text-slate-500 font-bold uppercase tracking-wider mt-1">System Precision</p>
+                                </div>
+                                <div className="flex items-center gap-1.5 px-2 py-1 bg-teal-500/10 rounded-lg border border-teal-500/20">
+                                    <div className="w-1.5 h-1.5 rounded-full bg-teal-500 animate-ping"></div>
+                                    <span className="text-[8px] font-black text-teal-400 uppercase tracking-widest">Live</span>
+                                </div>
+                            </div>
                         </div>
-                        <div className="flex items-end justify-between relative z-10">
-                            <div>
-                                <h4 className="text-2xl font-black text-white tabular-nums">98.4<span className="text-[10px] text-slate-400 ml-1">%</span></h4>
-                                <p className="text-[9px] text-slate-500 font-bold uppercase tracking-wider mt-1">System Precision</p>
-                            </div>
-                            <div className="flex items-center gap-1.5 px-2 py-1 bg-teal-500/10 rounded-lg border border-teal-500/20">
-                                <div className="w-1.5 h-1.5 rounded-full bg-teal-500 animate-ping"></div>
-                                <span className="text-[8px] font-black text-teal-400 uppercase tracking-widest">Live</span>
-                            </div>
-                        </div>
-                    </div>
+                    )}
                 </div>
             </aside>
 
