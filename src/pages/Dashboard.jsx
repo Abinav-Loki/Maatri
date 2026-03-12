@@ -1336,18 +1336,16 @@ const Dashboard = () => {
                 )}
             </AnimatePresence>
 
-            {/* Sidebar - Fixed to prevent scrolling */}
             <aside className={`fixed w-64 bg-[#020617] h-screen flex flex-col p-4 z-50 transition-transform duration-300 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'} shadow-[20px_0_60px_rgba(0,0,0,0.6)] border-r border-white/10`}>
-                <div className="py-2 flex flex-col items-center gap-1 mb-6 text-center select-none">
+                <div className="py-2 flex flex-col items-center gap-1 mb-4 text-center select-none shrink-0">
                     <div className="relative w-14 h-14 mb-1 group">
                         <img 
                             src={logo} 
                             alt="Maatri Shield" 
-                            className="w-full h-full object-contain filter brightness-125 contrast-125 mix-blend-lighten drop-shadow-[0_0_12px_rgba(99,102,241,0.4)] transition-all duration-500 group-hover:scale-110 group-hover:drop-shadow-[0_0_20px_rgba(99,102,241,0.6)]" 
+                            className="w-full h-full object-contain filter brightness-110 contrast-125 mix-blend-screen transition-all duration-500 group-hover:scale-110" 
                         />
-                        <div className="absolute inset-0 bg-brand-500/10 rounded-full blur-2xl opacity-40 animate-pulse"></div>
                     </div>
-                    <span className="hidden md:block font-black text-[10px] uppercase tracking-[0.6em] text-slate-400/60 transition-colors group-hover:text-brand-400">Maatri Shield</span>
+                    <span className="hidden md:block font-black text-[10px] uppercase tracking-[0.6em] text-slate-400/40 transition-colors group-hover:text-brand-400">Maatri Shield</span>
                 </div>
 
                 {/* Emergency SOS Button */}
@@ -1366,7 +1364,7 @@ const Dashboard = () => {
                     </div>
                 )}
 
-                <nav className="flex-1 space-y-1.5 px-1 overflow-hidden">
+                <nav className="flex-1 space-y-1.5 px-1 overflow-y-auto custom-scrollbar-none">
                     {[
                         { id: 'overview', icon: Activity, label: "Overview" },
                         ...(role === 'doctor' ? [
@@ -2615,7 +2613,18 @@ const Dashboard = () => {
                                                             strokeWidth={4} 
                                                             fill="url(#colorSysRedesign)" 
                                                             filter="url(#glow)"
+                                                            connectNulls={true}
                                                             animationDuration={1500}
+                                                        />
+                                                        <Area 
+                                                            type="monotone" 
+                                                            dataKey="dia" 
+                                                            stroke="#f43f5e" 
+                                                            strokeWidth={2} 
+                                                            strokeDasharray="5 5"
+                                                            fill="none" 
+                                                            connectNulls={true}
+                                                            animationDuration={2000}
                                                         />
                                                     </AreaChart>
                                                 </ResponsiveContainer>
@@ -2727,6 +2736,7 @@ const Dashboard = () => {
                                                             dot={{ r: 4, fill: '#14b8a6', strokeWidth: 0 }} 
                                                             activeDot={{ r: 8, strokeWidth: 4, stroke: 'rgba(20, 184, 166, 0.2)', fill: '#14b8a6' }} 
                                                             filter="url(#glowTeal)"
+                                                            connectNulls={true}
                                                             animationDuration={1500}
                                                         />
                                                     </LineChart>
@@ -2792,10 +2802,11 @@ const Dashboard = () => {
                                                             type="monotone" 
                                                             dataKey="g" 
                                                             stroke="#6366f1" 
-                                                            strokeWidth={5} 
-                                                            dot={{ r: 4, fill: '#6366f1', strokeWidth: 0 }} 
-                                                            activeDot={{ r: 8, strokeWidth: 4, stroke: 'rgba(99, 102, 241, 0.2)', fill: '#6366f1' }} 
+                                                            strokeWidth={4} 
+                                                            dot={{ r: 4, fill: '#6366f1', strokeWidth: 2, stroke: '#fff' }} 
+                                                            activeDot={{ r: 8, strokeWidth: 0, fill: '#6366f1' }}
                                                             filter="url(#glowIndigo)"
+                                                            connectNulls={true}
                                                             animationDuration={1500}
                                                         />
                                                     </LineChart>
