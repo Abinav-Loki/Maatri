@@ -44,16 +44,16 @@ const LandingPage = () => {
             <div className="absolute inset-0 z-0 overflow-hidden">
                 <motion.img 
                     initial={{ scale: 1.1, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 0.4 }}
+                    animate={{ scale: 1, opacity: 0.7 }}
                     transition={{ duration: 2 }}
                     src={portalBg} 
                     alt="Clinical Environment" 
                     className="w-full h-full object-cover"
                 />
-                {/* Multi-layered merging gradients */}
-                <div className="absolute inset-0 bg-gradient-to-b from-[#020617] via-transparent to-[#020617]" />
-                <div className="absolute inset-0 bg-gradient-to-r from-[#020617] via-transparent to-[#020617]" />
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_0%,_#020617_85%)]" />
+                {/* Multi-layered merging gradients - Softened for better image visibility */}
+                <div className="absolute inset-0 bg-gradient-to-b from-[#020617] via-transparent to-[#020617] opacity-60" />
+                <div className="absolute inset-0 bg-gradient-to-r from-[#020617] via-transparent to-[#020617] opacity-60" />
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_0%,_#020617_75%)] opacity-80" />
             </div>
 
             <div className="max-w-7xl mx-auto relative z-10 w-full">

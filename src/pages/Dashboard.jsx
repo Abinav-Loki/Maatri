@@ -1337,7 +1337,7 @@ const Dashboard = () => {
             </AnimatePresence>
 
             <aside className={`fixed w-64 bg-[#020617] h-screen flex flex-col p-4 z-50 transition-transform duration-300 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'} shadow-[20px_0_60px_rgba(0,0,0,0.6)] border-r border-white/10`}>
-                <div className="py-2 flex flex-col items-center gap-1 mb-4 text-center select-none shrink-0">
+                <div className="py-1 flex flex-col items-center gap-1 mb-2 text-center select-none shrink-0">
                     <div className="relative w-14 h-14 mb-1 group">
                         <img 
                             src={logo} 
@@ -1350,7 +1350,7 @@ const Dashboard = () => {
 
                 {/* Emergency SOS Button */}
                 {(role === 'patient' || role === 'guardian') && (
-                    <div className="px-1 mb-4">
+                    <div className="px-1 mb-3">
                         <button
                             onClick={handleSOS}
                             className={`w-full py-3.5 rounded-2xl flex items-center justify-center gap-3 font-black uppercase tracking-widest text-[9px] transition-all shadow-2xl relative overflow-hidden group ${isSOSTriggered
@@ -1364,7 +1364,7 @@ const Dashboard = () => {
                     </div>
                 )}
 
-                <nav className="flex-1 space-y-1.5 px-1 overflow-y-auto custom-scrollbar-none">
+                <nav className="flex-1 space-y-1 px-1 overflow-hidden">
                     {[
                         { id: 'overview', icon: Activity, label: "Overview" },
                         ...(role === 'doctor' ? [
@@ -1396,7 +1396,7 @@ const Dashboard = () => {
                                     setSelectedPatient(null);
                                 }
                             }}
-                            className={`flex items-center gap-3.5 w-full p-3 rounded-xl transition-all duration-300 group relative ${activeTab === item.id
+                            className={`flex items-center gap-3.5 w-full p-2.5 rounded-xl transition-all duration-300 group relative ${activeTab === item.id
                                 ? 'bg-brand-500/10 text-brand-400 border border-brand-500/20 shadow-[0_0_15px_rgba(99,102,241,0.1)]'
                                 : 'text-slate-500 hover:text-slate-200 hover:bg-white/5 border border-transparent'
                                 }`}
@@ -2614,7 +2614,9 @@ const Dashboard = () => {
                                                             fill="url(#colorSysRedesign)" 
                                                             filter="url(#glow)"
                                                             connectNulls={true}
-                                                            animationDuration={1500}
+                                                            animationBegin={0}
+                                                            animationDuration={2500}
+                                                            animationEasing="ease-in-out"
                                                         />
                                                         <Area 
                                                             type="monotone" 
@@ -2624,7 +2626,9 @@ const Dashboard = () => {
                                                             strokeDasharray="5 5"
                                                             fill="none" 
                                                             connectNulls={true}
+                                                            animationBegin={500}
                                                             animationDuration={2000}
+                                                            animationEasing="ease-in-out"
                                                         />
                                                     </AreaChart>
                                                 </ResponsiveContainer>
@@ -2737,7 +2741,8 @@ const Dashboard = () => {
                                                             activeDot={{ r: 8, strokeWidth: 4, stroke: 'rgba(20, 184, 166, 0.2)', fill: '#14b8a6' }} 
                                                             filter="url(#glowTeal)"
                                                             connectNulls={true}
-                                                            animationDuration={1500}
+                                                            animationDuration={2500}
+                                                            animationEasing="ease-in-out"
                                                         />
                                                     </LineChart>
                                                 </ResponsiveContainer>
