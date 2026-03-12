@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Mail, Lock, ArrowLeft, HeartPulse, CheckCircle2, XCircle, User, Phone, Calendar, Home, Users as UsersIcon, ShieldCheck, Eye, EyeOff } from 'lucide-react';
 import logo from '../assets/maatri_shield_logo.png';
+import loginHero from '../assets/login_hero.png';
 import storage from '../utils/storage';
 
 const AuthPage = () => {
@@ -98,16 +99,30 @@ const AuthPage = () => {
     roleColors[role] || 'brand';
 
     return (
-        <div className="min-h-screen flex flex-col lg:flex-row bg-white relative overflow-hidden">
-            {/* Left side: Hero (Harmonized with Dashboard Sidebar) */}
-            <div className="hidden lg:flex lg:w-1/2 relative bg-[linear-gradient(to_bottom,#6A4C93,#7C5BB3,#8E6BBF)]">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.05)_0%,transparent_50%)]" />
+        <div className="min-h-screen flex flex-col lg:flex-row bg-slate-950 relative overflow-hidden">
+            {/* Left side: Hero (Enhanced with Premium Image) */}
+            <div className="hidden lg:flex lg:w-5/12 relative overflow-hidden border-r border-white/5">
+                {/* Background Image */}
+                <img 
+                    src={loginHero} 
+                    alt="Healthcare Professional" 
+                    className="absolute inset-0 w-full h-full object-cover opacity-80"
+                />
+                
+                {/* Cinematic Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-tr from-slate-950 via-slate-950/40 to-brand-900/40 z-10" />
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(139,92,246,0.15)_0%,transparent_60%)] z-10" />
 
-                <div className="relative p-16 pt-32 flex flex-col justify-between h-full text-white w-full">
+                <div className="relative p-16 pt-32 flex flex-col justify-between h-full text-white w-full z-20">
                     <div>
-                        <div className="flex flex-row items-center justify-center lg:justify-start gap-4 mb-8 text-center lg:text-left">
-                            <img src={logo} alt="Maatri Shield" className="w-32 h-32 md:w-36 md:h-36 object-contain mix-blend-screen shrink-0 filter brightness-125 contrast-125" />
-                            <span className="font-black text-2xl uppercase tracking-[0.2em] text-white/90 drop-shadow-2xl">Maatri Shield</span>
+                        <div className="flex flex-row items-center justify-center lg:justify-start gap-4 mb-12 text-center lg:text-left">
+                            <div className="bg-white/10 backdrop-blur-xl p-3 rounded-2xl border border-white/20 shadow-2xl">
+                                <img src={logo} alt="Maatri Shield" className="w-16 h-16 md:w-20 md:h-20 object-contain filter brightness-110 shrink-0" />
+                            </div>
+                            <div className="flex flex-col">
+                                <span className="font-black text-xl md:text-2xl uppercase tracking-[0.2em] text-white">Maatri Shield</span>
+                                <span className="text-[10px] uppercase tracking-[0.3em] text-brand-300 font-bold">2026 AI Intelligence</span>
+                            </div>
                         </div>
 
                         <motion.div
@@ -116,23 +131,40 @@ const AuthPage = () => {
                             transition={{ delay: 0.2 }}
                             className="text-center lg:text-left"
                         >
-                            <h1 className="text-6xl font-black tracking-tight leading-[1.1] mb-6 text-white">
-                                Precision <span className="text-white/80">Care.</span>
+                            <h1 className="text-6xl md:text-7xl font-black tracking-tight leading-[1.1] mb-8 text-white">
+                                Precision <br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-300 to-accent-300">Care.</span>
                             </h1>
-                            <p className="text-xl text-white/60 max-w-md leading-relaxed font-medium mx-auto lg:mx-0">
-                                Empowering clinicians and mothers with 2026 AI-driven clinical intelligence for a safer Maatri journey.
-                            </p>
+                            <div className="space-y-4 max-w-sm">
+                                <div className="h-1 w-20 bg-brand-500 rounded-full" />
+                                <p className="text-xl text-slate-200 leading-relaxed font-semibold italic">
+                                    "Empowering clinicians and mothers with 2026 AI-driven clinical intelligence for a safer Maatri journey."
+                                </p>
+                            </div>
+                            
+                            {/* Extra Premium Indicators */}
+                            <div className="mt-16 flex items-center gap-6">
+                                <div className="flex flex-col">
+                                    <span className="text-2xl font-black text-white tracking-widest uppercase">E2EE</span>
+                                    <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Secured Data</span>
+                                </div>
+                                <div className="w-px h-10 bg-white/10" />
+                                <div className="flex flex-col">
+                                    <span className="text-2xl font-black text-white tracking-widest uppercase">HIPAA</span>
+                                    <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Medical Grade</span>
+                                </div>
+                            </div>
                         </motion.div>
                     </div>
                 </div>
             </div>
 
-            {/* Right side: Login Area */}
-            <div className="w-full lg:w-1/2 flex items-start justify-center p-6 md:p-12 pt-12 md:pt-16 relative overflow-y-auto bg-white">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_80%,rgba(139,92,246,0.03)_0%,transparent_50%)]" />
+            {/* Right side: Login Area (Standardized Professional UI) */}
+            <div className="w-full lg:w-7/12 flex items-center justify-center p-6 md:p-12 relative overflow-y-auto bg-slate-950">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_30%,rgba(139,92,246,0.05)_0%,transparent_50%)]" />
+                
                 <Link
-                    to="/"
-                    className="absolute top-4 left-4 md:top-8 md:left-8 flex items-center gap-2 text-slate-400 hover:text-brand-600 transition-all font-bold group z-20 text-xs md:text-sm"
+                    to="/portals"
+                    className="absolute top-8 left-8 flex items-center gap-2 text-slate-500 hover:text-brand-400 transition-all font-bold group z-20 text-xs md:text-sm"
                 >
                     <ArrowLeft size={16} className="md:w-5 md:h-5 group-hover:-translate-x-1 transition-transform" />
                     Back to portals
@@ -142,10 +174,13 @@ const AuthPage = () => {
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     style={{
-                        boxShadow: '20px 20px 60px #d1d1d1, -20px -20px 60px #ffffff, inset 0 1px 1px rgba(255,255,255,1)',
-                        background: '#F8F7FF'
+                        background: 'rgba(255, 255, 255, 0.05)',
+                        backdropFilter: 'blur(24px)',
+                        WebkitBackdropFilter: 'blur(24px)',
+                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                        boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
                     }}
-                    className="w-full max-w-md rounded-[2rem] md:rounded-[2.5rem] overflow-hidden relative p-6 md:p-10 border-2 border-brand-200"
+                    className="w-full max-w-lg rounded-[3rem] overflow-hidden relative p-8 md:p-12"
                 >
                     <div className="text-center mb-10">
                         <div className="flex justify-center mb-6">
@@ -153,24 +188,24 @@ const AuthPage = () => {
                                 <UsersIcon size={32} className="text-brand-600" />
                             </div>
                         </div>
-                        <h2 className="text-3xl font-black tracking-tight text-slate-900 capitalize mb-2">
+                        <h2 className="text-3xl font-black tracking-tight text-white capitalize mb-2">
                             {role} {isLogin ? 'Login' : 'Register'}
                         </h2>
-                        <p className="text-slate-700 font-bold tracking-tight">
+                        <p className="text-slate-300 font-bold tracking-tight">
                             {isLogin ? `Access the high-precision ${role} monitoring system.` : `Create your ${role} account to get started.`}
                         </p>
                     </div>
 
-                    <div className="flex p-1.5 bg-slate-900/5 rounded-2xl mb-10 border border-white/20">
+                    <div className="flex p-1.5 bg-white/5 rounded-2xl mb-10 border border-white/10">
                         <button
                             onClick={() => { setIsLogin(true); setAuthError(''); setEmail(''); setPassword(''); }}
-                            className={`flex-1 py-3.5 rounded-xl font-extrabold transition-all duration-300 ${isLogin ? 'bg-white shadow-xl text-brand-600' : 'text-slate-400 hover:text-slate-600'}`}
+                            className={`flex-1 py-3.5 rounded-xl font-extrabold transition-all duration-300 ${isLogin ? 'bg-white shadow-xl text-slate-900' : 'text-slate-500 hover:text-slate-400'}`}
                         >
                             Login
                         </button>
                         <button
                             onClick={() => { setIsLogin(false); setAuthError(''); setEmail(''); setPassword(''); }}
-                            className={`flex-1 py-3.5 rounded-xl font-extrabold transition-all duration-300 ${!isLogin ? 'bg-white shadow-xl text-brand-600' : 'text-slate-400 hover:text-slate-600'}`}
+                            className={`flex-1 py-3.5 rounded-xl font-extrabold transition-all duration-300 ${!isLogin ? 'bg-white shadow-xl text-slate-900' : 'text-slate-500 hover:text-slate-400'}`}
                         >
                             Join
                         </button>
@@ -198,13 +233,13 @@ const AuthPage = () => {
                                 className="space-y-6 mb-6"
                             >
                                 <div>
-                                    <label className="block text-xs font-extrabold text-slate-600 uppercase tracking-widest mb-2 px-2">Full Name</label>
+                                    <label className="block text-xs font-extrabold text-slate-400 uppercase tracking-widest mb-2 px-2">Full Name</label>
                                     <div className="relative">
-                                        <User className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                                        <User className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" size={18} />
                                         <input
                                             type="text"
                                             placeholder="Sarah Johnson"
-                                            className="w-full bg-white/60 border border-white/50 focus:border-brand-500/50 focus:ring-4 focus:ring-brand-500/10 rounded-2xl py-4 pl-12 pr-4 outline-none transition-all placeholder:text-slate-300 font-bold"
+                                            className="w-full bg-white/5 border border-white/10 focus:border-brand-500/50 focus:ring-4 focus:ring-brand-500/10 rounded-2xl py-4 pl-12 pr-4 outline-none transition-all placeholder:text-slate-600 text-white font-bold"
                                             value={name}
                                             onChange={(e) => setName(e.target.value)}
                                             required={!isLogin}
@@ -214,13 +249,13 @@ const AuthPage = () => {
 
                                 <div className="grid grid-cols-2 gap-4">
                                     <div>
-                                        <label className="block text-xs font-extrabold text-slate-600 uppercase tracking-widest mb-2 px-2">Age</label>
+                                        <label className="block text-xs font-extrabold text-slate-400 uppercase tracking-widest mb-2 px-2">Age</label>
                                         <div className="relative">
-                                            <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                                            <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" size={18} />
                                             <input
                                                 type="number"
                                                 placeholder="28"
-                                                className="w-full bg-white/60 border border-white/50 focus:border-brand-500/50 focus:ring-4 focus:ring-brand-500/10 rounded-2xl py-4 pl-12 pr-4 outline-none transition-all placeholder:text-slate-300 font-bold"
+                                                className="w-full bg-white/5 border border-white/10 focus:border-brand-500/50 focus:ring-4 focus:ring-brand-500/10 rounded-2xl py-4 pl-12 pr-4 outline-none transition-all placeholder:text-slate-600 text-white font-bold"
                                                 value={age}
                                                 onChange={(e) => setAge(e.target.value)}
                                                 required={!isLogin}
@@ -228,13 +263,13 @@ const AuthPage = () => {
                                         </div>
                                     </div>
                                     <div>
-                                        <label className="block text-xs font-extrabold text-slate-600 uppercase tracking-widest mb-2 px-2">Mobile</label>
+                                        <label className="block text-xs font-extrabold text-slate-400 uppercase tracking-widest mb-2 px-2">Mobile</label>
                                         <div className="relative">
-                                            <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                                            <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" size={18} />
                                             <input
                                                 type="tel"
                                                 placeholder="9876543210"
-                                                className="w-full bg-white/60 border border-white/50 focus:border-brand-500/50 focus:ring-4 focus:ring-brand-500/10 rounded-2xl py-4 pl-12 pr-4 outline-none transition-all placeholder:text-slate-300 font-bold"
+                                                className="w-full bg-white/5 border border-white/10 focus:border-brand-500/50 focus:ring-4 focus:ring-brand-500/10 rounded-2xl py-4 pl-12 pr-4 outline-none transition-all placeholder:text-slate-600 text-white font-bold"
                                                 value={mobile}
                                                 onChange={(e) => setMobile(e.target.value)}
                                                 required={!isLogin}
@@ -250,25 +285,25 @@ const AuthPage = () => {
                                         className="space-y-6"
                                     >
                                         <div>
-                                            <label className="block text-xs font-extrabold text-slate-600 uppercase tracking-widest mb-2 px-2">Pregnancy History</label>
+                                            <label className="block text-xs font-extrabold text-slate-400 uppercase tracking-widest mb-2 px-2">Pregnancy History</label>
                                             <select
-                                                className="w-full bg-white/60 border border-white/50 focus:border-brand-500/50 focus:ring-4 focus:ring-brand-500/10 rounded-2xl py-4 px-4 outline-none transition-all font-bold cursor-pointer"
+                                                className="w-full bg-white/5 border border-white/10 focus:border-brand-500/50 focus:ring-4 focus:ring-brand-500/10 rounded-2xl py-4 px-4 outline-none transition-all text-white font-bold cursor-pointer"
                                                 value={pregnancyType}
                                                 onChange={(e) => setPregnancyType(e.target.value)}
                                             >
-                                                <option value="first">First Pregnancy</option>
-                                                <option value="second">Second Pregnancy</option>
-                                                <option value="other">Other</option>
+                                                <option value="first" className="bg-slate-900">First Pregnancy</option>
+                                                <option value="second" className="bg-slate-900">Second Pregnancy</option>
+                                                <option value="other" className="bg-slate-900">Other</option>
                                             </select>
                                         </div>
                                         <div>
-                                            <label className="block text-xs font-extrabold text-slate-600 uppercase tracking-widest mb-2 px-2">Home Address</label>
+                                            <label className="block text-xs font-extrabold text-slate-400 uppercase tracking-widest mb-2 px-2">Home Address</label>
                                             <div className="relative">
-                                                <Home className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                                                <Home className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" size={18} />
                                                 <input
                                                     type="text"
                                                     placeholder="123 Medical Lane"
-                                                    className="w-full bg-white/60 border border-white/50 focus:border-brand-500/50 focus:ring-4 focus:ring-brand-500/10 rounded-2xl py-4 pl-12 pr-4 outline-none transition-all placeholder:text-slate-300 font-bold"
+                                                    className="w-full bg-white/5 border border-white/10 focus:border-brand-500/50 focus:ring-4 focus:ring-brand-500/10 rounded-2xl py-4 pl-12 pr-4 outline-none transition-all placeholder:text-slate-600 text-white font-bold"
                                                     value={address}
                                                     onChange={(e) => setAddress(e.target.value)}
                                                 />
@@ -343,13 +378,13 @@ const AuthPage = () => {
                         )}
 
                         <div>
-                            <label className="block text-xs font-extrabold text-slate-600 uppercase tracking-widest mb-2 px-2">Email Identity</label>
+                            <label className="block text-xs font-extrabold text-slate-400 uppercase tracking-widest mb-2 px-2">Email Identity</label>
                             <div className="relative">
-                                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" size={18} />
                                 <input
                                     type="text"
                                     placeholder="sarah@clinic.com"
-                                    className={`w-full bg-white/60 border ${emailError ? 'border-rose-300 ring-4 ring-rose-50' : 'border-white/50 focus:border-brand-500/50 focus:ring-4 focus:ring-brand-500/10'} rounded-2xl py-4 pl-12 pr-4 outline-none transition-all placeholder:text-slate-300 font-bold`}
+                                    className={`w-full bg-white/5 border ${emailError ? 'border-rose-300 ring-4 ring-rose-50' : 'border-white/10 focus:border-brand-500/50 focus:ring-4 focus:ring-brand-500/10'} rounded-2xl py-4 pl-12 pr-4 outline-none transition-all placeholder:text-slate-600 text-white font-bold`}
                                     value={email}
                                     onChange={handleEmailChange}
                                     required
@@ -358,13 +393,13 @@ const AuthPage = () => {
                         </div>
 
                         <div>
-                            <label className="block text-xs font-extrabold text-slate-600 uppercase tracking-widest mb-2 px-2">Secure Password</label>
+                            <label className="block text-xs font-extrabold text-slate-400 uppercase tracking-widest mb-2 px-2">Secure Password</label>
                             <div className="relative">
-                                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" size={18} />
                                 <input
                                     type={showPassword ? "text" : "password"}
                                     placeholder="••••••••"
-                                    className="w-full bg-white/60 border border-white/50 focus:border-brand-500/50 focus:ring-4 focus:ring-brand-500/10 rounded-2xl py-4 pl-12 pr-12 outline-none transition-all placeholder:text-slate-300 font-bold"
+                                    className="w-full bg-white/5 border border-white/10 focus:border-brand-500/50 focus:ring-4 focus:ring-brand-500/10 rounded-2xl py-4 pl-12 pr-12 outline-none transition-all placeholder:text-slate-600 text-white font-bold"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     required
@@ -372,7 +407,7 @@ const AuthPage = () => {
                                 <button
                                     type="button"
                                     onClick={() => setShowPassword(!showPassword)}
-                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-brand-600 transition-colors p-1"
+                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-brand-400 transition-colors p-1"
                                 >
                                     {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                                 </button>
@@ -398,11 +433,11 @@ const AuthPage = () => {
                         </button>
                     </form>
 
-                    <p className="text-center mt-10 text-slate-600 text-sm font-bold">
+                    <p className="text-center mt-10 text-slate-400 text-sm font-bold">
                         {isLogin ? "New to the platform?" : "Already have an account?"}
                         <button
                             onClick={() => { setIsLogin(!isLogin); setAuthError(''); setEmail(''); setPassword(''); }}
-                            className="ml-2 text-brand-600 hover:underline"
+                            className="ml-2 text-brand-400 hover:text-brand-300 transition-colors underline underline-offset-4"
                         >
                             {isLogin ? 'Join Now' : 'Login'}
                         </button>
