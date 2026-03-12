@@ -1345,7 +1345,7 @@ const Dashboard = () => {
                             className="w-full h-full object-contain filter brightness-110 contrast-125 mix-blend-screen transition-all duration-500 group-hover:scale-110" 
                         />
                     </div>
-                    <span className="hidden md:block font-black text-[11px] uppercase tracking-[0.6em] text-slate-400/40 transition-colors group-hover:text-brand-400">Maatri Shield</span>
+                    <span className="hidden md:block font-black text-[11px] uppercase tracking-[0.6em] text-slate-400 transition-colors group-hover:text-brand-400">Maatri Shield</span>
                 </div>
 
                 {/* Emergency SOS Button */}
