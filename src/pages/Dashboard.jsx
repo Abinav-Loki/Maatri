@@ -2062,7 +2062,7 @@ const Dashboard = () => {
                                             <div className="absolute top-0 right-0 w-32 h-32 bg-teal-50 rounded-full -mr-16 -mt-16 opacity-40 group-hover:scale-125 transition-transform duration-700"></div>
                                             <div className="flex items-center gap-4 mb-6 relative z-10">
                                                 <div className="w-12 h-12 rounded-2xl bg-teal-50 flex items-center justify-center text-teal-500 group-hover:rotate-12 transition-transform">
-                                                    <CheckCircle size={24} />
+                                                    <CheckCircle2 size={24} />
                                                 </div>
                                                 <p className="text-[10px] text-teal-500 font-black uppercase tracking-[0.3em]">Optimal Stability</p>
                                             </div>
