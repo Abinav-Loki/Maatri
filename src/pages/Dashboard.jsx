@@ -9,7 +9,7 @@ import {
     Users as UsersIcon, User, Search, Edit, Camera,
     MessageSquare, Sparkles, Bot, Trash2,
     Calendar, Download, CheckCircle2, Play, Square, Zap, Image as ImageIcon,
-    Mic, Pause, UserPlus, Lock, ArrowRight
+    Mic, Pause, UserPlus, Lock, ArrowRight, Shield
 } from 'lucide-react';
 import {
     AreaChart, Area, XAxis, YAxis, CartesianGrid,
