@@ -2,7 +2,6 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { HeartPulse, ShieldCheck, Sparkles, ChevronRight } from 'lucide-react';
-import logo from '../assets/maatri_shield_logo.png';
 import welcomeHero from '../assets/welcome_hero.png';
 
 const Welcome = () => {
@@ -79,41 +78,20 @@ const Welcome = () => {
                 animate="visible"
                 className="relative z-30 max-w-4xl mx-auto px-6 text-center"
             >
-                {/* Logo Section */}
-                <motion.div 
-                    variants={itemVariants}
-                    className="flex justify-center mb-10"
-                >
-                    <div className="relative">
-                        <motion.div 
-                            animate={{ scale: [1, 1.1, 1] }}
-                            transition={{ duration: 4, repeat: Infinity }}
-                            className="absolute inset-0 bg-brand-500/30 blur-2xl rounded-full"
-                        />
-                        <div className="relative w-24 h-24 md:w-32 md:h-32 bg-white/10 backdrop-blur-xl flex items-center justify-center p-4 border border-white/20 rounded-3xl shadow-2xl">
-                            <img 
-                                src={logo} 
-                                alt="Maatri Shield Logo" 
-                                className="w-full h-full object-contain filter brightness-110 drop-shadow-md" 
-                            />
-                        </div>
-                    </div>
-                </motion.div>
-
                 {/* Text Content */}
                 <motion.div variants={itemVariants} className="mb-6">
                     <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-500/20 text-brand-200 text-xs md:text-sm font-semibold tracking-wide uppercase mb-6 shadow-sm border border-brand-400/30 backdrop-blur-md">
                         <Sparkles size={14} className="animate-pulse" />
-                        Next-Gen Maternal Safety
+                        Next-Gen Maternal Support
                     </span>
                     <h1 className="text-4xl md:text-7xl font-black text-white mb-6 tracking-tight leading-[1.1]">
-                        Nurturing Life Through <br />
+                        Supporting Your Journey with <br />
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-300 via-brand-200 to-accent-300">
                             Intelligent Care
                         </span>
                     </h1>
                     <p className="text-lg md:text-xl text-slate-200 max-w-2xl mx-auto leading-relaxed font-medium">
-                        Advanced AI monitoring for every expectant mother, ensuring safety and peace of mind at every step of your journey.
+                        AI-assisted health tracking and insights for every expectant mother, working alongside you for a healthier experience.
                     </p>
                 </motion.div>
 
@@ -126,13 +104,13 @@ const Welcome = () => {
                         <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-brand-300 border border-white/10 shadow-sm backdrop-blur-md">
                             <ShieldCheck size={20} />
                         </div>
-                        <span className="font-semibold text-sm md:text-base">AI Risk Detection</span>
+                        <span className="font-semibold text-sm md:text-base">Smart Risk Screening</span>
                     </div>
                     <div className="flex items-center gap-3 text-white/90">
                         <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-accent-300 border border-white/10 shadow-sm backdrop-blur-md">
                             <HeartPulse size={20} />
                         </div>
-                        <span className="font-semibold text-sm md:text-base">Real-time Monitoring</span>
+                        <span className="font-semibold text-sm md:text-base">Continuous Engagement</span>
                     </div>
                 </motion.div>
 
@@ -153,7 +131,7 @@ const Welcome = () => {
                         </div>
                     </button>
                     <p className="mt-6 text-white/50 font-medium text-sm md:text-base">
-                        Experience the future of maternity care
+                        Experience the latest in maternity support
                     </p>
                 </motion.div>
             </motion.div>
