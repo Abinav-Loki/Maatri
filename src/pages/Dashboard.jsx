@@ -1413,11 +1413,7 @@ const Dashboard = () => {
                     ))}
                 </nav>
 
-                <div className="mt-auto px-1 pt-6 border-t border-white/5">
-                    <div className="bg-white/5 rounded-2xl p-4 text-center">
-                        <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Maatri Shield Intelligence</p>
-                        <p className="text-[10px] text-slate-400 mt-1 font-bold">Premium Clinical Tier</p>
-                    </div>
+                <div className="mt-auto px-1 pt-6">
                 </div>
             </aside>
 
@@ -2588,7 +2584,7 @@ const Dashboard = () => {
                                                             tickLine={false} 
                                                             tick={{ fill: '#94a3b8', fontSize: 10, fontWeight: 800 }} 
                                                         />
-                                                        <YAxis hide={true} domain={['dataMin - 10', 'dataMax + 10']} />
+                                                        <YAxis hide={false} domain={['dataMin - 10', 'dataMax + 10']} tick={{ fill: '#94a3b8', fontSize: 10, fontWeight: 800 }} axisLine={false} tickLine={false} />
                                                         <Tooltip
                                                             cursor={{ stroke: '#f43f5e', strokeWidth: 2, strokeDasharray: '5 5' }}
                                                             contentStyle={{ 
@@ -2717,7 +2713,7 @@ const Dashboard = () => {
                                                             tickLine={false} 
                                                             tick={{ fill: '#94a3b8', fontSize: 10, fontWeight: 800 }} 
                                                         />
-                                                        <YAxis hide={true} domain={['dataMin - 5', 'dataMax + 5']} />
+                                                        <YAxis hide={false} domain={['dataMin - 5', 'dataMax + 5']} tick={{ fill: '#94a3b8', fontSize: 10, fontWeight: 800 }} axisLine={false} tickLine={false} />
                                                         <Tooltip 
                                                             contentStyle={{ 
                                                                 borderRadius: '20px', 
@@ -2789,7 +2785,7 @@ const Dashboard = () => {
                                                             tickLine={false} 
                                                             tick={{ fill: '#94a3b8', fontSize: 10, fontWeight: 800 }} 
                                                         />
-                                                        <YAxis hide={true} domain={['dataMin - 5', 'dataMax + 5']} />
+                                                        <YAxis hide={false} domain={['dataMin - 5', 'dataMax + 5']} tick={{ fill: '#94a3b8', fontSize: 10, fontWeight: 800 }} axisLine={false} tickLine={false} />
                                                         <Tooltip 
                                                             contentStyle={{ 
                                                                 borderRadius: '20px', 
