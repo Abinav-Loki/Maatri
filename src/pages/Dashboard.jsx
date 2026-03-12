@@ -1413,16 +1413,17 @@ const Dashboard = () => {
                     ))}
                 </nav>
 
-                <div className="mt-auto pt-10 px-4 mb-6">
-                    <div className="bg-white/10 p-4 rounded-2xl border border-white/20">
-                        <p className="text-[10px] text-white/50 font-bold uppercase tracking-widest mb-3">Clinical System</p>
-                        <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-lg bg-brand-500/20 flex items-center justify-center text-brand-300">
-                                <Zap size={16} />
-                            </div>
-                            <span className="text-xs font-bold text-white/80">V2.4 Active</span>
-                        </div>
-                    </div>
+                <div className="mt-auto px-1 pb-4">
+                    <button
+                        onClick={() => {
+                            storage.logout();
+                            navigate('/');
+                        }}
+                        className="flex items-center gap-3.5 w-full p-2.5 rounded-xl transition-all duration-300 text-rose-400/60 hover:text-rose-400 hover:bg-rose-500/10 border border-transparent hover:border-rose-500/20 group"
+                    >
+                        <LogOut size={18} className="group-hover:scale-110 transition-transform" />
+                        <span className="hidden md:block text-[13px] font-black uppercase tracking-widest">Logout System</span>
+                    </button>
                 </div>
             </aside>
 
@@ -2615,7 +2616,7 @@ const Dashboard = () => {
                                                             filter="url(#glow)"
                                                             connectNulls={true}
                                                             animationBegin={0}
-                                                            animationDuration={2500}
+                                                            animationDuration={3000}
                                                             animationEasing="ease-in-out"
                                                         />
                                                         <Area 
@@ -2626,8 +2627,8 @@ const Dashboard = () => {
                                                             strokeDasharray="5 5"
                                                             fill="none" 
                                                             connectNulls={true}
-                                                            animationBegin={500}
-                                                            animationDuration={2000}
+                                                            animationBegin={0}
+                                                            animationDuration={3000}
                                                             animationEasing="ease-in-out"
                                                         />
                                                     </AreaChart>
@@ -3246,15 +3247,15 @@ const Dashboard = () => {
             <AnimatePresence>
                  {
                      activeTab === 'settings' && (
-                         <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} className="space-y-10 pb-12 relative z-10">
-                             <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-8">
+                         <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} className="space-y-8 pb-12 relative z-10 max-w-4xl mx-auto">
+                             <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-6">
                                  <div>
-                                     <h2 className="text-4xl font-black tracking-tight text-slate-900 mb-2 bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-slate-800 to-slate-600">Account Settings</h2>
-                                     <p className="text-slate-500 font-medium italic border-l-4 border-brand-500 pl-4 py-1">Manage your clinical profile identity and system preferences.</p>
+                                     <h2 className="text-3xl font-black tracking-tight text-slate-900 mb-2 bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-slate-800 to-slate-600">Account Settings</h2>
+                                     <p className="text-slate-500 font-medium italic border-l-4 border-brand-500 pl-4 py-1 text-sm">Manage your clinical profile identity and system preferences.</p>
                                  </div>
                              </div>
  
-                             <div className="bg-white p-8 lg:p-12 rounded-3xl border border-slate-100 shadow-xl shadow-slate-200/20 max-w-5xl">
+                             <div className="bg-white p-6 lg:p-10 rounded-3xl border border-slate-100 shadow-xl shadow-slate-200/20">
                                  <form id="profileForm" onSubmit={handleUpdateProfile} className="space-y-12">
                                      <div className="flex flex-col md:flex-row gap-12 items-start">
                                          {/* Photo Section */}
