@@ -169,15 +169,18 @@ const Dashboard = () => {
         setIsSosPulsing(false);
         setDemoRiskPercent(0.15); // Start Safe
 
-        const totalDuration = 5000;
-        const intervalTime = totalDuration / fullDemoData.length;
+        const totalScanDuration = 2500; // Faster, more cinematic scan
+        const intervalTime = totalScanDuration / fullDemoData.length;
 
         const timer = setInterval(() => {
             if (currentIndex < fullDemoData.length) {
                 const currentPoint = fullDemoData[currentIndex];
                 setDemoDataPoints(prev => {
                     const next = [...prev];
-                    next[currentIndex] = { ...currentPoint };
+                    // Real-time animation: fill up to current index with actual values
+                    for (let i = 0; i <= currentIndex; i++) {
+                        next[i] = { ...fullDemoData[i] };
+                    }
                     return next;
                 });
                 setDemoRiskPercent(currentPoint.risk);
@@ -1334,28 +1337,36 @@ const Dashboard = () => {
             </AnimatePresence>
 
             {/* Sidebar - Fixed to prevent scrolling */}
-            <aside className={`fixed w-64 bg-slate-950 h-screen flex flex-col p-6 z-50 transition-transform duration-300 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'} shadow-[4px_0_24px_rgba(0,0,0,0.3)] border-r border-slate-900`}>
-                <div className="p-4 flex flex-col items-center gap-2 mb-8 text-center">
-                    <img src={logo} alt="Maatri Shield" className="w-16 h-16 object-contain shrink-0" />
-                    <span className="hidden md:block font-black text-xs uppercase tracking-[0.4em] text-slate-400">Maatri Shield</span>
+            <aside className={`fixed w-64 bg-[#020617] h-screen flex flex-col p-4 z-50 transition-transform duration-300 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'} shadow-[20px_0_60px_rgba(0,0,0,0.6)] border-r border-white/10`}>
+                <div className="py-2 flex flex-col items-center gap-1 mb-6 text-center select-none">
+                    <div className="relative w-14 h-14 mb-1 group">
+                        <img 
+                            src={logo} 
+                            alt="Maatri Shield" 
+                            className="w-full h-full object-contain filter brightness-125 contrast-125 mix-blend-lighten drop-shadow-[0_0_12px_rgba(99,102,241,0.4)] transition-all duration-500 group-hover:scale-110 group-hover:drop-shadow-[0_0_20px_rgba(99,102,241,0.6)]" 
+                        />
+                        <div className="absolute inset-0 bg-brand-500/10 rounded-full blur-2xl opacity-40 animate-pulse"></div>
+                    </div>
+                    <span className="hidden md:block font-black text-[10px] uppercase tracking-[0.6em] text-slate-400/60 transition-colors group-hover:text-brand-400">Maatri Shield</span>
                 </div>
 
                 {/* Emergency SOS Button */}
                 {(role === 'patient' || role === 'guardian') && (
-                    <div className="px-4 mb-8">
+                    <div className="px-1 mb-4">
                         <button
                             onClick={handleSOS}
-                            className={`w-full py-4 rounded-2xl flex items-center justify-center gap-3 font-black uppercase tracking-widest text-xs transition-all shadow-2xl ${isSOSTriggered
+                            className={`w-full py-3.5 rounded-2xl flex items-center justify-center gap-3 font-black uppercase tracking-widest text-[9px] transition-all shadow-2xl relative overflow-hidden group ${isSOSTriggered
                                 ? 'bg-red-600 text-white animate-pulse'
-                                : 'bg-gradient-to-r from-red-500 to-rose-600 text-white hover:scale-[1.02] hover:shadow-[0_0_15px_rgba(225,29,72,0.6)] border-2 border-transparent'}`}
+                                : 'bg-gradient-to-br from-red-500 via-rose-600 to-red-700 text-white hover:scale-[1.02] hover:shadow-[0_0_20px_rgba(225,29,72,0.4)] border border-white/10'}`}
                         >
-                            <AlertTriangle size={18} className={isSOSTriggered ? 'animate-bounce' : ''} />
-                            <span className="hidden md:block">Emergency SOS</span>
+                            <div className="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+                            <AlertTriangle size={16} className={`relative z-10 ${isSOSTriggered ? 'animate-bounce' : ''}`} />
+                            <span className="hidden md:block relative z-10 text-[10px]">Emergency SOS</span>
                         </button>
                     </div>
                 )}
 
-                <nav className="flex-1 space-y-2">
+                <nav className="flex-1 space-y-1.5 px-1 overflow-hidden">
                     {[
                         { id: 'overview', icon: Activity, label: "Overview" },
                         ...(role === 'doctor' ? [
@@ -1387,18 +1398,18 @@ const Dashboard = () => {
                                     setSelectedPatient(null);
                                 }
                             }}
-                            className={`flex items-center gap-4 w-full p-4 rounded-2xl transition-all duration-300 group relative ${activeTab === item.id
-                                ? 'bg-brand-600/15 text-brand-400 border border-brand-500/30'
-                                : 'text-slate-400 hover:text-slate-200 hover:bg-white/5 border border-transparent'
+                            className={`flex items-center gap-3.5 w-full p-3 rounded-xl transition-all duration-300 group relative ${activeTab === item.id
+                                ? 'bg-brand-500/10 text-brand-400 border border-brand-500/20 shadow-[0_0_15px_rgba(99,102,241,0.1)]'
+                                : 'text-slate-500 hover:text-slate-200 hover:bg-white/5 border border-transparent'
                                 }`}
                         >
-                            <item.icon size={20} className={activeTab === item.id ? 'text-brand-400' : 'text-slate-500 group-hover:text-slate-300'} />
-                            <span className="hidden md:block text-sm font-bold tracking-tight">{item.label}</span>
+                            <item.icon size={18} className={activeTab === item.id ? 'text-brand-400 group-hover:scale-110 transition-transform' : 'text-slate-500 group-hover:text-slate-300'} />
+                            <span className="hidden md:block text-[13px] font-bold tracking-tight">{item.label}</span>
                             {activeTab === item.id && (
-                                <motion.div layoutId="activeNav" className="absolute left-0 w-1 h-6 bg-brand-500 rounded-full" />
+                                <motion.div layoutId="activeNav" className="absolute left-[-4px] w-1 h-5 bg-brand-500 rounded-r-full shadow-[2px_0_10px_rgba(99,102,241,0.8)]" />
                             )}
                             {item.id === 'notifications' && clinicalNotifications.filter(n => !n.read && (role !== 'doctor' || n.type !== 'water')).length > 0 && (
-                                <span className="absolute top-4 right-4 w-2 h-2 bg-rose-500 rounded-full shadow-[0_0_10px_rgba(244,63,94,0.6)] animate-pulse"></span>
+                                <span className="absolute top-3 right-3 w-1.5 h-1.5 bg-rose-500 rounded-full shadow-[0_0_10px_rgba(244,63,94,0.6)] animate-pulse"></span>
                             )}
                         </button>
                     ))}
@@ -1418,8 +1429,11 @@ const Dashboard = () => {
             </aside>
 
             {/* Main Content - Added ml-64 to compensate for fixed sidebar */}
-            <main className={`flex-1 min-w-0 transition-all duration-500 p-4 lg:p-10 lg:ml-64 bg-slate-50/50 min-h-screen`}>
-                <header className="flex justify-between items-center mb-8 gap-4">
+            <main className={`flex-1 min-w-0 transition-all duration-500 p-4 lg:p-8 lg:ml-64 bg-[#fbfbfe] min-h-screen relative overflow-x-hidden`}>
+                <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-brand-500/5 rounded-full blur-[120px] -mr-80 -mt-80 pointer-events-none"></div>
+                <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-teal-500/5 rounded-full blur-[100px] -ml-60 -mb-60 pointer-events-none"></div>
+                
+                <header className="flex justify-between items-center mb-8 gap-4 relative z-10">
                     <div className="flex items-center gap-4">
                         <button 
                             onClick={() => setIsMobileMenuOpen(true)}
@@ -2558,58 +2572,103 @@ const Dashboard = () => {
                                                     <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">mmHg  Latest</p>
                                                 </div>
                                             </div>
-                                            <div className="h-[180px] w-full">
+                                            <div className="h-[200px] w-full relative group/chart">
                                                 <ResponsiveContainer width="100%" height="100%">
                                                     <AreaChart data={weeklyTrends}>
                                                         <defs>
                                                             <linearGradient id="colorSysRedesign" x1="0" y1="0" x2="0" y2="1">
-                                                                <stop offset="5%" stopColor="#f43f5e" stopOpacity={0.1} />
+                                                                <stop offset="5%" stopColor="#f43f5e" stopOpacity={0.2} />
                                                                 <stop offset="95%" stopColor="#f43f5e" stopOpacity={0} />
                                                             </linearGradient>
+                                                            <filter id="glow">
+                                                                <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                                                                <feMerge>
+                                                                    <feMergeNode in="coloredBlur"/>
+                                                                    <feMergeNode in="SourceGraphic"/>
+                                                                </feMerge>
+                                                            </filter>
                                                         </defs>
-                                                        <CartesianGrid strokeDasharray="6 6" vertical={false} stroke="#f1f5f9" />
-                                                        <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 9, fontWeight: 700 }} />
-                                                        <YAxis hide={true} />
-                                                        <Tooltip
-                                                            contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.1)', padding: '12px' }}
-                                                            itemStyle={{ fontWeight: 'bold', fontSize: '12px' }}
+                                                        <CartesianGrid strokeDasharray="8 8" vertical={false} stroke="#f1f5f9" />
+                                                        <XAxis 
+                                                            dataKey="day" 
+                                                            axisLine={false} 
+                                                            tickLine={false} 
+                                                            tick={{ fill: '#94a3b8', fontSize: 10, fontWeight: 800 }} 
                                                         />
-                                                        <Area type="monotone" dataKey="sys" stroke="#f43f5e" strokeWidth={3} fill="url(#colorSysRedesign)" />
+                                                        <YAxis hide={true} domain={['dataMin - 10', 'dataMax + 10']} />
+                                                        <Tooltip
+                                                            cursor={{ stroke: '#f43f5e', strokeWidth: 2, strokeDasharray: '5 5' }}
+                                                            contentStyle={{ 
+                                                                borderRadius: '20px', 
+                                                                border: '1px solid rgba(244, 63, 94, 0.1)', 
+                                                                boxShadow: '0 20px 40px -10px rgba(0,0,0,0.1)',
+                                                                padding: '16px',
+                                                                backdropFilter: 'blur(10px)',
+                                                                backgroundColor: 'rgba(255,255,255,0.9)'
+                                                            }}
+                                                            itemStyle={{ fontWeight: '900', fontSize: '14px', color: '#1e293b' }}
+                                                        />
+                                                        <Area 
+                                                            type="monotone" 
+                                                            dataKey="sys" 
+                                                            stroke="#f43f5e" 
+                                                            strokeWidth={4} 
+                                                            fill="url(#colorSysRedesign)" 
+                                                            filter="url(#glow)"
+                                                            animationDuration={1500}
+                                                        />
                                                     </AreaChart>
                                                 </ResponsiveContainer>
+                                                {isDemoMode && (
+                                                    <motion.div 
+                                                        animate={{ left: ['0%', '100%'], opacity: [0, 1, 1, 0] }}
+                                                        transition={{ duration: 2.5, ease: "linear", repeat: Infinity }}
+                                                        className="absolute top-0 bottom-0 w-[2px] bg-rose-500 shadow-[0_0_15px_#f43f5e] z-10 pointer-events-none"
+                                                    />
+                                                )}
                                             </div>
                                         </div>
 
                                         {/* Risk Score Card - Redesigned */}
-                                        <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col items-center justify-center relative overflow-hidden">
-                                            <div className="absolute top-6 left-6">
-                                                <div className="flex items-center gap-2 mb-1.5">
-                                                    <div className="w-6 h-6 rounded-lg bg-brand-50 flex items-center justify-center text-brand-500">
-                                                        <Activity size={14} />
+                                        <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-[0_10px_30px_rgba(0,0,0,0.02)] hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.08)] transition-all duration-500 flex flex-col items-center justify-center relative overflow-hidden group">
+                                            <div className="absolute top-0 right-0 w-32 h-32 bg-slate-50 rounded-full -mr-16 -mt-16 opacity-50 group-hover:scale-150 transition-transform duration-1000"></div>
+                                            <div className="absolute top-8 left-8">
+                                                <div className="flex items-center gap-3 mb-2">
+                                                    <div className="w-8 h-8 rounded-xl bg-brand-50 flex items-center justify-center text-brand-500 shadow-sm">
+                                                        <Activity size={18} />
                                                     </div>
-                                                    <p className="text-[9px] font-black text-brand-500 uppercase tracking-widest">Safety Index</p>
+                                                    <p className="text-[11px] font-black text-brand-500 uppercase tracking-widest">Safety Index</p>
                                                 </div>
-                                                <h3 className="text-xl font-bold text-slate-900 tracking-tight">Risk Assessment</h3>
+                                                <h3 className="text-2xl font-black text-slate-900 tracking-tight">Risk Assessment</h3>
                                             </div>
-                                            <div className="w-full max-w-[240px] mt-12">
+                                            <div className="w-full max-w-[280px] mt-16 relative">
                                                 <GaugeChart
                                                     id="risk-gauge-analytics"
-                                                    nrOfLevels={30}
+                                                    nrOfLevels={40}
                                                     colors={['#10b981', '#f59e0b', '#ef4444']}
-                                                    arcWidth={0.15}
+                                                    arcWidth={0.12}
                                                     percent={isDemoMode ? demoRiskPercent : (getRiskStatus(logs[0])?.score || 0.2)}
                                                     textColor="#1e293b"
                                                     needleColor="#0f172a"
                                                     needleBaseColor="#0f172a"
                                                     hideText={true}
+                                                    animate={true}
+                                                    animDelay={500}
                                                 />
-                                            </div>
-                                            <div className="text-center -mt-6">
-                                                <p className="text-5xl font-black text-slate-900 tracking-tighter">
-                                                    {((isDemoMode ? demoRiskPercent : (getRiskStatus(logs[0])?.score || 0.2)) * 100).toFixed(0)}<span className="text-xl text-slate-300 ml-1">%</span>
-                                                </p>
-                                                <div className="mt-3 px-4 py-1.5 bg-slate-950 text-white rounded-xl text-[10px] font-black uppercase tracking-widest inline-block">
-                                                    {getRiskStatus(logs[0])?.label || 'Normal'} Stability
+                                                <div className="absolute inset-0 flex items-center justify-center pt-16">
+                                                    <div className="text-center">
+                                                        <motion.p 
+                                                            key={demoRiskPercent}
+                                                            initial={{ scale: 0.8, opacity: 0 }}
+                                                            animate={{ scale: 1, opacity: 1 }}
+                                                            className="text-6xl font-black text-slate-900 tracking-tighter"
+                                                        >
+                                                            {((isDemoMode ? demoRiskPercent : (getRiskStatus(logs[0])?.score || 0.2)) * 100).toFixed(0)}<span className="text-2xl text-slate-300 ml-1">%</span>
+                                                        </motion.p>
+                                                        <div className="mt-4 px-6 py-2 bg-slate-950 text-white rounded-2xl text-[11px] font-black uppercase tracking-[0.2em] inline-block shadow-xl shadow-slate-200">
+                                                            {getRiskStatus(logs[0])?.label || 'Normal'} Stability
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -2631,21 +2690,60 @@ const Dashboard = () => {
                                                     <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Resting  Optimized</p>
                                                 </div>
                                             </div>
-                                            <div className="h-[180px] w-full">
+                                            <div className="h-[200px] w-full relative">
                                                 <ResponsiveContainer width="100%" height="100%">
                                                     <LineChart data={weeklyTrends}>
-                                                        <CartesianGrid strokeDasharray="6 6" vertical={false} stroke="#f1f5f9" />
-                                                        <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 9, fontWeight: 700 }} />
-                                                        <YAxis hide={true} />
-                                                        <Tooltip contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.1)' }} />
-                                                        <Line type="monotone" dataKey="hr" stroke="#14b8a6" strokeWidth={4} dot={false} activeDot={{ r: 6, strokeWidth: 2, stroke: '#fff', fill: '#14b8a6' }} />
+                                                        <defs>
+                                                            <filter id="glowTeal">
+                                                                <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                                                                <feMerge>
+                                                                    <feMergeNode in="coloredBlur"/>
+                                                                    <feMergeNode in="SourceGraphic"/>
+                                                                </feMerge>
+                                                            </filter>
+                                                        </defs>
+                                                        <CartesianGrid strokeDasharray="8 8" vertical={false} stroke="#f1f5f9" />
+                                                        <XAxis 
+                                                            dataKey="day" 
+                                                            axisLine={false} 
+                                                            tickLine={false} 
+                                                            tick={{ fill: '#94a3b8', fontSize: 10, fontWeight: 800 }} 
+                                                        />
+                                                        <YAxis hide={true} domain={['dataMin - 5', 'dataMax + 5']} />
+                                                        <Tooltip 
+                                                            contentStyle={{ 
+                                                                borderRadius: '20px', 
+                                                                border: '1px solid rgba(20, 184, 166, 0.1)', 
+                                                                boxShadow: '0 20px 40px -10px rgba(0,0,0,0.1)',
+                                                                backdropFilter: 'blur(10px)',
+                                                                backgroundColor: 'rgba(255,255,255,0.9)'
+                                                            }} 
+                                                        />
+                                                        <Line 
+                                                            type="monotone" 
+                                                            dataKey="hr" 
+                                                            stroke="#14b8a6" 
+                                                            strokeWidth={5} 
+                                                            dot={{ r: 4, fill: '#14b8a6', strokeWidth: 0 }} 
+                                                            activeDot={{ r: 8, strokeWidth: 4, stroke: 'rgba(20, 184, 166, 0.2)', fill: '#14b8a6' }} 
+                                                            filter="url(#glowTeal)"
+                                                            animationDuration={1500}
+                                                        />
                                                     </LineChart>
                                                 </ResponsiveContainer>
+                                                {isDemoMode && (
+                                                    <motion.div 
+                                                        animate={{ left: ['0%', '100%'], opacity: [0, 1, 1, 0] }}
+                                                        transition={{ duration: 2.5, ease: "linear", repeat: Infinity }}
+                                                        className="absolute top-0 bottom-0 w-[2px] bg-teal-500 shadow-[0_0_15px_#14b8a6] z-10 pointer-events-none"
+                                                    />
+                                                )}
                                             </div>
                                         </div>
 
                                         {/* Blood Sugar Card - Redesigned */}
-                                        <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 group relative">
+                                        <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 group relative overflow-hidden">
+                                            <div className="absolute top-0 left-0 w-1.5 h-full bg-indigo-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                                             <div className="flex items-start justify-between mb-6">
                                                 <div>
                                                     <div className="flex items-center gap-2 mb-1.5">
@@ -2661,44 +2759,89 @@ const Dashboard = () => {
                                                     <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Target  95</p>
                                                 </div>
                                             </div>
-                                            <div className="h-[180px] w-full">
+                                            <div className="h-[200px] w-full relative">
                                                 <ResponsiveContainer width="100%" height="100%">
                                                     <LineChart data={weeklyTrends}>
-                                                        <CartesianGrid strokeDasharray="6 6" vertical={false} stroke="#f1f5f9" />
-                                                        <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 9, fontWeight: 700 }} />
-                                                        <YAxis hide={true} />
-                                                        <Tooltip contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.1)' }} />
-                                                        <Line type="monotone" dataKey="g" stroke="#6366f1" strokeWidth={4} dot={false} activeDot={{ r: 6, strokeWidth: 2, stroke: '#fff', fill: '#6366f1' }} />
+                                                        <defs>
+                                                            <filter id="glowIndigo">
+                                                                <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                                                                <feMerge>
+                                                                    <feMergeNode in="coloredBlur"/>
+                                                                    <feMergeNode in="SourceGraphic"/>
+                                                                </feMerge>
+                                                            </filter>
+                                                        </defs>
+                                                        <CartesianGrid strokeDasharray="8 8" vertical={false} stroke="#f1f5f9" />
+                                                        <XAxis 
+                                                            dataKey="day" 
+                                                            axisLine={false} 
+                                                            tickLine={false} 
+                                                            tick={{ fill: '#94a3b8', fontSize: 10, fontWeight: 800 }} 
+                                                        />
+                                                        <YAxis hide={true} domain={['dataMin - 5', 'dataMax + 5']} />
+                                                        <Tooltip 
+                                                            contentStyle={{ 
+                                                                borderRadius: '20px', 
+                                                                border: '1px solid rgba(99, 102, 241, 0.1)', 
+                                                                boxShadow: '0 20px 40px -10px rgba(0,0,0,0.1)',
+                                                                backdropFilter: 'blur(10px)',
+                                                                backgroundColor: 'rgba(255,255,255,0.9)'
+                                                            }} 
+                                                        />
+                                                        <Line 
+                                                            type="monotone" 
+                                                            dataKey="g" 
+                                                            stroke="#6366f1" 
+                                                            strokeWidth={5} 
+                                                            dot={{ r: 4, fill: '#6366f1', strokeWidth: 0 }} 
+                                                            activeDot={{ r: 8, strokeWidth: 4, stroke: 'rgba(99, 102, 241, 0.2)', fill: '#6366f1' }} 
+                                                            filter="url(#glowIndigo)"
+                                                            animationDuration={1500}
+                                                        />
                                                     </LineChart>
                                                 </ResponsiveContainer>
+                                                {isDemoMode && (
+                                                    <motion.div 
+                                                        animate={{ left: ['0%', '100%'], opacity: [0, 1, 1, 0] }}
+                                                        transition={{ duration: 2.5, ease: "linear", repeat: Infinity }}
+                                                        className="absolute top-0 bottom-0 w-[2px] bg-indigo-500 shadow-[0_0_15px_#6366f1] z-10 pointer-events-none"
+                                                    />
+                                                )}
                                             </div>
                                         </div>
 
                                         {/* Symptoms Card - Redesigned */}
-                                        <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300">
-                                            <div className="flex items-center gap-3 mb-6">
-                                                <div className="w-8 h-8 rounded-xl bg-slate-950 text-white flex items-center justify-center">
-                                                    <Sparkles size={16} />
+                                        <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-[0_10px_30px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.05)] transition-all duration-500 group relative overflow-hidden">
+                                            <div className="absolute top-0 right-0 w-32 h-32 bg-slate-50 rounded-full -mr-16 -mt-16 opacity-50 group-hover:scale-150 transition-transform duration-1000"></div>
+                                            <div className="flex items-center gap-4 mb-8">
+                                                <div className="w-10 h-10 rounded-2xl bg-slate-950 text-white flex items-center justify-center shadow-lg shadow-slate-200">
+                                                    <Sparkles size={20} />
                                                 </div>
-                                                <h3 className="text-lg font-bold text-slate-900 tracking-tight">Symptoms Tracking</h3>
+                                                <div>
+                                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-0.5">Physical Status</p>
+                                                    <h3 className="text-xl font-black text-slate-900 tracking-tight">Symptoms Tracking</h3>
+                                                </div>
                                             </div>
-                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                                 {[
-                                                    { id: 'swelling', label: 'Peripheral Swelling' },
-                                                    { id: 'headache', label: 'Acute Headache' },
-                                                    { id: 'vision', label: 'Visual Disturbances' },
-                                                    { id: 'nausea', label: 'Persistent Nausea' }
+                                                    { id: 'swelling', label: 'Peripheral Swelling', icon: Droplets },
+                                                    { id: 'headache', label: 'Acute Headache', icon: Zap },
+                                                    { id: 'vision', label: 'Visual Disturbances', icon: Sparkles },
+                                                    { id: 'nausea', label: 'Persistent Nausea', icon: Activity }
                                                 ].map((s) => (
-                                                    <label key={s.id} className="flex items-center gap-3 cursor-pointer group p-3 bg-slate-50 rounded-xl border border-transparent hover:border-slate-200 hover:bg-white transition-all">
+                                                    <label key={s.id} className="flex items-center gap-4 cursor-pointer group p-4 bg-slate-50 rounded-2xl border border-slate-100 hover:border-brand-200 hover:bg-brand-50/30 transition-all duration-300">
                                                         <div className="relative flex items-center justify-center">
                                                             <input
                                                                 type="checkbox"
-                                                                className="peer appearance-none w-5 h-5 rounded-lg border-2 border-slate-300 checked:bg-teal-500 checked:border-teal-500 transition-all cursor-pointer"
+                                                                className="peer appearance-none w-6 h-6 rounded-xl border-2 border-slate-200 checked:bg-brand-500 checked:border-brand-500 transition-all cursor-pointer shadow-sm"
                                                                 defaultChecked={s.id === 'swelling'}
                                                             />
-                                                            <CheckCircle2 size={12} className="absolute text-white scale-0 peer-checked:scale-100 transition-transform pointer-events-none" />
+                                                            <CheckCircle2 size={14} className="absolute text-white scale-0 peer-checked:scale-100 transition-transform pointer-events-none" />
                                                         </div>
-                                                        <span className="text-[11px] font-bold text-slate-600 peer-checked:text-slate-900 transition-colors uppercase tracking-tight">{s.label}</span>
+                                                        <div>
+                                                            <span className="text-xs font-black text-slate-600 peer-checked:text-slate-900 transition-colors uppercase tracking-tight block">{s.label}</span>
+                                                            <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-0.5 opacity-0 group-hover:opacity-100 transition-opacity">Select to Log</span>
+                                                        </div>
                                                     </label>
                                                 ))}
                                             </div>
@@ -3039,32 +3182,30 @@ const Dashboard = () => {
                                                 </div>
                                             )}
 
-                                            {/* Generate Report Button */}
-                                            <div className="bg-white/60 backdrop-blur-md rounded-2xl border-2 border-dashed border-slate-200 p-6 text-center h-fit flex flex-col items-center justify-center group hover:border-brand-200 transition-colors max-w-xl mx-auto">
-                                                <div className="flex flex-col items-center">
-                                                    <div className="flex items-center gap-4 mb-4">
-                                                        <div className="w-10 h-10 bg-[#F8F7FF] rounded-xl flex items-center justify-center text-brand-600 group-hover:scale-110 transition-transform">
-                                                            <Sparkles size={20} />
-                                                        </div>
-                                                        <div className="text-left">
-                                                            <h3 className="text-lg font-bold text-slate-900 leading-none">Generate Fresh Report</h3>
-                                                            <p className="text-[11px] text-slate-500 font-medium mt-1">
-                                                                {role === 'doctor'
-                                                                    ? `Analyze ${selectedPatient.name}'s recent clinical progression`
-                                                                    : "Analyze your recent clinical data & interaction logs"
-                                                                }
-                                                            </p>
-                                                        </div>
+                                            {/* Generate Report Button - Premium CTA */}
+                                            <div className="bg-gradient-to-br from-white to-brand-50/30 backdrop-blur-xl rounded-3xl border border-white shadow-[0_20px_40px_-15px_rgba(99,102,241,0.1)] p-10 text-center h-fit flex flex-col items-center justify-center group hover:shadow-[0_40px_80px_-20px_rgba(99,102,241,0.2)] transition-all duration-700 max-w-2xl mx-auto relative overflow-hidden">
+                                                <div className="absolute -top-20 -right-20 w-40 h-40 bg-brand-500/5 rounded-full blur-3xl group-hover:bg-brand-500/10 transition-colors"></div>
+                                                <div className="flex flex-col items-center relative z-10">
+                                                    <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center text-brand-600 shadow-xl shadow-brand-100 mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500">
+                                                        <Sparkles size={32} />
                                                     </div>
+                                                    <h3 className="text-2xl font-black text-slate-900 leading-none mb-3">Generate Fresh Clinical Assessment</h3>
+                                                    <p className="text-sm font-medium text-slate-500 max-w-sm mx-auto mb-8">
+                                                        {role === 'doctor'
+                                                            ? `Our AI will synthesize ${selectedPatient.name}'s latest vitals and interaction history into a professional S.O.A.P note.`
+                                                            : "Initiate our proprietary clinical engine to analyze your recent health metrics and provide actionable advice."
+                                                        }
+                                                    </p>
                                                     <button
                                                         onClick={handleGenerateReport}
                                                         disabled={isGeneratingReport}
-                                                        className={`bg-brand-600 hover:bg-brand-700 text-white py-3 px-8 rounded-2xl flex items-center gap-3 text-sm font-bold shadow-lg shadow-brand-200 transition-all active:scale-95 ${isGeneratingReport ? 'opacity-50' : ''}`}
+                                                        className={`relative overflow-hidden group bg-slate-950 text-white h-14 px-10 rounded-2xl flex items-center gap-4 text-xs font-black uppercase tracking-[0.2em] shadow-2xl shadow-slate-300 transition-all active:scale-95 ${isGeneratingReport ? 'opacity-50' : 'hover:bg-brand-600 hover:shadow-brand-200'}`}
                                                     >
+                                                        <div className="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
                                                         {isGeneratingReport ? (
-                                                            <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Processing Assessment...</>
+                                                            <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Processing...</>
                                                         ) : (
-                                                            <><Activity size={18} /> Generate New Report</>
+                                                            <><Activity size={18} /> Run AI Analysis</>
                                                         )}
                                                     </button>
                                                 </div>
@@ -3089,11 +3230,11 @@ const Dashboard = () => {
             <AnimatePresence>
                  {
                      activeTab === 'settings' && (
-                         <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} className="space-y-10 pb-12">
+                         <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} className="space-y-10 pb-12 relative z-10">
                              <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-8">
                                  <div>
-                                     <h2 className="text-4xl font-black tracking-tight text-slate-900 mb-2">Account Settings</h2>
-                                     <p className="text-slate-500 font-medium italic">Manage your clinical profile identity and system preferences.</p>
+                                     <h2 className="text-4xl font-black tracking-tight text-slate-900 mb-2 bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-slate-800 to-slate-600">Account Settings</h2>
+                                     <p className="text-slate-500 font-medium italic border-l-4 border-brand-500 pl-4 py-1">Manage your clinical profile identity and system preferences.</p>
                                  </div>
                              </div>
  
