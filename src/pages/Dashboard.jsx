@@ -1318,10 +1318,8 @@ const Dashboard = () => {
     };
 
 
-    if (!currentUser) return <div className="min-h-screen bg-slate-50 flex items-center justify-center font-bold text-slate-300">Loading Clinical Interface...</div>;
-
     return (
-        <div className="min-h-screen bg-white flex font-sans relative">
+        <div className="min-h-screen bg-white flex font-sans relative overflow-x-hidden text-slate-900">
             {/* Mobile Menu Overlay */}
             <AnimatePresence>
                 {isMobileMenuOpen && (
@@ -1335,8 +1333,8 @@ const Dashboard = () => {
                 )}
             </AnimatePresence>
 
-            {/* Sidebar */}
-            <aside className={`fixed lg:relative w-64 bg-slate-950 h-screen flex flex-col p-4 z-50 transition-transform duration-300 lg:translate-x-0 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'} shadow-[4px_0_24px_rgba(0,0,0,0.3)] border-r border-slate-900`}>
+            {/* Sidebar - Fixed to prevent scrolling */}
+            <aside className={`fixed w-64 bg-slate-950 h-screen flex flex-col p-6 z-50 transition-transform duration-300 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'} shadow-[4px_0_24px_rgba(0,0,0,0.3)] border-r border-slate-900`}>
                 <div className="p-4 flex flex-col items-center gap-2 mb-8 text-center">
                     <img src={logo} alt="Maatri Shield" className="w-16 h-16 object-contain shrink-0" />
                     <span className="hidden md:block font-black text-xs uppercase tracking-[0.4em] text-slate-400">Maatri Shield</span>
@@ -1379,17 +1377,14 @@ const Dashboard = () => {
                         <button
                             key={item.id}
                             onClick={() => {
-                                if (item.id === 'settings') handleProfileEdit();
-                                else {
-                                    setActiveTab(item.id);
-                                    if (item.id === 'notifications') {
-                                        setClinicalNotifications(prev => prev.map(n => ({ ...n, read: true })));
-                                        if (currentUser) storage.markNotificationsAsRead(currentUser.email);
-                                    }
-                                    if (item.id === 'patients-list') setPatientFilter('all');
-                                    if (['reports', 'find-doctors'].includes(item.id) && role === 'doctor') {
-                                        setSelectedPatient(null);
-                                    }
+                                setActiveTab(item.id);
+                                if (item.id === 'notifications') {
+                                    setClinicalNotifications(prev => prev.map(n => ({ ...n, read: true })));
+                                    if (currentUser) storage.markNotificationsAsRead(currentUser.email);
+                                }
+                                if (item.id === 'patients-list') setPatientFilter('all');
+                                if (['reports', 'find-doctors'].includes(item.id) && role === 'doctor') {
+                                    setSelectedPatient(null);
                                 }
                             }}
                             className={`flex items-center gap-4 w-full p-4 rounded-2xl transition-all duration-300 group relative ${activeTab === item.id
@@ -1422,9 +1417,9 @@ const Dashboard = () => {
                 </div>
             </aside>
 
-            {/* Main Content */}
-            <main className={`flex-1 min-w-0 transition-all duration-500 ${activeTab === 'analytics' ? 'bg-white' : 'bg-slate-50'} p-4 md:p-8`}>
-                <header className="flex justify-between items-center mb-12 gap-4">
+            {/* Main Content - Added ml-64 to compensate for fixed sidebar */}
+            <main className={`flex-1 min-w-0 transition-all duration-500 p-4 lg:p-10 lg:ml-64 bg-slate-50/50 min-h-screen`}>
+                <header className="flex justify-between items-center mb-8 gap-4">
                     <div className="flex items-center gap-4">
                         <button 
                             onClick={() => setIsMobileMenuOpen(true)}
@@ -1656,12 +1651,13 @@ const Dashboard = () => {
 
                                         <button
                                             onClick={() => {
-                                                handleProfileEdit();
+                                                setActiveTab('settings');
+                                                // handleProfileEdit(); // Removed modal trigger
                                                 setShowQuickProfile(false);
                                             }}
-                                            className="w-full py-2.5 bg-brand-600 rounded-xl text-white font-bold text-xs hover:bg-brand-700 transition-all flex items-center justify-center gap-2"
+                                            className="w-full py-3 bg-brand-600 text-white rounded-xl font-bold text-xs hover:bg-brand-700 transition-all shadow-lg shadow-brand-100 flex items-center justify-center gap-2"
                                         >
-                                            <Edit size={14} /> Edit Settings
+                                            <Edit size={14} /> User Settings
                                         </button>
 
                                     </motion.div>
@@ -1795,7 +1791,7 @@ const Dashboard = () => {
                                                         <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider shrink-0">Active now</span>
                                                     </div>
                                                     <p className="text-slate-500 text-sm truncate pr-10">
-                                                        {partner.role === 'doctor' ? partner.hospitalName || 'Clinical Specialist' : `${partner.pregnancyType} Stage � Age ${partner.age}`}
+                                                        {partner.role === 'doctor' ? partner.hospitalName || 'Clinical Specialist' : `${partner.pregnancyType} Stage • Age ${partner.age}`}
                                                     </p>
                                                 </div>
 
@@ -3014,7 +3010,7 @@ const Dashboard = () => {
                                                                     <div>
                                                                         <p className="font-bold text-slate-900 leading-tight">Clinical Health Assessment</p>
                                                                         <p className="text-[10px] text-slate-500 font-medium mt-0.5">
-                                                                            AI Generated � S.O.A.P Format
+                                                                            AI Generated • S.O.A.P Format
                                                                         </p>
                                                                     </div>
                                                                 </div>
@@ -3091,148 +3087,117 @@ const Dashboard = () => {
             </main >
 
             <AnimatePresence>
-                {isProfileModalOpen && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setIsProfileModalOpen(false)} className="absolute inset-0 bg-slate-900/60 backdrop-blur-md" />
-                        <motion.div initial={{ opacity: 0, scale: 0.9, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.9, y: 20 }} className="relative bg-white w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
-                            {/* Header - Fixed */}
-                            <div className="p-6 pb-4 border-b border-slate-100 bg-white z-10">
-                                <div className="flex justify-between items-center">
-                                    <div>
-                                        <h3 className="text-xl font-bold tracking-tight text-slate-900">Account Settings</h3>
-                                        <div className="flex items-center gap-2 mt-0.5">
-                                            <p className="text-brand-500 text-[9px] uppercase font-black tracking-widest">Manage your clinical profile</p>
-                                        </div>
+                 {
+                     activeTab === 'settings' && (
+                         <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} className="space-y-10 pb-12">
+                             <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-8">
+                                 <div>
+                                     <h2 className="text-4xl font-black tracking-tight text-slate-900 mb-2">Account Settings</h2>
+                                     <p className="text-slate-500 font-medium italic">Manage your clinical profile identity and system preferences.</p>
+                                 </div>
+                             </div>
+ 
+                             <div className="bg-white p-8 lg:p-12 rounded-3xl border border-slate-100 shadow-xl shadow-slate-200/20 max-w-5xl">
+                                 <form id="profileForm" onSubmit={handleUpdateProfile} className="space-y-12">
+                                     <div className="flex flex-col md:flex-row gap-12 items-start">
+                                         {/* Photo Section */}
+                                         <div className="flex flex-col items-center gap-4 w-full md:w-auto">
+                                             <div className="relative group">
+                                                 <div className={`w-40 h-40 rounded-3xl border-4 border-white shadow-2xl flex items-center justify-center overflow-hidden transition-all group-hover:scale-[1.02] ${role === 'doctor' ? 'bg-blue-600' : role === 'guardian' ? 'bg-purple-600' : 'bg-brand-600'}`}>
+                                                     {profileForm.photo ? (
+                                                         <img src={profileForm.photo} alt="Preview" className="w-full h-full object-cover" />
+                                                     ) : (
+                                                         <span className="text-white text-5xl font-black">
+                                                             {profileForm.name?.[0]?.toUpperCase() || 'U'}
+                                                         </span>
+                                                     )}
+                                                 </div>
+                                                 <label className="absolute -right-3 -bottom-3 p-4 bg-white text-brand-600 rounded-2xl shadow-xl cursor-pointer hover:bg-brand-50 transition-all border border-brand-100 group-hover:rotate-6">
+                                                     <Camera size={24} />
+                                                     <input type="file" accept="image/*" className="hidden" onChange={handlePhotoUpload} />
+                                                 </label>
+                                             </div>
+                                             <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">Clinical Identity Image</p>
+                                         </div>
+ 
+                                         {/* Fields Section */}
+                                         <div className="flex-1 w-full grid grid-cols-1 md:grid-cols-2 gap-8">
+                                             <div>
+                                                 <label className="block text-[11px] font-black text-slate-400 mb-3 uppercase tracking-widest px-1">Full Legal Name</label>
+                                                 <input type="text" className="w-full h-14 px-6 bg-slate-50 border border-slate-100 rounded-2xl font-bold text-slate-700 focus:bg-white focus:border-brand-500 transition-all shadow-sm" placeholder="Full Name" value={profileForm.name} onChange={e => setProfileForm({ ...profileForm, name: e.target.value })} required />
+                                             </div>
+                                             <div>
+                                                 <label className="block text-[11px] font-black text-slate-400 mb-3 uppercase tracking-widest px-0.5">Clinical Age</label>
+                                                 <input type="number" className="w-full h-14 px-6 bg-slate-50 border border-slate-100 rounded-2xl font-bold text-slate-700 focus:bg-white focus:border-brand-500 transition-all shadow-sm" placeholder="Age" value={profileForm.age} onChange={e => setProfileForm({ ...profileForm, age: e.target.value })} required />
+                                             </div>
+                                             <div>
+                                                 <label className="block text-[11px] font-black text-slate-400 mb-3 uppercase tracking-widest px-0.5 flex justify-between">
+                                                     <span>Mobile Primary</span>
+                                                     <span className={`${profileForm.mobile && !profileForm.mobile.startsWith('+') ? 'text-rose-500 animate-pulse' : 'text-slate-300'} font-black italic`}>Prefix with +</span>
+                                                 </label>
+                                                 <input
+                                                     type="tel"
+                                                     placeholder="+1234567890"
+                                                     className={`w-full h-14 px-6 bg-slate-50 border rounded-2xl font-bold text-slate-700 transition-all shadow-sm ${profileForm.mobile && !profileForm.mobile.startsWith('+') ? 'border-rose-400 bg-rose-50' : 'border-slate-100 focus:bg-white focus:border-brand-500'}`}
+                                                     value={profileForm.mobile}
+                                                     onChange={e => setProfileForm({ ...profileForm, mobile: e.target.value })}
+                                                     required
+                                                 />
+                                             </div>
+                                             <div>
+                                                 <label className="block text-[11px] font-black text-slate-400 mb-3 uppercase tracking-widest px-0.5 flex justify-between">
+                                                     <span>SOS Emergency Contact</span>
+                                                      <span className={`${profileForm.emergencyContact && !profileForm.emergencyContact.startsWith('+') ? 'text-rose-500 animate-pulse' : 'text-slate-300'} font-black italic`}>Prefix with +</span>
+                                                 </label>
+                                                 <input
+                                                     type="tel"
+                                                     placeholder="+1234567890"
+                                                     className={`w-full h-14 px-6 bg-slate-50 border rounded-2xl font-bold text-slate-700 transition-all shadow-sm ${profileForm.emergencyContact && !profileForm.emergencyContact.startsWith('+') ? 'border-rose-400 bg-rose-50' : 'border-slate-100 focus:bg-white focus:border-brand-500'}`}
+                                                     value={profileForm.emergencyContact}
+                                                     onChange={e => setProfileForm({ ...profileForm, emergencyContact: e.target.value })}
+                                                 />
+                                             </div>
+                                         </div>
+                                     </div>
+ 
+                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8 border-t border-slate-50">
+                                         <div>
+                                             <label className="block text-[11px] font-black text-slate-400 mb-3 uppercase tracking-widest px-0.5">Medicine Intake Schedule (24h)</label>
+                                             <input type="text" className="w-full h-14 px-6 bg-slate-50 border border-slate-100 rounded-2xl font-bold text-slate-700 focus:bg-white focus:border-brand-500 transition-all shadow-sm" value={profileForm.medicineTimes} onChange={e => setProfileForm({ ...profileForm, medicineTimes: e.target.value })} placeholder="08:00, 14:00, 20:00" />
+                                         </div>
+                                         {role === 'patient' && (
+                                             <div>
+                                                 <label className="block text-[11px] font-black text-slate-400 mb-3 uppercase tracking-widest px-0.5">Biological Pregnancy Stage</label>
+                                                 <select className="w-full h-14 px-6 bg-slate-50 border border-slate-100 rounded-2xl font-bold text-slate-700 outline-none focus:bg-white focus:border-brand-500 transition-all shadow-sm" value={profileForm.pregnancyType} onChange={e => setProfileForm({ ...profileForm, pregnancyType: e.target.value })}>
+                                                     <option value="first">First Full-Term Pregnancy</option>
+                                                     <option value="second">Multipara (Second+ Pregnancy)</option>
+                                                     <option value="other">Clinical Variance / Other</option>
+                                                 </select>
+                                             </div>
+                                         )}
+                                         {role === 'doctor' && (
+                                             <div>
+                                                 <label className="block text-[11px] font-black text-slate-400 mb-3 uppercase tracking-widest px-0.5">Clinical Facility Name</label>
+                                                 <input type="text" className="w-full h-14 px-6 bg-slate-50 border border-slate-100 rounded-2xl font-bold text-slate-700 focus:bg-white focus:border-brand-500 transition-all shadow-sm" placeholder="E.g. City Life Medical Center" value={profileForm.hospitalName} onChange={e => setProfileForm({ ...profileForm, hospitalName: e.target.value })} />
+                                             </div>
+                                         )}
+                                     </div>
+                                     <div className="pb-4">
+                                        <label className="block text-[11px] font-black text-slate-400 mb-3 uppercase tracking-widest px-0.5">{role === 'patient' ? 'Residential Address' : 'Professional Address'}</label>
+                                        <textarea className="w-full min-h-[100px] px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl font-bold text-slate-700 focus:bg-white focus:border-brand-500 transition-all" placeholder="Street, City, Postal Code" value={profileForm.address} onChange={e => setProfileForm({ ...profileForm, address: e.target.value })} />
                                     </div>
-                                    <button onClick={() => setIsProfileModalOpen(false)} className="p-2 hover:bg-slate-100 rounded-xl transition-all text-slate-400"><X size={20} /></button>
-                                </div>
-                            </div>
-
-                            {/* Scrollable Content */}
-                            <div className="flex-1 overflow-y-auto p-6 pt-4 custom-scrollbar">
-                                <form id="profileForm" onSubmit={handleUpdateProfile} className="space-y-6">
-                                    {/* Photo Upload Section */}
-                                    <div className="flex flex-col items-center mb-2">
-                                        <div className="relative group">
-                                            <div className={`w-24 h-24 rounded-2xl border-4 border-white shadow-xl flex items-center justify-center overflow-hidden transition-all group-hover:scale-105 ${role === 'doctor' ? 'bg-blue-600' : role === 'guardian' ? 'bg-purple-600' : 'bg-brand-600'}`}>
-                                                {profileForm.photo ? (
-                                                    <img src={profileForm.photo} alt="Preview" className="w-full h-full object-cover" />
-                                                ) : (
-                                                    <span className="text-white text-3xl font-black">
-                                                        {profileForm.name?.[0]?.toUpperCase() || 'U'}
-                                                    </span>
-                                                )}
-                                            </div>
-                                            <label className="absolute -right-1 -bottom-1 p-2 bg-white text-brand-600 rounded-xl shadow-lg cursor-pointer hover:bg-brand-50 transition-all border border-brand-100">
-                                                <Camera size={16} />
-                                                <input type="file" accept="image/*" className="hidden" onChange={handlePhotoUpload} />
-                                            </label>
-                                        </div>
-                                        <p className="text-[9px] font-bold text-slate-400 mt-2 uppercase tracking-widest">Profile Picture</p>
-                                    </div>
-
-                                    <div className="grid grid-cols-2 gap-6">
-                                        <div className="col-span-2">
-                                            <label className="block text-[10px] font-black text-slate-400 mb-2 uppercase tracking-widest px-1">Full Identity</label>
-                                            <input type="text" className="input-field py-4" placeholder="Full Name" value={profileForm.name} onChange={e => setProfileForm({ ...profileForm, name: e.target.value })} required />
-                                        </div>
-                                        <div>
-                                            <label className="block text-[10px] font-black text-slate-400 mb-2 uppercase tracking-widest px-1">Age</label>
-                                            <input type="number" className="input-field py-4" placeholder="Age" value={profileForm.age} onChange={e => setProfileForm({ ...profileForm, age: e.target.value })} required />
-                                        </div>
-                                        <div>
-                                            <label className="block text-[10px] font-black text-slate-400 mb-2 uppercase tracking-widest px-1 flex justify-between">
-                                                <span>Mobile Primary</span>
-                                                <span className={`${profileForm.mobile && !profileForm.mobile.startsWith('+') ? 'text-rose-500' : 'text-slate-300'} text-[8px]`}>Required: +CountryCode</span>
-                                            </label>
-                                            <input
-                                                type="tel"
-                                                placeholder="+1234567890"
-                                                className={`input-field py-4 ${profileForm.mobile && !profileForm.mobile.startsWith('+') ? 'border-rose-300 bg-rose-50/50' : ''}`}
-                                                value={profileForm.mobile}
-                                                onChange={e => setProfileForm({ ...profileForm, mobile: e.target.value })}
-                                                required
-                                            />
-                                        </div>
-                                        <div className="col-span-2">
-                                            <label className="block text-[10px] font-black text-slate-400 mb-2 uppercase tracking-widest px-1 flex justify-between">
-                                                <span>Emergency SOS Contact</span>
-                                                <span className={`${profileForm.emergencyContact && !profileForm.emergencyContact.startsWith('+') ? 'text-rose-500' : 'text-slate-300'} text-[8px]`}>Required: +CountryCode</span>
-                                            </label>
-                                            <div className="relative">
-                                                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-rose-500">
-                                                    <AlertTriangle size={18} />
-                                                </div>
-                                                <input
-                                                    type="tel"
-                                                    placeholder="+1234567890"
-                                                    className={`input-field py-4 pl-12 ${profileForm.emergencyContact && !profileForm.emergencyContact.startsWith('+') ? 'border-rose-300 bg-rose-50/50' : 'border-rose-100 bg-rose-50/30'}`}
-                                                    value={profileForm.emergencyContact}
-                                                    onChange={e => setProfileForm({ ...profileForm, emergencyContact: e.target.value })}
-                                                />
-                                            </div>
-                                            <p className="mt-2 text-[9px] text-slate-400 font-medium px-1 italic">
-                                                * WhatsApp and SMS are sent in **Simulation Mode** (View logs in Console). Mandate the "+" prefix for international formatting.
-                                            </p>
-                                        </div>
-                                        <div className="col-span-2">
-                                            <label className="block text-[10px] font-black text-slate-400 mb-2 uppercase tracking-widest px-1 flex justify-between">
-                                                <span>Medicine Schedule (HH:MM, HH:MM)</span>
-                                                <span className="text-[10px] text-brand-500">24h Format</span>
-                                            </label>
-                                            <input type="text" className="input-field py-4" value={profileForm.medicineTimes} onChange={e => setProfileForm({ ...profileForm, medicineTimes: e.target.value })} placeholder="08:00, 14:00, 20:00" />
-                                        </div>
-                                        {role === 'patient' && (
-                                            <div className="col-span-2">
-                                                <label className="block text-[10px] font-black text-slate-400 mb-2 uppercase tracking-widest px-1">Clinical Pregnancy Stage</label>
-                                                <select className="input-field py-4" value={profileForm.pregnancyType} onChange={e => setProfileForm({ ...profileForm, pregnancyType: e.target.value })}>
-                                                    <option value="first">First Pregnancy</option>
-                                                    <option value="second">Second Pregnancy</option>
-                                                    <option value="other">Other</option>
-                                                </select>
-                                            </div>
-                                        )}
-                                        {role === 'doctor' && (
-                                            <div className="col-span-2">
-                                                <label className="block text-[10px] font-black text-slate-400 mb-2 uppercase tracking-widest px-1">Facility Name</label>
-                                                <input type="text" className="input-field py-4" placeholder="City Life Hospital" value={profileForm.hospitalName} onChange={e => setProfileForm({ ...profileForm, hospitalName: e.target.value })} />
-                                            </div>
-                                        )}
-                                    </div>
-                                    <div className="pb-4">
-                                        <label className="block text-[10px] font-black text-slate-400 mb-2 uppercase tracking-widest px-1">{role === 'patient' ? 'Residential Address' : 'Professional Address'}</label>
-                                        <textarea className="input-field min-h-[100px] py-4" placeholder="Street, City, Postal Code" value={profileForm.address} onChange={e => setProfileForm({ ...profileForm, address: e.target.value })} />
-                                    </div>
-                                </form>
-                            </div>
-
-                            {/* Footer - Fixed */}
-                            <div className="p-8 border-t border-slate-100 bg-slate-50/50 flex gap-4">
-                                <button
-                                    type="button"
-                                    onClick={handleLogout}
-                                    className="px-6 py-4 bg-white text-slate-400 rounded-2xl font-bold flex items-center justify-center gap-2 border border-slate-200 hover:bg-rose-50 hover:text-rose-600 hover:border-rose-100 transition-all active:scale-95"
-                                >
-                                    <LogOut size={20} /> <span className="hidden sm:inline">Log Out</span>
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={handleUpdateProfile}
-                                    className="flex-1 py-4 bg-brand-600 text-white rounded-2xl font-black flex items-center justify-center gap-3 shadow-xl shadow-brand-200 hover:bg-brand-700 active:scale-95 transition-all group overflow-hidden relative"
-                                >
-                                    <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
-                                    <CheckCircle2 size={24} className="relative z-10" />
-                                    <span className="relative z-10 text-lg">Save Changes</span>
-                                    <motion.div
-                                        animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0, 0.5] }}
-                                        transition={{ repeat: Infinity, duration: 2 }}
-                                        className="absolute inset-0 bg-white/40 rounded-full"
-                                    />
-                                </button>
-                            </div>
-                        </motion.div>
-                    </div>
-                )}
+ 
+                                     <div className="flex justify-end pt-10">
+                                         <button type="submit" className="h-14 px-12 bg-slate-950 text-white rounded-2xl font-black uppercase text-xs tracking-widest shadow-2xl shadow-slate-200 hover:bg-brand-600 transition-all active:scale-95 flex items-center gap-4">
+                                             <Zap size={18} fill="currentColor" />
+                                             Update Clinical Credentials
+                                         </button>
+                                     </div>
+                                 </form>
+                             </div>
+                         </motion.div>
+                     )
+                 }
             </AnimatePresence>
 
             <AnimatePresence>
