@@ -1336,7 +1336,7 @@ const Dashboard = () => {
                 )}
             </AnimatePresence>
 
-            <aside className={`fixed w-64 bg-[#020617] h-screen flex flex-col py-8 px-4 z-50 transition-transform duration-300 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'} shadow-[20px_0_60px_rgba(0,0,0,0.6)] border-r border-white/10`}>
+            <aside className={`fixed w-64 bg-[#0f172a] h-screen flex flex-col py-8 px-4 z-50 transition-transform duration-300 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'} shadow-[20px_0_60px_rgba(0,0,0,0.6)] border-r border-white/10`}>
                 <div className="py-1 flex flex-col items-center gap-1 mb-8 text-center select-none shrink-0 border-b border-white/5 pb-6">
                     <div className="relative w-16 h-16 mb-2 group">
                         <img 
