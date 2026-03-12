@@ -1336,16 +1336,16 @@ const Dashboard = () => {
                 )}
             </AnimatePresence>
 
-            <aside className={`fixed w-64 bg-[#020617] h-screen flex flex-col p-4 z-50 transition-transform duration-300 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'} shadow-[20px_0_60px_rgba(0,0,0,0.6)] border-r border-white/10`}>
-                <div className="py-1 flex flex-col items-center gap-1 mb-2 text-center select-none shrink-0">
-                    <div className="relative w-14 h-14 mb-1 group">
+            <aside className={`fixed w-64 bg-[#020617] h-screen flex flex-col py-8 px-4 z-50 transition-transform duration-300 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'} shadow-[20px_0_60px_rgba(0,0,0,0.6)] border-r border-white/10`}>
+                <div className="py-1 flex flex-col items-center gap-1 mb-8 text-center select-none shrink-0 border-b border-white/5 pb-6">
+                    <div className="relative w-16 h-16 mb-2 group">
                         <img 
                             src={logo} 
                             alt="Maatri Shield" 
                             className="w-full h-full object-contain filter brightness-110 contrast-125 mix-blend-screen transition-all duration-500 group-hover:scale-110" 
                         />
                     </div>
-                    <span className="hidden md:block font-black text-[10px] uppercase tracking-[0.6em] text-slate-400/40 transition-colors group-hover:text-brand-400">Maatri Shield</span>
+                    <span className="hidden md:block font-black text-[11px] uppercase tracking-[0.6em] text-slate-400/40 transition-colors group-hover:text-brand-400">Maatri Shield</span>
                 </div>
 
                 {/* Emergency SOS Button */}
@@ -1364,7 +1364,7 @@ const Dashboard = () => {
                     </div>
                 )}
 
-                <nav className="flex-1 space-y-1 px-1 overflow-hidden">
+                <nav className="flex-1 space-y-3 px-1 overflow-hidden">
                     {[
                         { id: 'overview', icon: Activity, label: "Overview" },
                         ...(role === 'doctor' ? [
@@ -1413,17 +1413,11 @@ const Dashboard = () => {
                     ))}
                 </nav>
 
-                <div className="mt-auto px-1 pb-4">
-                    <button
-                        onClick={() => {
-                            storage.logout();
-                            navigate('/');
-                        }}
-                        className="flex items-center gap-3.5 w-full p-2.5 rounded-xl transition-all duration-300 text-rose-400/60 hover:text-rose-400 hover:bg-rose-500/10 border border-transparent hover:border-rose-500/20 group"
-                    >
-                        <LogOut size={18} className="group-hover:scale-110 transition-transform" />
-                        <span className="hidden md:block text-[13px] font-black uppercase tracking-widest">Logout System</span>
-                    </button>
+                <div className="mt-auto px-1 pt-6 border-t border-white/5">
+                    <div className="bg-white/5 rounded-2xl p-4 text-center">
+                        <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Maatri Shield Intelligence</p>
+                        <p className="text-[10px] text-slate-400 mt-1 font-bold">Premium Clinical Tier</p>
+                    </div>
                 </div>
             </aside>
 
@@ -2742,7 +2736,8 @@ const Dashboard = () => {
                                                             activeDot={{ r: 8, strokeWidth: 4, stroke: 'rgba(20, 184, 166, 0.2)', fill: '#14b8a6' }} 
                                                             filter="url(#glowTeal)"
                                                             connectNulls={true}
-                                                            animationDuration={2500}
+                                                            animationBegin={0}
+                                                            animationDuration={3000}
                                                             animationEasing="ease-in-out"
                                                         />
                                                     </LineChart>
@@ -2813,7 +2808,9 @@ const Dashboard = () => {
                                                             activeDot={{ r: 8, strokeWidth: 0, fill: '#6366f1' }}
                                                             filter="url(#glowIndigo)"
                                                             connectNulls={true}
-                                                            animationDuration={1500}
+                                                            animationBegin={0}
+                                                            animationDuration={3000}
+                                                            animationEasing="ease-in-out"
                                                         />
                                                     </LineChart>
                                                 </ResponsiveContainer>
@@ -3247,7 +3244,7 @@ const Dashboard = () => {
             <AnimatePresence>
                  {
                      activeTab === 'settings' && (
-                         <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} className="space-y-8 pb-12 relative z-10 max-w-4xl mx-auto">
+                         <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} className="space-y-6 pb-12 relative z-10 max-w-2xl mx-auto">
                              <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-6">
                                  <div>
                                      <h2 className="text-3xl font-black tracking-tight text-slate-900 mb-2 bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-slate-800 to-slate-600">Account Settings</h2>
@@ -3255,7 +3252,7 @@ const Dashboard = () => {
                                  </div>
                              </div>
  
-                             <div className="bg-white p-6 lg:p-10 rounded-3xl border border-slate-100 shadow-xl shadow-slate-200/20">
+                             <div className="bg-white p-6 lg:p-8 rounded-3xl border border-slate-100 shadow-xl shadow-slate-200/20">
                                  <form id="profileForm" onSubmit={handleUpdateProfile} className="space-y-12">
                                      <div className="flex flex-col md:flex-row gap-12 items-start">
                                          {/* Photo Section */}
@@ -3345,10 +3342,21 @@ const Dashboard = () => {
                                         <textarea className="w-full min-h-[100px] px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl font-bold text-slate-700 focus:bg-white focus:border-brand-500 transition-all" placeholder="Street, City, Postal Code" value={profileForm.address} onChange={e => setProfileForm({ ...profileForm, address: e.target.value })} />
                                     </div>
  
-                                     <div className="flex justify-end pt-10">
-                                         <button type="submit" className="h-14 px-12 bg-slate-950 text-white rounded-2xl font-black uppercase text-xs tracking-widest shadow-2xl shadow-slate-200 hover:bg-brand-600 transition-all active:scale-95 flex items-center gap-4">
+                                     <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-10 border-t border-slate-50">
+                                         <button
+                                             type="button"
+                                             onClick={() => {
+                                                 storage.logout();
+                                                 navigate('/');
+                                             }}
+                                             className="h-14 px-8 bg-rose-50 text-rose-600 rounded-2xl font-black uppercase text-xs tracking-widest hover:bg-rose-500 hover:text-white transition-all active:scale-95 flex items-center gap-3 w-full sm:w-auto order-2 sm:order-1"
+                                         >
+                                             <LogOut size={18} />
+                                             Logout System
+                                         </button>
+                                         <button type="submit" className="h-14 px-10 bg-slate-950 text-white rounded-2xl font-black uppercase text-xs tracking-widest shadow-2xl shadow-slate-200 hover:bg-brand-600 transition-all active:scale-95 flex items-center gap-4 w-full sm:w-auto order-1 sm:order-2">
                                              <Zap size={18} fill="currentColor" />
-                                             Update Clinical Credentials
+                                             Update Credentials
                                          </button>
                                      </div>
                                  </form>
