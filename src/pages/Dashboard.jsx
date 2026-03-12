@@ -1413,7 +1413,26 @@ const Dashboard = () => {
                     ))}
                 </nav>
 
-                <div className="mt-auto px-1 pt-6">
+                <div className="mt-auto px-1 pt-6 border-t border-white/5">
+                    <div className="p-4 rounded-2xl bg-gradient-to-br from-[#1e293b] to-[#0f172a] border border-white/10 shadow-2xl relative overflow-hidden group transition-all duration-500 hover:shadow-brand-500/10">
+                        <div className="absolute top-0 right-0 w-24 h-24 bg-brand-500/10 rounded-full -mr-12 -mt-12 blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
+                        <div className="flex items-center gap-3 mb-3 relative z-10">
+                            <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-brand-400 border border-white/10">
+                                <Shield size={16} />
+                            </div>
+                            <p className="text-[10px] font-black text-white uppercase tracking-widest">Clinical Intelligence</p>
+                        </div>
+                        <div className="flex items-end justify-between relative z-10">
+                            <div>
+                                <h4 className="text-2xl font-black text-white tabular-nums">98.4<span className="text-[10px] text-slate-400 ml-1">%</span></h4>
+                                <p className="text-[9px] text-slate-500 font-bold uppercase tracking-wider mt-1">System Precision</p>
+                            </div>
+                            <div className="flex items-center gap-1.5 px-2 py-1 bg-teal-500/10 rounded-lg border border-teal-500/20">
+                                <div className="w-1.5 h-1.5 rounded-full bg-teal-500 animate-ping"></div>
+                                <span className="text-[8px] font-black text-teal-400 uppercase tracking-widest">Live</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </aside>
 
@@ -1431,7 +1450,7 @@ const Dashboard = () => {
                             <Zap size={24} />
                         </button>
                         <div>
-                            <h1 className="text-3xl font-black tracking-tight text-slate-900 capitalize">{role} <span className="text-brand-600">Command Center</span></h1>
+                            <h1 className="text-3xl font-black tracking-tight text-[#000000] capitalize">{role} <span className="text-[#000000]">Command Center</span></h1>
                             <div className="text-slate-500 mt-1 flex items-center flex-wrap gap-2 text-xs md:text-sm">
                             {role === 'doctor' ? `Overseeing ${patients.length} patients` :
                                 role === 'guardian' ? (selectedPatient ? `Monitoring ${selectedPatient.name}` : "Connect to a patient") :
@@ -2632,10 +2651,10 @@ const Dashboard = () => {
                                                     />
                                                 )}
                                             </div>
-                                        </div>
+                                        </motion.div>
 
                                         {/* Risk Score Card - Redesigned */}
-                                        <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-[0_10px_30px_rgba(0,0,0,0.02)] hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.08)] transition-all duration-500 flex flex-col items-center justify-center relative overflow-hidden group">
+                                        <motion.div whileHover={{ y: -10, scale: 1.01 }} className="bg-white p-8 rounded-3xl border border-slate-100 shadow-[0_10px_30px_rgba(0,0,0,0.02)] hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.08)] transition-all duration-500 flex flex-col items-center justify-center relative overflow-hidden group">
                                             <div className="absolute top-0 right-0 w-32 h-32 bg-slate-50 rounded-full -mr-16 -mt-16 opacity-50 group-hover:scale-150 transition-transform duration-1000"></div>
                                             <div className="absolute top-8 left-8">
                                                 <div className="flex items-center gap-3 mb-2">
@@ -2822,7 +2841,7 @@ const Dashboard = () => {
                                         </motion.div>
 
                                         {/* Symptoms Card - Redesigned */}
-                                        <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-[0_10px_30px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.05)] transition-all duration-500 group relative overflow-hidden">
+                                        <motion.div whileHover={{ y: -10, scale: 1.01 }} className="bg-white p-8 rounded-3xl border border-slate-100 shadow-[0_10px_30px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.05)] transition-all duration-500 group relative overflow-hidden">
                                             <div className="absolute top-0 right-0 w-32 h-32 bg-slate-50 rounded-full -mr-16 -mt-16 opacity-50 group-hover:scale-150 transition-transform duration-1000"></div>
                                             <div className="flex items-center gap-4 mb-8">
                                                 <div className="w-10 h-10 rounded-2xl bg-slate-950 text-white flex items-center justify-center shadow-lg shadow-slate-200">
@@ -2856,10 +2875,10 @@ const Dashboard = () => {
                                                     </label>
                                                 ))}
                                             </div>
-                                        </div>
+                                        </motion.div>
 
                                         {/* Quick Actions Card - Redesigned */}
-                                        <div className="bg-slate-950 p-6 rounded-2xl text-white flex flex-col justify-between relative overflow-hidden group">
+                                        <motion.div whileHover={{ y: -10, scale: 1.01 }} className="bg-slate-950 p-6 rounded-2xl text-white flex flex-col justify-between relative overflow-hidden group">
                                             <div className="absolute top-0 right-0 w-24 h-24 bg-white/5 rounded-full -mr-12 -mt-12 group-hover:scale-150 transition-transform duration-700"></div>
                                             <div>
                                                 <h3 className="text-lg font-bold mb-1 tracking-tight">Clinical Decision Support</h3>
@@ -2882,7 +2901,7 @@ const Dashboard = () => {
                                                     <button className="flex-1 h-12 bg-white/10 rounded-xl border border-white/10 font-bold text-[10px] hover:bg-white/20 transition-all uppercase">Peer Review</button>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </motion.div>
                                     </div>
 
 
