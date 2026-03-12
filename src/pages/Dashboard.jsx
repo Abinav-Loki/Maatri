@@ -1624,10 +1624,10 @@ const Dashboard = () => {
                                         initial={{ opacity: 0, y: 10, scale: 0.95 }}
                                         animate={{ opacity: 1, y: 0, scale: 1 }}
                                         exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                                        className="absolute right-0 top-16 w-72 glass p-6 rounded-[2.5rem] shadow-2xl z-50 border border-white/40 backdrop-blur-xl"
+                                        className="absolute right-0 top-16 w-64 glass p-4 rounded-2xl shadow-xl z-50 border border-white/40 backdrop-blur-xl"
                                     >
-                                        <div className="flex flex-col items-center mb-6">
-                                            <div className={`w-20 h-20 rounded-3xl mb-4 border-4 border-white shadow-lg flex items-center justify-center text-white text-3xl font-black overflow-hidden ${role === 'doctor' ? 'bg-blue-600' :
+                                        <div className="flex flex-col items-center mb-4">
+                                            <div className={`w-14 h-14 rounded-2xl mb-3 border-2 border-white shadow-md flex items-center justify-center text-white text-xl font-bold overflow-hidden ${role === 'doctor' ? 'bg-blue-600' :
                                                 role === 'guardian' ? 'bg-purple-600' :
                                                     'bg-brand-600'
                                                 }`}>
@@ -1637,24 +1637,20 @@ const Dashboard = () => {
                                                     currentUser?.name?.[0]?.toUpperCase() || currentUser?.email?.[0]?.toUpperCase() || 'U'
                                                 )}
                                             </div>
-                                            <h3 className="font-black text-xl text-slate-900 leading-tight">{currentUser?.name || 'User'}</h3>
-                                            <p className="text-slate-400 text-[10px] uppercase font-bold tracking-[0.2em] mt-1">{role}</p>
+                                            <h3 className="font-bold text-base text-slate-900 leading-tight">{currentUser?.name || 'User'}</h3>
+                                            <p className="text-slate-400 text-[9px] uppercase font-bold tracking-widest mt-0.5">{role}</p>
                                         </div>
 
-                                        <div className="space-y-3 mb-6">
+                                        <div className="space-y-2 mb-4">
                                             {role === 'doctor' && currentUser?.hospitalName && (
-                                                <div className="bg-brand-50/50 p-3 rounded-2xl border border-brand-100">
-                                                    <p className="text-[9px] text-brand-600 uppercase font-black mb-1">Clinic / Hospital</p>
-                                                    <p className="text-sm font-black text-slate-800">{currentUser?.hospitalName || 'Clinical Facility'}</p>
+                                                <div className="bg-brand-50/50 p-2.5 rounded-xl border border-brand-100">
+                                                    <p className="text-[8px] text-brand-600 uppercase font-black mb-0.5">Clinic / Hospital</p>
+                                                    <p className="text-xs font-bold text-slate-800">{currentUser?.hospitalName || 'Clinical Facility'}</p>
                                                 </div>
                                             )}
-                                            <div className="bg-slate-50/50 p-3 rounded-2xl border border-white/50">
-                                                <p className="text-[9px] text-slate-400 uppercase font-black mb-1">Email Identifier</p>
+                                            <div className="bg-slate-50/50 p-2.5 rounded-xl border border-white/50">
+                                                <p className="text-[8px] text-slate-400 uppercase font-black mb-0.5">Email</p>
                                                 <p className="text-xs font-bold text-slate-700 truncate">{currentUser?.email || '...'}</p>
-                                            </div>
-                                            <div className="bg-slate-50/50 p-3 rounded-2xl border border-white/50">
-                                                <p className="text-[9px] text-slate-400 uppercase font-black mb-1">Contact Status</p>
-                                                <p className="text-xs font-bold text-slate-700">{currentUser?.mobile || 'Not provided'}</p>
                                             </div>
                                         </div>
 
@@ -1663,9 +1659,9 @@ const Dashboard = () => {
                                                 handleProfileEdit();
                                                 setShowQuickProfile(false);
                                             }}
-                                            className="w-full py-3.5 bg-brand-600 rounded-2xl text-white font-bold hover:bg-brand-700 transition-all flex items-center justify-center gap-2 shadow-lg shadow-brand-100"
+                                            className="w-full py-2.5 bg-brand-600 rounded-xl text-white font-bold text-xs hover:bg-brand-700 transition-all flex items-center justify-center gap-2"
                                         >
-                                            <Edit size={16} /> Edit Settings
+                                            <Edit size={14} /> Edit Settings
                                         </button>
 
                                     </motion.div>
@@ -1676,18 +1672,18 @@ const Dashboard = () => {
                 </header >
 
                 {activeTab === 'find-doctors' && (
-                    <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-8">
+                    <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-6">
                         <div>
-                            <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 mb-2">Connect with Doctors</h2>
-                            <p className="text-slate-500">Search by Name, Hospital, or Mobile Number to request data sharing.</p>
+                            <h2 className="text-2xl font-bold tracking-tight text-slate-900 mb-1">Connect with Doctors</h2>
+                            <p className="text-slate-500 text-sm">Search by Name, Hospital, or Mobile Number.</p>
                         </div>
 
-                        <div className="relative group max-w-2xl">
-                            <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-brand-600 transition-colors" size={24} />
+                        <div className="relative group max-w-xl">
+                            <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-brand-600 transition-colors" size={20} />
                             <input
                                 type="text"
-                                placeholder="Search e.g. 'City Life Hospital' or '9876543210'..."
-                                className="w-full pl-16 pr-6 py-6 bg-white rounded-[2rem] border-2 border-slate-200 focus:border-brand-500 focus:ring-4 focus:ring-brand-50 shadow-sm transition-all text-lg font-medium"
+                                placeholder="Search e.g. 'City Life Hospital'..."
+                                className="w-full pl-14 pr-5 py-4 bg-white rounded-xl border border-slate-200 focus:border-brand-500 focus:ring-4 focus:ring-brand-50 shadow-sm transition-all text-base font-medium"
                                 value={doctorSearchQuery}
                                 onChange={(e) => handleDoctorSearch(e.target.value)}
                             />
@@ -1703,7 +1699,7 @@ const Dashboard = () => {
                                             layout
                                             initial={{ opacity: 0, scale: 0.95 }}
                                             animate={{ opacity: 1, scale: 1 }}
-                                            className="glass p-4 rounded-[2rem] flex flex-col items-center text-center cursor-pointer hover:border-brand-300 transition-colors group"
+                                            className="bg-white p-4 rounded-2xl flex flex-col items-center text-center cursor-pointer border border-slate-100 hover:border-brand-300 transition-all hover:shadow-md group"
                                             onClick={() => handleViewDoctorDetails(doc)}
                                         >
                                             <div className="w-20 h-20 rounded-2xl bg-blue-100 border-4 border-white shadow-md mb-3 flex items-center justify-center text-blue-600 text-2xl font-black overflow-hidden uppercase">
@@ -1756,10 +1752,10 @@ const Dashboard = () => {
                 {
                     activeTab === 'chat' && (
                         <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} className="max-w-4xl mx-auto">
-                            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
+                            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-6">
                                 <div>
-                                    <h2 className="text-4xl font-black tracking-tight text-slate-900 mb-2">Messages</h2>
-                                    <p className="text-slate-500 font-medium">Connect with your clinical care team and patients.</p>
+                                    <h2 className="text-2xl font-bold tracking-tight text-slate-900 mb-1">Messages</h2>
+                                    <p className="text-slate-500 text-sm">Clinical care team and patient connectivity.</p>
                                 </div>
                                 <div className="relative group w-full md:w-80">
                                     <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-brand-600 transition-colors" size={18} />
@@ -1773,7 +1769,7 @@ const Dashboard = () => {
                                 </div>
                             </div>
 
-                            <div className="bg-white rounded-[2.5rem] border border-slate-100 shadow-[0_20px_50px_rgba(0,0,0,0.05)] overflow-hidden">
+                            <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
                                 <div className="divide-y divide-slate-50">
                                     {(role === 'doctor' ? patients : connectedPartners)
                                         .filter(p => p.name.toLowerCase().includes(chatSearchQuery.toLowerCase()))
@@ -1847,8 +1843,8 @@ const Dashboard = () => {
                             </div>
 
                             <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-                                {/* Large Calendar View */}
-                                <div className="lg:col-span-2 bg-white/40 backdrop-blur-xl p-10 rounded-[3rem] shadow-2xl shadow-indigo-100/10 border border-white/60">
+                                 {/* Large Calendar View */}
+                                <div className="lg:col-span-2 bg-white/40 backdrop-blur-xl p-6 rounded-3xl shadow-2xl shadow-indigo-100/10 border border-white/60">
                                     <div className="flex items-center justify-between mb-8">
                                         <h3 className="text-2xl font-black text-slate-800">
                                             {viewDate.toLocaleString('default', { month: 'long', year: 'numeric' })}
@@ -1923,7 +1919,7 @@ const Dashboard = () => {
                                             }
                                         </div>
                                     ) : (
-                                        <div className="bg-slate-50/50 p-8 rounded-[2rem] border-2 border-dashed border-slate-100 text-center">
+                                        <div className="bg-slate-50/50 p-8 rounded-2xl border-2 border-dashed border-slate-100 text-center">
                                             <p className="text-slate-400 text-sm font-bold">No upcoming appointments scheduled.</p>
                                         </div>
                                     )}
@@ -1995,7 +1991,7 @@ const Dashboard = () => {
                                             </motion.div>
                                         ))
                                     ) : (
-                                        <div className="py-20 text-center bg-white/50 rounded-[3rem] border-2 border-dashed border-slate-100">
+                                        <div className="py-20 text-center bg-white/50 rounded-3xl border-2 border-dashed border-slate-100">
                                             <Bell size={48} className="mx-auto mb-4 text-slate-100" />
                                             <p className="text-slate-400 font-bold">No clinical notifications found.</p>
                                         </div>
@@ -2003,7 +1999,7 @@ const Dashboard = () => {
                                 </div>
 
                                 <div className="space-y-6">
-                                    <div className="glass p-8 rounded-[2.5rem] bg-gradient-to-br from-brand-500 to-brand-600 text-white shadow-2xl shadow-brand-200">
+                                    <div className="glass p-8 rounded-3xl bg-gradient-to-br from-brand-500 to-brand-600 text-white shadow-2xl shadow-brand-200">
                                         <h3 className="text-xl font-black mb-4">Care Instructions</h3>
                                         <div className="space-y-4 text-sm font-medium text-brand-50 opacity-90">
                                             <div className="flex gap-3">
@@ -2025,70 +2021,70 @@ const Dashboard = () => {
                 {
                     activeTab === 'overview' && (
                         <>                            {role === 'doctor' && (
-                                <div className="space-y-10 animate-in fade-in slide-in-from-bottom-6 duration-700">
-                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                                <div className="space-y-6 animate-in fade-in slide-in-from-bottom-6 duration-700">
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                                         <div
                                             onClick={() => { setPatientFilter('urgent'); setActiveTab('patients-list'); }}
-                                            className="bg-white p-10 rounded-[3.5rem] border border-slate-100 shadow-[0_15px_40px_rgba(0,0,0,0.02)] cursor-pointer hover:shadow-[0_30px_60px_rgba(225,29,72,0.1)] transition-all duration-500 group relative overflow-hidden"
+                                            className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm cursor-pointer hover:shadow-md hover:border-rose-100 transition-all duration-300 group relative overflow-hidden"
                                         >
-                                            <div className="absolute top-0 right-0 w-32 h-32 bg-rose-50 rounded-full -mr-16 -mt-16 opacity-40 group-hover:scale-125 transition-transform duration-700"></div>
-                                            <div className="flex items-center gap-4 mb-6 relative z-10">
-                                                <div className="w-12 h-12 rounded-2xl bg-rose-50 flex items-center justify-center text-rose-500 group-hover:rotate-12 transition-transform">
-                                                    <AlertTriangle size={24} />
+                                            <div className="absolute top-0 right-0 w-20 h-20 bg-rose-50 rounded-full -mr-10 -mt-10 opacity-40 group-hover:scale-125 transition-transform duration-500"></div>
+                                            <div className="flex items-center gap-3 mb-4 relative z-10">
+                                                <div className="w-9 h-9 rounded-xl bg-rose-50 flex items-center justify-center text-rose-500">
+                                                    <AlertTriangle size={18} />
                                                 </div>
-                                                <p className="text-[10px] text-rose-500 font-black uppercase tracking-[0.3em]">Critical Care</p>
+                                                <p className="text-[10px] text-rose-500 font-black uppercase tracking-widest">Critical Care</p>
                                             </div>
-                                            <h4 className="text-6xl font-black text-slate-900 mb-2 relative z-10 tabular-nums">{riskStats.high}</h4>
-                                            <p className="text-sm text-slate-400 font-bold relative z-10">High Priority Cases</p>
+                                            <h4 className="text-4xl font-black text-slate-900 mb-1 relative z-10 tabular-nums">{riskStats.high}</h4>
+                                            <p className="text-xs text-slate-400 font-bold relative z-10">High Priority Cases</p>
                                         </div>
                                         <div
                                             onClick={() => { setPatientFilter('help'); setActiveTab('patients-list'); }}
-                                            className="bg-white p-10 rounded-[3.5rem] border border-slate-100 shadow-[0_15px_40px_rgba(0,0,0,0.02)] cursor-pointer hover:shadow-[0_30px_60px_rgba(245,158,11,0.1)] transition-all duration-500 group relative overflow-hidden"
+                                            className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm cursor-pointer hover:shadow-md hover:border-amber-100 transition-all duration-300 group relative overflow-hidden"
                                         >
-                                            <div className="absolute top-0 right-0 w-32 h-32 bg-amber-50 rounded-full -mr-16 -mt-16 opacity-40 group-hover:scale-125 transition-transform duration-700"></div>
-                                            <div className="flex items-center gap-4 mb-6 relative z-10">
-                                                <div className="w-12 h-12 rounded-2xl bg-amber-50 flex items-center justify-center text-amber-500 group-hover:rotate-12 transition-transform">
-                                                    <Activity size={24} />
+                                            <div className="absolute top-0 right-0 w-20 h-20 bg-amber-50 rounded-full -mr-10 -mt-10 opacity-40 group-hover:scale-125 transition-transform duration-500"></div>
+                                            <div className="flex items-center gap-3 mb-4 relative z-10">
+                                                <div className="w-9 h-9 rounded-xl bg-amber-50 flex items-center justify-center text-amber-500">
+                                                    <Activity size={18} />
                                                 </div>
-                                                <p className="text-[10px] text-amber-500 font-black uppercase tracking-[0.3em]">Clinical Review</p>
+                                                <p className="text-[10px] text-amber-500 font-black uppercase tracking-widest">Clinical Review</p>
                                             </div>
-                                            <h4 className="text-6xl font-black text-slate-900 mb-2 relative z-10 tabular-nums">{riskStats.medium}</h4>
-                                            <p className="text-sm text-slate-400 font-bold relative z-10">Moderate Monitoring</p>
+                                            <h4 className="text-4xl font-black text-slate-900 mb-1 relative z-10 tabular-nums">{riskStats.medium}</h4>
+                                            <p className="text-xs text-slate-400 font-bold relative z-10">Moderate Monitoring</p>
                                         </div>
                                         <div
                                             onClick={() => { setPatientFilter('normal'); setActiveTab('patients-list'); }}
-                                            className="bg-white p-10 rounded-[3.5rem] border border-slate-100 shadow-[0_15px_40px_rgba(0,0,0,0.02)] cursor-pointer hover:shadow-[0_30px_60px_rgba(20,184,166,0.1)] transition-all duration-500 group relative overflow-hidden"
+                                            className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm cursor-pointer hover:shadow-md hover:border-teal-100 transition-all duration-300 group relative overflow-hidden"
                                         >
-                                            <div className="absolute top-0 right-0 w-32 h-32 bg-teal-50 rounded-full -mr-16 -mt-16 opacity-40 group-hover:scale-125 transition-transform duration-700"></div>
-                                            <div className="flex items-center gap-4 mb-6 relative z-10">
-                                                <div className="w-12 h-12 rounded-2xl bg-teal-50 flex items-center justify-center text-teal-500 group-hover:rotate-12 transition-transform">
-                                                    <CheckCircle2 size={24} />
+                                            <div className="absolute top-0 right-0 w-20 h-20 bg-teal-50 rounded-full -mr-10 -mt-10 opacity-40 group-hover:scale-125 transition-transform duration-500"></div>
+                                            <div className="flex items-center gap-3 mb-4 relative z-10">
+                                                <div className="w-9 h-9 rounded-xl bg-teal-50 flex items-center justify-center text-teal-500">
+                                                    <CheckCircle2 size={18} />
                                                 </div>
-                                                <p className="text-[10px] text-teal-500 font-black uppercase tracking-[0.3em]">Optimal Stability</p>
+                                                <p className="text-[10px] text-teal-500 font-black uppercase tracking-widest">Optimal Stability</p>
                                             </div>
-                                            <h4 className="text-6xl font-black text-slate-900 mb-2 relative z-10 tabular-nums">{riskStats.low}</h4>
-                                            <p className="text-sm text-slate-400 font-bold relative z-10">Low Risk Registry</p>
+                                            <h4 className="text-4xl font-black text-slate-900 mb-1 relative z-10 tabular-nums">{riskStats.low}</h4>
+                                            <p className="text-xs text-slate-400 font-bold relative z-10">Low Risk Registry</p>
                                         </div>
                                     </div>
 
-                                    <div className="bg-[linear-gradient(135deg,#0f172a_0%,#1e293b_100%)] p-12 rounded-[4rem] border border-white/5 shadow-[0_40px_80px_rgba(0,0,0,0.15)] flex flex-col xl:flex-row items-center gap-12 relative overflow-hidden group">
-                                        <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-teal-500/10 rounded-full -mr-32 -mb-32 blur-[100px] group-hover:bg-teal-500/20 transition-all duration-1000"></div>
-                                        <div className="w-24 h-24 bg-white/5 backdrop-blur-md rounded-3xl flex items-center justify-center text-teal-400 border border-white/10 shadow-2xl relative z-10">
-                                            <Sparkles size={40} className="animate-pulse" />
+                                    <div className="bg-[linear-gradient(135deg,#0f172a_0%,#1e293b_100%)] p-6 rounded-2xl border border-white/5 shadow-lg flex flex-col xl:flex-row items-center gap-6 relative overflow-hidden">
+                                        <div className="absolute bottom-0 right-0 w-64 h-64 bg-teal-500/10 rounded-full -mr-16 -mb-16 blur-3xl"></div>
+                                        <div className="w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center text-teal-400 border border-white/10 relative z-10">
+                                            <Sparkles size={26} className="animate-pulse" />
                                         </div>
                                         <div className="flex-1 text-center xl:text-left relative z-10">
-                                            <h3 className="text-3xl font-black text-white mb-3 tracking-tight">Active Clinical Intelligence</h3>
-                                            <p className="text-slate-300 text-lg leading-relaxed font-medium">
+                                            <h3 className="text-xl font-black text-white mb-1 tracking-tight">Active Clinical Intelligence</h3>
+                                            <p className="text-slate-400 text-sm leading-relaxed">
                                                 {riskStats.high > 0
-                                                    ? `System telemetry detects ${riskStats.high} patients requiring clinical intervention. High-priority hemodynamics suggest an immediate review of the latest clinical streams.`
-                                                    : "All clinical streams are reporting within optimal thresholds. Neural monitoring indicates high stability across the patient registry."}
+                                                    ? `${riskStats.high} patients requiring clinical intervention — review their latest clinical streams.`
+                                                    : "All clinical streams reporting within optimal thresholds."}
                                             </p>
                                         </div>
                                         <button 
                                             onClick={() => { setPatientFilter('all'); setActiveTab('patients-list'); }} 
-                                            className="px-10 py-5 bg-teal-500 text-[#0f172a] rounded-[2rem] font-black text-sm uppercase tracking-[0.2em] hover:bg-white hover:scale-105 transition-all duration-300 flex items-center gap-3 shadow-2xl shadow-teal-500/20 relative z-10"
+                                            className="px-6 py-3 bg-teal-500 text-[#0f172a] rounded-xl font-black text-xs uppercase tracking-widest hover:bg-white transition-all duration-300 flex items-center gap-2 relative z-10"
                                         >
-                                            Audit Registry <ChevronRight size={18} />
+                                            Audit Registry <ChevronRight size={16} />
                                         </button>
                                     </div>
                                 </div>
@@ -2103,20 +2099,20 @@ const Dashboard = () => {
                                         <motion.div
                                             initial={{ opacity: 0, scale: 0.95 }}
                                             animate={{ opacity: 1, scale: 1 }}
-                                            className="relative overflow-hidden bg-[linear-gradient(135deg,#0f172a_0%,#1e293b_100%)] p-12 rounded-[4rem] mb-12 shadow-2xl group"
+                                            className="relative overflow-hidden bg-[linear-gradient(135deg,#0f172a_0%,#1e293b_100%)] p-6 rounded-2xl mb-6 shadow-lg"
                                         >
-                                            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-teal-500/10 rounded-full -mr-32 -mt-32 blur-[100px] group-hover:bg-teal-500/20 transition-all duration-1000"></div>
-                                            <div className="relative z-10 flex flex-col md:flex-row items-center gap-12 text-center md:text-left">
-                                                <div className="text-6xl animate-bounce-slow bg-white/5 backdrop-blur-lg w-24 h-24 rounded-3xl flex items-center justify-center border border-white/10 shadow-2xl">✨</div>
-                                                <div className="max-w-2xl">
-                                                    <p className="font-black text-white text-4xl mb-4 tracking-tight">
-                                                        Welcome to Maatri Shield, <span className="text-teal-400">{currentUser?.name?.split(' ')[0] || 'Mama'}</span>
+                                            <div className="absolute top-0 right-0 w-64 h-64 bg-teal-500/10 rounded-full -mr-16 -mt-16 blur-3xl"></div>
+                                            <div className="relative z-10 flex flex-col md:flex-row items-center gap-6 text-center md:text-left">
+                                                <div className="text-3xl bg-white/5 w-14 h-14 rounded-2xl flex items-center justify-center border border-white/10">✨</div>
+                                                <div>
+                                                    <p className="font-black text-white text-xl mb-1 tracking-tight">
+                                                        Welcome, <span className="text-teal-400">{currentUser?.name?.split(' ')[0] || 'Mama'}</span>
                                                     </p>
-                                                    <p className="text-slate-300 text-xl font-medium leading-relaxed opacity-90">
-                                                        "Every moment today nurtures the life growing within you. You are protected by an intelligent care network built for your safety."
+                                                    <p className="text-slate-400 text-sm leading-relaxed">
+                                                        You are protected by an intelligent care network. Log your first health entry to begin.
                                                     </p>
-                                                    <div className="mt-10 inline-flex items-center gap-4 px-6 py-3 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 text-teal-400 text-[10px] font-black uppercase tracking-[0.3em] hover:bg-white/10 transition-all cursor-pointer">
-                                                        Initialize Clinical Log <ArrowRight size={14} />
+                                                    <div className="mt-3 inline-flex items-center gap-2 px-4 py-2 bg-white/5 rounded-xl border border-white/10 text-teal-400 text-[10px] font-black uppercase tracking-widest hover:bg-white/10 transition-all cursor-pointer">
+                                                        Initialize Clinical Log <ArrowRight size={12} />
                                                     </div>
                                                 </div>
                                             </div>
@@ -2125,67 +2121,55 @@ const Dashboard = () => {
                                         <motion.div
                                             initial={{ opacity: 0, y: 10 }}
                                             animate={{ opacity: 1, y: 0 }}
-                                            className={`p-10 rounded-[3.5rem] mb-12 flex flex-col md:flex-row items-center gap-10 border shadow-2xl backdrop-blur-2xl transition-all duration-700 ${alert.includes('Monitoring active')
-                                                ? 'bg-white/40 border-slate-100'
+                                            className={`p-5 rounded-2xl mb-6 flex flex-col md:flex-row items-center gap-5 border transition-all duration-700 ${alert.includes('Monitoring active')
+                                                ? 'bg-teal-50/60 border-teal-100'
                                                 : 'bg-rose-50/60 border-rose-100'
                                                 }`}
                                         >
-                                            <div className={`w-20 h-20 rounded-[2.5rem] flex items-center justify-center transition-all duration-1000 ${alert.includes('Monitoring active')
-                                                ? 'bg-teal-500 text-white shadow-2xl shadow-teal-500/40 translate-y-0'
-                                                : 'bg-rose-500 text-white shadow-2xl shadow-rose-500/40 animate-pulse'
+                                            <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${alert.includes('Monitoring active')
+                                                ? 'bg-teal-500 text-white'
+                                                : 'bg-rose-500 text-white animate-pulse'
                                                 }`}>
-                                                <Bell size={32} className={alert.includes('Monitoring active') ? "animate-pulse" : "animate-bounce"} />
+                                                <Bell size={22} className={alert.includes('Monitoring active') ? "animate-pulse" : "animate-bounce"} />
                                             </div>
                                             <div className="flex-1 text-center md:text-left">
                                                 {alert.includes('Monitoring active') ? (
-                                                    <div className="flex flex-col gap-2">
-                                                        <div className="flex items-center justify-center md:justify-start gap-3">
-                                                            <div className="w-3 h-3 rounded-full bg-teal-500 animate-ping"></div>
-                                                            <p className="font-black text-slate-900 text-[10px] uppercase tracking-[0.4em]">
-                                                                Clinical Network: Secure & Active
-                                                            </p>
+                                                    <div className="flex flex-col gap-1">
+                                                        <div className="flex items-center justify-center md:justify-start gap-2">
+                                                            <div className="w-2 h-2 rounded-full bg-teal-500 animate-ping"></div>
+                                                            <p className="font-black text-teal-700 text-[10px] uppercase tracking-widest">Clinical Network: Active</p>
                                                         </div>
-                                                        <p className="font-black text-slate-700 text-2xl tracking-tight leading-tight">{alert}</p>
+                                                        <p className="font-semibold text-slate-700 text-base">{alert}</p>
                                                     </div>
                                                 ) : (
-                                                    <div className="flex flex-col gap-2">
-                                                        <div className="flex items-center justify-center md:justify-start gap-3">
-                                                            <div className="w-3 h-3 rounded-full bg-rose-500 animate-ping"></div>
-                                                            <p className="font-black text-rose-600 text-[10px] uppercase tracking-[0.4em]">
-                                                                System Priority Alert
-                                                            </p>
+                                                    <div className="flex flex-col gap-1">
+                                                        <div className="flex items-center justify-center md:justify-start gap-2">
+                                                            <div className="w-2 h-2 rounded-full bg-rose-500 animate-ping"></div>
+                                                            <p className="font-black text-rose-600 text-[10px] uppercase tracking-widest">Alert</p>
                                                         </div>
-                                                        <p className="font-black text-slate-900 text-2xl tracking-tight leading-tight">{alert}</p>
+                                                        <p className="font-semibold text-slate-900 text-base">{alert}</p>
                                                     </div>
                                                 )}
                                             </div>
-                                            {alert.includes('Monitoring active') && (
-                                                <div className="hidden xl:flex items-center gap-8 px-10 border-l border-slate-100 h-16">
-                                                    <div className="text-right">
-                                                        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-1">Care Latency</p>
-                                                        <p className="font-black text-2xl text-slate-900 tabular-nums tracking-tighter">0.02<span className="text-xs ml-1 opacity-50">s</span></p>
-                                                    </div>
-                                                </div>
-                                            )}
                                         </motion.div>
                                     )}
 
-                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
                                         {stats.map((stat, i) => (
                                             <motion.div
                                                 key={i}
                                                 initial={{ opacity: 0, scale: 0.95 }}
                                                 animate={{ opacity: 1, scale: 1 }}
                                                 transition={{ delay: i * 0.1 }}
-                                                className="bg-white p-10 rounded-[3.5rem] border border-slate-50 shadow-[0_20px_40px_rgba(0,0,0,0.02)] hover:shadow-[0_40px_80px_rgba(106,76,147,0.08)] transition-all cursor-pointer group relative overflow-hidden"
+                                                className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-all cursor-pointer group relative overflow-hidden"
                                             >
-                                                <div className="flex items-center justify-between mb-8">
-                                                    <p className="text-slate-400 text-[10px] font-black uppercase tracking-[0.3em]">{stat.label}</p>
-                                                    <div className="w-12 h-12 rounded-2xl bg-slate-50 text-slate-400 group-hover:bg-brand-500 group-hover:text-white transition-all duration-500 flex items-center justify-center">
-                                                        <Activity size={20} />
+                                                <div className="flex items-center justify-between mb-4">
+                                                    <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest">{stat.label}</p>
+                                                    <div className="w-9 h-9 rounded-xl bg-slate-50 text-slate-400 group-hover:bg-brand-500 group-hover:text-white transition-all duration-300 flex items-center justify-center">
+                                                        <Activity size={16} />
                                                     </div>
                                                 </div>
-                                                <h3 className="text-5xl font-black tracking-tight mb-4 text-slate-900 tabular-nums">{stat.value}</h3>
+                                                <h3 className="text-3xl font-black tracking-tight mb-3 text-slate-900 tabular-nums">{stat.value}</h3>
                                                 <div className="flex items-center gap-3">
                                                     <span className={`text-[10px] font-black uppercase tracking-[0.2em] px-4 py-1.5 rounded-full border ${stat.color} bg-white shadow-sm`}>
                                                         {stat.status}
@@ -2201,46 +2185,46 @@ const Dashboard = () => {
                                         ))}
                                     </div>
 
-                                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-                                        <div className="bg-white p-12 rounded-[4rem] border border-slate-50 shadow-[0_30px_60px_rgba(0,0,0,0.03)] relative overflow-hidden group">
-                                            <div className="absolute top-0 right-0 w-80 h-80 bg-slate-50 rounded-full -mr-40 -mt-40 opacity-50 transition-transform duration-1000 group-hover:scale-110"></div>
-                                            <h3 className="text-2xl font-black tracking-tight text-slate-900 mb-10 flex items-center gap-4 relative z-10">
-                                                <div className="w-12 h-12 rounded-[1.25rem] bg-slate-900 text-white flex items-center justify-center shadow-2xl">
-                                                    <Activity size={24} />
+                                    <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+                                        <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm relative overflow-hidden group">
+                                            <div className="absolute top-0 right-0 w-64 h-64 bg-slate-50 rounded-full -mr-32 -mt-32 opacity-50 group-hover:scale-110 transition-transform duration-700"></div>
+                                            <h3 className="text-xl font-bold tracking-tight text-slate-900 mb-6 flex items-center gap-3 relative z-10">
+                                                <div className="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center shadow-md">
+                                                    <Droplets size={20} />
                                                 </div>
-                                                {role === 'guardian' ? `Registry: ${selectedPatient?.name || 'Patient'}` : 'Clinical Stream'}
+                                                Clinical Streams
                                             </h3>
                                             {(role === 'guardian' && guardianConnectionStatus !== 'accepted') ? (
-                                                <div className="h-full py-24 text-center text-slate-300 relative z-10">
-                                                    <Lock size={64} className="mx-auto mb-6 opacity-10" />
-                                                    <p className="font-black uppercase tracking-[0.2em] text-xs">Authorization Required</p>
-                                                    <p className="text-slate-400 mt-2 font-medium">Awaiting care-giver approval.</p>
+                                                <div className="h-full py-12 text-center text-slate-300 relative z-10">
+                                                    <Lock size={48} className="mx-auto mb-4 opacity-10" />
+                                                    <p className="font-bold uppercase tracking-widest text-[10px]">Authorization Required</p>
+                                                    <p className="text-slate-400 mt-1 text-xs">Awaiting care-giver approval.</p>
                                                 </div>
                                             ) : logs.length > 0 ? (
-                                                <div className="space-y-8 relative z-10">
+                                                <div className="space-y-6 relative z-10">
                                                     {logs.slice(0, 2).map((log) => (
-                                                        <div key={log.id} className="relative pl-10 border-l-[3px] border-slate-100 pb-2">
-                                                            <div className="absolute -left-[11px] top-0 w-5 h-5 rounded-full bg-slate-900 border-4 border-white shadow-xl"></div>
-                                                            <div className="bg-slate-50/50 backdrop-blur-sm p-6 rounded-[2rem] border border-slate-100 hover:border-slate-200 transition-colors">
-                                                                <p className="text-[10px] text-slate-400 font-black uppercase tracking-[0.2em] mb-4">
+                                                        <div key={log.id} className="relative pl-8 border-l-2 border-slate-100 pb-1">
+                                                            <div className="absolute -left-[7px] top-0 w-3 h-3 rounded-full bg-slate-900 border-2 border-white shadow-sm"></div>
+                                                            <div className="bg-slate-50/50 p-4 rounded-2xl border border-slate-100 hover:border-slate-200 transition-colors">
+                                                                <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wider mb-3">
                                                                     Telemetry Sync • {new Date(log.timestamp).toLocaleDateString()} at {new Date(log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                                                 </p>
-                                                                <div className="grid grid-cols-3 gap-6">
-                                                                    <div className="flex flex-col gap-1">
-                                                                        <p className="text-[10px] text-slate-400 uppercase font-black tracking-widest">Rate</p>
-                                                                        <p className="font-black text-xl tabular-nums text-slate-900">{log.heartRate}<span className="text-[9px] ml-1 opacity-40">bpm</span></p>
+                                                                <div className="grid grid-cols-3 gap-4">
+                                                                    <div>
+                                                                        <p className="text-[9px] text-slate-400 uppercase font-bold tracking-widest">Rate</p>
+                                                                        <p className="font-bold text-lg tabular-nums text-slate-900">{log.heartRate}<span className="text-[8px] ml-0.5 opacity-40">bpm</span></p>
                                                                     </div>
-                                                                    <div className="flex flex-col gap-1">
-                                                                        <p className="text-[10px] text-slate-400 uppercase font-black tracking-widest">Gauge</p>
-                                                                        <p className="font-black text-xl tabular-nums text-slate-900">{log.systolic}/{log.diastolic}<span className="text-[9px] ml-1 opacity-40">BP</span></p>
+                                                                    <div>
+                                                                        <p className="text-[9px] text-slate-400 uppercase font-bold tracking-widest">Gauge</p>
+                                                                        <p className="font-bold text-lg tabular-nums text-slate-900">{log.systolic}/{log.diastolic}<span className="text-[8px] ml-0.5 opacity-40">BP</span></p>
                                                                     </div>
-                                                                    <div className="flex flex-col gap-1">
-                                                                        <p className="text-[10px] text-slate-400 uppercase font-black tracking-widest">Index</p>
-                                                                        <p className="font-black text-xl tabular-nums text-slate-900">{log.glucose}<span className="text-[9px] ml-1 opacity-40">mg/dL</span></p>
+                                                                    <div>
+                                                                        <p className="text-[9px] text-slate-400 uppercase font-bold tracking-widest">Index</p>
+                                                                        <p className="font-bold text-lg tabular-nums text-slate-900">{log.glucose}<span className="text-[8px] ml-0.5 opacity-40">mg/dL</span></p>
                                                                     </div>
                                                                 </div>
                                                                 {log.symptoms && (
-                                                                    <div className="mt-5 p-4 bg-white/60 rounded-xl border border-white/80 text-xs text-slate-500 font-medium italic">
+                                                                    <div className="mt-3 p-3 bg-white/60 rounded-xl border border-white/80 text-[11px] text-slate-500 font-medium italic">
                                                                         "{log.symptoms}"
                                                                     </div>
                                                                 )}
@@ -2249,53 +2233,52 @@ const Dashboard = () => {
                                                     ))}
                                                 </div>
                                             ) : (
-                                                <div className="h-full py-24 text-center text-slate-200 relative z-10">
-                                                    <Activity size={64} className="mx-auto mb-6 opacity-5" />
-                                                    <p className="font-black uppercase tracking-[0.2em] text-xs">No Stream Data</p>
+                                                <div className="h-full py-12 text-center text-slate-200 relative z-10">
+                                                    <Activity size={48} className="mx-auto mb-4 opacity-5" />
+                                                    <p className="font-bold uppercase tracking-widest text-[10px]">No Stream Data</p>
                                                 </div>
                                             )}
                                         </div>
-
-                                        <div className="space-y-10">
-                                            <div className="bg-white p-12 rounded-[4rem] border border-slate-50 shadow-[0_30px_60px_rgba(0,0,0,0.03)] relative overflow-hidden group">
-                                                <div className="absolute bottom-0 left-0 w-80 h-80 bg-brand-50 rounded-full -ml-40 -mb-40 opacity-50 transition-transform duration-1000 group-hover:scale-110"></div>
-                                                <h3 className="text-2xl font-black tracking-tight text-slate-900 mb-10 flex items-center gap-4 relative z-10">
-                                                    <div className="w-12 h-12 rounded-[1.25rem] bg-brand-500 text-white flex items-center justify-center shadow-lg shadow-brand-500/20">
-                                                        <TrendingUp size={24} />
+                                        <div className="space-y-6">
+                                            <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm relative overflow-hidden group">
+                                                <div className="absolute bottom-0 left-0 w-64 h-64 bg-slate-50 rounded-full -ml-32 -mb-32 opacity-50 group-hover:scale-110 transition-transform duration-700"></div>
+                                                <h3 className="text-xl font-bold tracking-tight text-slate-900 mb-8 flex items-center gap-3 relative z-10">
+                                                    <div className="w-10 h-10 rounded-xl bg-brand-500 text-white flex items-center justify-center shadow-md shadow-brand-500/10">
+                                                        <TrendingUp size={20} />
                                                     </div>
                                                     Stability Matrix
                                                 </h3>
                                                 {(role === 'guardian' && guardianConnectionStatus !== 'accepted') ? (
-                                                    <div className="h-full py-24 text-center text-slate-300 relative z-10">
-                                                        <Lock size={64} className="mx-auto mb-6 opacity-10" />
-                                                        <p className="font-black uppercase tracking-[0.2em] text-xs">Access Encrypted</p>
+                                                    <div className="h-full py-12 text-center text-slate-300 relative z-10">
+                                                        <Lock size={48} className="mx-auto mb-4 opacity-10" />
+                                                        <p className="font-bold uppercase tracking-widest text-[10px]">Access Encrypted</p>
                                                     </div>
                                                 ) : (selectedPatient || role === 'patient') ? (
-                                                    <div className={`p-10 rounded-[3rem] border-2 relative overflow-hidden transition-all duration-500 z-10 ${getRiskStatus(logs[0]).bg} ${getRiskStatus(logs[0]).border}`}>
+                                                    <div className={`p-6 rounded-2xl border-2 relative overflow-hidden transition-all duration-300 z-10 ${getRiskStatus(logs[0]).bg} ${getRiskStatus(logs[0]).border}`}>
                                                         <div className="relative z-10">
-                                                            <div className="flex items-center gap-3 mb-6">
+                                                            <div className="flex items-center gap-2 mb-4">
                                                                 <div className="relative flex items-center justify-center">
-                                                                    <div className={`w-3 h-3 rounded-full bg-current animate-ping opacity-50 ${getRiskStatus(logs[0]).color}`}></div>
-                                                                    <div className={`w-2 h-2 rounded-full bg-current absolute ${getRiskStatus(logs[0]).color}`}></div>
+                                                                    <div className={`w-2 h-2 rounded-full bg-current animate-ping opacity-50 ${getRiskStatus(logs[0]).color}`}></div>
+                                                                    <div className={`w-1.5 h-1.5 rounded-full bg-current absolute ${getRiskStatus(logs[0]).color}`}></div>
                                                                 </div>
-                                                                <p className={`${getRiskStatus(logs[0]).color} font-black text-[10px] uppercase tracking-[0.3em]`}>
+                                                                <p className={`${getRiskStatus(logs[0]).color} font-bold text-[9px] uppercase tracking-widest`}>
                                                                     Computational Analytics: {getRiskStatus(logs[0]).label}
                                                                 </p>
                                                             </div>
-                                                            <h4 className="text-4xl font-black text-slate-900 mb-6 leading-tight">
-                                                                {getRiskStatus(logs[0]).level === 'urgent' ? 'Clinical Action Required' :
+                                                            <h4 className="text-2xl font-black text-slate-900 mb-4 leading-tight">
+                                                                {getRiskStatus(logs[0]).level === 'urgent' ? 'Action Required' :
                                                                     getRiskStatus(logs[0]).level === 'help' ? 'Enhanced Monitoring' :
                                                                         'Condition Stable'}
                                                             </h4>
-                                                            <div className="text-slate-600 text-base leading-relaxed mb-10 font-medium">
+                                                            <div className="text-slate-600 text-sm leading-relaxed mb-6 font-medium">
                                                                 {logs[0]?.symptoms ? (
-                                                                    <div className="mb-6 p-6 bg-white/80 backdrop-blur-sm rounded-[1.5rem] border border-white shadow-sm">
-                                                                        <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Subjective Feedback</p>
-                                                                        <p className="italic text-rose-500 text-lg">"{logs[0].symptoms}"</p>
+                                                                    <div className="mb-4 p-4 bg-white/80 rounded-xl border border-white shadow-sm">
+                                                                        <p className="text-[9px] font-bold uppercase tracking-widest text-slate-400 mb-1">Feedback</p>
+                                                                        <p className="italic text-rose-500 text-base">"{logs[0].symptoms}"</p>
                                                                     </div>
                                                                 ) : null}
                                                                 <p className="opacity-80">
-                                                                    "Current clinical biomarkers demonstrate persistent continuity. Telemetry suggests sticking to the established care protocol."
+                                                                    "Telemetry suggests sticking to the established care protocol."
                                                                 </p>
                                                             </div>
                                                             {role === 'doctor' ? (
@@ -2305,12 +2288,12 @@ const Dashboard = () => {
                                                                         setIsAppointmentModalOpen(true);
                                                                         setAppointmentStep('date');
                                                                     }}
-                                                                    className="w-full py-5 bg-slate-900 text-white rounded-[2rem] font-black text-xs uppercase tracking-[0.2em] hover:bg-slate-800 transition-all shadow-2xl flex items-center justify-center gap-3"
+                                                                    className="w-full py-4 bg-slate-900 text-white rounded-xl font-bold text-[11px] uppercase tracking-widest hover:bg-slate-800 transition-all shadow-lg flex items-center justify-center gap-2"
                                                                 >
-                                                                    Schedule Intervention <Calendar size={18} />
+                                                                    Schedule Intervention <Calendar size={16} />
                                                                 </button>
                                                             ) : (
-                                                                <button className={`w-full py-5 rounded-[2rem] border-2 font-black text-xs uppercase tracking-[0.2em] flex items-center justify-center gap-3 transition-all ${getRiskStatus(logs[0]).color} ${getRiskStatus(logs[0]).border} bg-white hover:bg-slate-50`}>
+                                                                <button className={`w-full py-5 rounded-2xl border-2 font-black text-xs uppercase tracking-[0.2em] flex items-center justify-center gap-3 transition-all ${getRiskStatus(logs[0]).color} ${getRiskStatus(logs[0]).border} bg-white hover:bg-slate-50`}>
                                                                     Full Clinical Assessment <ChevronRight size={18} />
                                                                 </button>
                                                             )}
@@ -2318,7 +2301,7 @@ const Dashboard = () => {
                                                         <Heart className={`absolute -right-20 -bottom-20 w-80 h-80 -rotate-12 opacity-[0.05] ${getRiskStatus(logs[0]).color}`} fill="currentColor" />
                                                     </div>
                                                 ) : (
-                                                    <div className="bg-slate-50/50 p-12 rounded-[3.5rem] border border-dashed border-slate-100 text-center py-24 relative z-10">
+                                                    <div className="bg-slate-50/50 p-12 rounded-3xl border border-dashed border-slate-100 text-center py-12 relative z-10">
                                                         <Activity className="mx-auto mb-6 text-slate-200" size={64} />
                                                         <p className="text-slate-400 font-black uppercase tracking-[0.2em] text-xs">Awaiting Subject Selection</p>
                                                     </div>
@@ -2342,7 +2325,7 @@ const Dashboard = () => {
                                                                     <div className="min-w-0 flex-1">
                                                                         <p className="font-bold text-slate-900 text-[11px] truncate">Dr. {apt.doctor_name || apt.doctor_email.split('@')[0]}</p>
                                                                         <p className="text-[9px] font-medium text-slate-500 truncate">
-                                                                            {new Date(apt.appointment_time).toLocaleDateString([], { month: 'short', day: 'numeric' })} � {new Date(apt.appointment_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                                            {new Date(apt.appointment_time).toLocaleDateString([], { month: 'short', day: 'numeric' })} — {new Date(apt.appointment_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                                                         </p>
                                                                     </div>
                                                                 </div>
@@ -2403,7 +2386,7 @@ const Dashboard = () => {
                                                     <div key={p.email} className="relative group/card">
                                                         <button
                                                             onClick={() => handleSelectPatient(p)}
-                                                            className={`p-6 rounded-[2rem] text-left transition-all border-2 w-full flex flex-col md:flex-row items-center gap-6 shadow-sm hover:shadow-xl bg-white text-slate-600 border-white shadow-slate-200/30`}
+                                                            className={`p-5 rounded-2xl text-left transition-all border-2 w-full flex flex-col md:flex-row items-center gap-6 shadow-sm hover:shadow-xl bg-white text-slate-600 border-white shadow-slate-200/30`}
                                                         >
                                                             <div className="flex items-center gap-6 flex-1 w-full">
                                                                 <div className={`w-16 h-16 rounded-2xl flex-shrink-0 flex items-center justify-center text-2xl font-black border-2 bg-brand-50 text-brand-600 border-brand-100 shadow-inner overflow-hidden`}>
@@ -2446,7 +2429,7 @@ const Dashboard = () => {
                                             })}
 
                                         {patients.length === 0 && (
-                                            <div className="col-span-full py-20 text-center bg-white/50 rounded-[3rem] border-2 border-dashed border-slate-200">
+                                            <div className="col-span-full py-20 text-center bg-white/50 rounded-3xl border-2 border-dashed border-slate-200">
                                                 <UsersIcon size={48} className="mx-auto mb-4 text-slate-200" />
                                                 <p className="text-slate-400 font-bold">Your patient directory is empty.</p>
                                             </div>
@@ -2455,12 +2438,12 @@ const Dashboard = () => {
                                 </div>
                             ) : (
                                 <div className="space-y-10">
-                                    {/* Patient Profile Header - Elegant & Empathetic */}
-                                    <div className="bg-white p-10 rounded-[3rem] border border-slate-100 shadow-[0_20px_50px_rgba(0,0,0,0.03)] flex flex-col xl:flex-row items-center justify-between gap-10 relative overflow-hidden group">
+                                     {/* Patient Profile Header - Elegant & Empathetic */}
+                                    <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-[0_20px_50px_rgba(0,0,0,0.03)] flex flex-col xl:flex-row items-center justify-between gap-10 relative overflow-hidden group">
                                         <div className="absolute top-0 right-0 w-64 h-64 bg-slate-50 rounded-full -mr-32 -mt-32 opacity-50 group-hover:scale-110 transition-transform duration-700"></div>
                                         <div className="flex flex-col md:flex-row items-center gap-8 relative z-10 w-full xl:w-auto">
                                             <div className="relative">
-                                                <div className="w-24 h-24 rounded-[2rem] bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 text-3xl font-black shadow-inner overflow-hidden">
+                                                <div className="w-20 h-20 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 text-3xl font-black shadow-inner overflow-hidden">
                                                     {(role === 'doctor' ? selectedPatient?.photo : currentUser?.photo) ? (
                                                         <img
                                                             src={(role === 'doctor' ? selectedPatient?.photo : currentUser?.photo)}
@@ -2560,59 +2543,59 @@ const Dashboard = () => {
                                     </div>
 
 
-                                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                                         {/* Blood Pressure Card - Redesigned */}
-                                        <div className="bg-white p-10 rounded-[3.5rem] border border-slate-100 shadow-[0_15px_40px_rgba(0,0,0,0.02)] hover:shadow-[0_40px_80px_rgba(0,0,0,0.06)] transition-all duration-500 group relative overflow-hidden">
-                                            <div className="absolute top-0 left-0 w-2 h-full bg-rose-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                                            <div className="flex items-start justify-between mb-10">
+                                        <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 group relative overflow-hidden">
+                                            <div className="absolute top-0 left-0 w-1.5 h-full bg-rose-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                            <div className="flex items-start justify-between mb-6">
                                                 <div>
-                                                    <div className="flex items-center gap-2 mb-2">
-                                                        <div className="w-8 h-8 rounded-lg bg-rose-50 flex items-center justify-center text-rose-500">
-                                                            <Heart size={16} fill="currentColor" />
+                                                    <div className="flex items-center gap-2 mb-1.5">
+                                                        <div className="w-6 h-6 rounded-lg bg-rose-50 flex items-center justify-center text-rose-500">
+                                                            <Heart size={14} fill="currentColor" />
                                                         </div>
-                                                        <p className="text-[10px] font-black text-rose-500 uppercase tracking-widest">Hemodynamics</p>
+                                                        <p className="text-[9px] font-black text-rose-500 uppercase tracking-widest">Hemodynamics</p>
                                                     </div>
-                                                    <h3 className="text-3xl font-black text-slate-900 tracking-tight">Blood Pressure</h3>
+                                                    <h3 className="text-xl font-bold text-slate-900 tracking-tight">Blood Pressure</h3>
                                                 </div>
                                                 <div className="text-right">
-                                                    <p className="text-5xl font-black text-slate-900 tracking-tighter tabular-nums">145<span className="text-xl text-slate-300 font-bold ml-1">/92</span></p>
-                                                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">mmHg  Latest</p>
+                                                    <p className="text-3xl font-black text-slate-900 tracking-tighter tabular-nums">145<span className="text-sm text-slate-300 font-bold ml-1">/92</span></p>
+                                                    <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">mmHg  Latest</p>
                                                 </div>
                                             </div>
-                                            <div className="h-[220px] w-full">
+                                            <div className="h-[180px] w-full">
                                                 <ResponsiveContainer width="100%" height="100%">
                                                     <AreaChart data={weeklyTrends}>
                                                         <defs>
                                                             <linearGradient id="colorSysRedesign" x1="0" y1="0" x2="0" y2="1">
-                                                                <stop offset="5%" stopColor="#f43f5e" stopOpacity={0.15} />
+                                                                <stop offset="5%" stopColor="#f43f5e" stopOpacity={0.1} />
                                                                 <stop offset="95%" stopColor="#f43f5e" stopOpacity={0} />
                                                             </linearGradient>
                                                         </defs>
                                                         <CartesianGrid strokeDasharray="6 6" vertical={false} stroke="#f1f5f9" />
-                                                        <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 10, fontWeight: 700 }} />
+                                                        <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 9, fontWeight: 700 }} />
                                                         <YAxis hide={true} />
                                                         <Tooltip
-                                                            contentStyle={{ borderRadius: '24px', border: 'none', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.15)', padding: '20px' }}
-                                                            itemStyle={{ fontWeight: 'black', fontSize: '14px' }}
+                                                            contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.1)', padding: '12px' }}
+                                                            itemStyle={{ fontWeight: 'bold', fontSize: '12px' }}
                                                         />
-                                                        <Area type="monotone" dataKey="sys" stroke="#f43f5e" strokeWidth={5} fill="url(#colorSysRedesign)" />
+                                                        <Area type="monotone" dataKey="sys" stroke="#f43f5e" strokeWidth={3} fill="url(#colorSysRedesign)" />
                                                     </AreaChart>
                                                 </ResponsiveContainer>
                                             </div>
                                         </div>
 
                                         {/* Risk Score Card - Redesigned */}
-                                        <div className="bg-white p-10 rounded-[3.5rem] border border-slate-100 shadow-[0_15px_40px_rgba(0,0,0,0.02)] hover:shadow-[0_40px_80px_rgba(0,0,0,0.06)] transition-all duration-500 flex flex-col items-center justify-center relative overflow-hidden">
-                                            <div className="absolute top-10 left-10">
-                                                <div className="flex items-center gap-2 mb-2">
-                                                    <div className="w-8 h-8 rounded-lg bg-brand-50 flex items-center justify-center text-brand-500">
-                                                        <Activity size={16} />
+                                        <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col items-center justify-center relative overflow-hidden">
+                                            <div className="absolute top-6 left-6">
+                                                <div className="flex items-center gap-2 mb-1.5">
+                                                    <div className="w-6 h-6 rounded-lg bg-brand-50 flex items-center justify-center text-brand-500">
+                                                        <Activity size={14} />
                                                     </div>
-                                                    <p className="text-[10px] font-black text-brand-500 uppercase tracking-widest">Safety Index</p>
+                                                    <p className="text-[9px] font-black text-brand-500 uppercase tracking-widest">Safety Index</p>
                                                 </div>
-                                                <h3 className="text-3xl font-black text-slate-900 tracking-tight">Risk Assessment</h3>
+                                                <h3 className="text-xl font-bold text-slate-900 tracking-tight">Risk Assessment</h3>
                                             </div>
-                                            <div className="w-full max-w-[320px] mt-20">
+                                            <div className="w-full max-w-[240px] mt-12">
                                                 <GaugeChart
                                                     id="risk-gauge-analytics"
                                                     nrOfLevels={30}
@@ -2625,128 +2608,128 @@ const Dashboard = () => {
                                                     hideText={true}
                                                 />
                                             </div>
-                                            <div className="text-center -mt-8">
-                                                <p className="text-7xl font-black text-slate-900 tracking-tighter">
-                                                    {((isDemoMode ? demoRiskPercent : (getRiskStatus(logs[0])?.score || 0.2)) * 100).toFixed(0)}<span className="text-3xl text-slate-300 ml-1">%</span>
+                                            <div className="text-center -mt-6">
+                                                <p className="text-5xl font-black text-slate-900 tracking-tighter">
+                                                    {((isDemoMode ? demoRiskPercent : (getRiskStatus(logs[0])?.score || 0.2)) * 100).toFixed(0)}<span className="text-xl text-slate-300 ml-1">%</span>
                                                 </p>
-                                                <div className="mt-4 px-6 py-2 bg-slate-950 text-white rounded-2xl text-xs font-black uppercase tracking-[0.25em] inline-block shadow-xl shadow-slate-200">
+                                                <div className="mt-3 px-4 py-1.5 bg-slate-950 text-white rounded-xl text-[10px] font-black uppercase tracking-widest inline-block">
                                                     {getRiskStatus(logs[0])?.label || 'Normal'} Stability
                                                 </div>
                                             </div>
                                         </div>
 
                                         {/* Heart Rate Card - Redesigned */}
-                                        <div className="bg-white p-10 rounded-[3.5rem] border border-slate-100 shadow-[0_15px_40px_rgba(0,0,0,0.02)] hover:shadow-[0_40px_80px_rgba(0,0,0,0.06)] transition-all duration-500 group relative">
-                                            <div className="flex items-start justify-between mb-10">
+                                        <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 group relative">
+                                            <div className="flex items-start justify-between mb-6">
                                                 <div>
-                                                    <div className="flex items-center gap-2 mb-2">
-                                                        <div className="w-8 h-8 rounded-lg bg-teal-50 flex items-center justify-center text-teal-500">
-                                                            <Activity size={16} />
+                                                    <div className="flex items-center gap-2 mb-1.5">
+                                                        <div className="w-6 h-6 rounded-lg bg-teal-50 flex items-center justify-center text-teal-500">
+                                                            <Activity size={14} />
                                                         </div>
-                                                        <p className="text-[10px] font-black text-teal-500 uppercase tracking-widest">Chronometry</p>
+                                                        <p className="text-[9px] font-black text-teal-500 uppercase tracking-widest">Chronometry</p>
                                                     </div>
-                                                    <h3 className="text-3xl font-black text-slate-900 tracking-tight">Heart Rate</h3>
+                                                    <h3 className="text-xl font-bold text-slate-900 tracking-tight">Heart Rate</h3>
                                                 </div>
                                                 <div className="text-right">
-                                                    <p className="text-5xl font-black text-slate-900 tracking-tighter tabular-nums">78<span className="text-xl text-slate-300 font-bold ml-1">bpm</span></p>
-                                                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Resting  Optimized</p>
+                                                    <p className="text-3xl font-black text-slate-900 tracking-tighter tabular-nums">78<span className="text-sm text-slate-300 font-bold ml-1">bpm</span></p>
+                                                    <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Resting  Optimized</p>
                                                 </div>
                                             </div>
-                                            <div className="h-[200px] w-full">
+                                            <div className="h-[180px] w-full">
                                                 <ResponsiveContainer width="100%" height="100%">
                                                     <LineChart data={weeklyTrends}>
                                                         <CartesianGrid strokeDasharray="6 6" vertical={false} stroke="#f1f5f9" />
-                                                        <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 10, fontWeight: 700 }} />
+                                                        <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 9, fontWeight: 700 }} />
                                                         <YAxis hide={true} />
-                                                        <Tooltip contentStyle={{ borderRadius: '24px', border: 'none', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.15)' }} />
-                                                        <Line type="monotone" dataKey="hr" stroke="#14b8a6" strokeWidth={6} dot={false} activeDot={{ r: 10, strokeWidth: 5, stroke: '#fff', fill: '#14b8a6' }} />
+                                                        <Tooltip contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.1)' }} />
+                                                        <Line type="monotone" dataKey="hr" stroke="#14b8a6" strokeWidth={4} dot={false} activeDot={{ r: 6, strokeWidth: 2, stroke: '#fff', fill: '#14b8a6' }} />
                                                     </LineChart>
                                                 </ResponsiveContainer>
                                             </div>
                                         </div>
 
                                         {/* Blood Sugar Card - Redesigned */}
-                                        <div className="bg-white p-10 rounded-[3.5rem] border border-slate-100 shadow-[0_15px_40px_rgba(0,0,0,0.02)] hover:shadow-[0_40px_80px_rgba(0,0,0,0.06)] transition-all duration-500 group relative">
-                                            <div className="flex items-start justify-between mb-10">
+                                        <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 group relative">
+                                            <div className="flex items-start justify-between mb-6">
                                                 <div>
-                                                    <div className="flex items-center gap-2 mb-2">
-                                                        <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-500">
-                                                            <Droplets size={16} fill="currentColor" />
+                                                    <div className="flex items-center gap-2 mb-1.5">
+                                                        <div className="w-6 h-6 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-500">
+                                                            <Droplets size={14} fill="currentColor" />
                                                         </div>
-                                                        <p className="text-[10px] font-black text-indigo-500 uppercase tracking-widest">Metabolic</p>
+                                                        <p className="text-[9px] font-black text-indigo-500 uppercase tracking-widest">Metabolic</p>
                                                     </div>
-                                                    <h3 className="text-3xl font-black text-slate-900 tracking-tight">Glucose Level</h3>
+                                                    <h3 className="text-xl font-bold text-slate-900 tracking-tight">Glucose Level</h3>
                                                 </div>
                                                 <div className="text-right">
-                                                    <p className="text-5xl font-black text-slate-900 tracking-tighter tabular-nums">92<span className="text-xl text-slate-300 font-bold ml-1">mg/dL</span></p>
-                                                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Prenatal Target  95</p>
+                                                    <p className="text-3xl font-black text-slate-900 tracking-tighter tabular-nums">92<span className="text-sm text-slate-300 font-bold ml-1">mg/dL</span></p>
+                                                    <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Target  95</p>
                                                 </div>
                                             </div>
-                                            <div className="h-[200px] w-full">
+                                            <div className="h-[180px] w-full">
                                                 <ResponsiveContainer width="100%" height="100%">
                                                     <LineChart data={weeklyTrends}>
                                                         <CartesianGrid strokeDasharray="6 6" vertical={false} stroke="#f1f5f9" />
-                                                        <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 10, fontWeight: 700 }} />
+                                                        <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 9, fontWeight: 700 }} />
                                                         <YAxis hide={true} />
-                                                        <Tooltip contentStyle={{ borderRadius: '24px', border: 'none', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.15)' }} />
-                                                        <Line type="monotone" dataKey="g" stroke="#6366f1" strokeWidth={6} dot={false} activeDot={{ r: 10, strokeWidth: 5, stroke: '#fff', fill: '#6366f1' }} />
+                                                        <Tooltip contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.1)' }} />
+                                                        <Line type="monotone" dataKey="g" stroke="#6366f1" strokeWidth={4} dot={false} activeDot={{ r: 6, strokeWidth: 2, stroke: '#fff', fill: '#6366f1' }} />
                                                     </LineChart>
                                                 </ResponsiveContainer>
                                             </div>
                                         </div>
 
                                         {/* Symptoms Card - Redesigned */}
-                                        <div className="bg-white p-10 rounded-[3.5rem] border border-slate-100 shadow-[0_15px_40px_rgba(0,0,0,0.02)] hover:shadow-[0_40px_80px_rgba(0,0,0,0.06)] transition-all duration-500">
-                                            <div className="flex items-center gap-3 mb-8">
-                                                <div className="w-10 h-10 rounded-xl bg-slate-950 text-white flex items-center justify-center">
-                                                    <Sparkles size={18} />
+                                        <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300">
+                                            <div className="flex items-center gap-3 mb-6">
+                                                <div className="w-8 h-8 rounded-xl bg-slate-950 text-white flex items-center justify-center">
+                                                    <Sparkles size={16} />
                                                 </div>
-                                                <h3 className="text-2xl font-black text-slate-900 tracking-tight">Symptoms Tracking</h3>
+                                                <h3 className="text-lg font-bold text-slate-900 tracking-tight">Symptoms Tracking</h3>
                                             </div>
-                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                                 {[
                                                     { id: 'swelling', label: 'Peripheral Swelling' },
                                                     { id: 'headache', label: 'Acute Headache' },
                                                     { id: 'vision', label: 'Visual Disturbances' },
                                                     { id: 'nausea', label: 'Persistent Nausea' }
                                                 ].map((s) => (
-                                                    <label key={s.id} className="flex items-center gap-4 cursor-pointer group p-4 bg-slate-50 rounded-[1.5rem] border border-transparent hover:border-slate-200 hover:bg-white transition-all">
+                                                    <label key={s.id} className="flex items-center gap-3 cursor-pointer group p-3 bg-slate-50 rounded-xl border border-transparent hover:border-slate-200 hover:bg-white transition-all">
                                                         <div className="relative flex items-center justify-center">
                                                             <input
                                                                 type="checkbox"
-                                                                className="peer appearance-none w-7 h-7 rounded-xl border-2 border-slate-300 checked:bg-teal-500 checked:border-teal-500 transition-all cursor-pointer"
+                                                                className="peer appearance-none w-5 h-5 rounded-lg border-2 border-slate-300 checked:bg-teal-500 checked:border-teal-500 transition-all cursor-pointer"
                                                                 defaultChecked={s.id === 'swelling'}
                                                             />
-                                                            <CheckCircle2 size={16} className="absolute text-white scale-0 peer-checked:scale-100 transition-transform pointer-events-none" />
+                                                            <CheckCircle2 size={12} className="absolute text-white scale-0 peer-checked:scale-100 transition-transform pointer-events-none" />
                                                         </div>
-                                                        <span className="text-sm font-black text-slate-600 peer-checked:text-slate-900 transition-colors uppercase tracking-tight">{s.label}</span>
+                                                        <span className="text-[11px] font-bold text-slate-600 peer-checked:text-slate-900 transition-colors uppercase tracking-tight">{s.label}</span>
                                                     </label>
                                                 ))}
                                             </div>
                                         </div>
 
                                         {/* Quick Actions Card - Redesigned */}
-                                        <div className="bg-slate-950 p-10 rounded-[3.5rem] text-white flex flex-col justify-between relative overflow-hidden group">
-                                            <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-700"></div>
+                                        <div className="bg-slate-950 p-6 rounded-2xl text-white flex flex-col justify-between relative overflow-hidden group">
+                                            <div className="absolute top-0 right-0 w-24 h-24 bg-white/5 rounded-full -mr-12 -mt-12 group-hover:scale-150 transition-transform duration-700"></div>
                                             <div>
-                                                <h3 className="text-2xl font-black mb-2 tracking-tight">Clinical Decision Support</h3>
-                                                <p className="text-slate-400 text-sm font-medium">Execute comprehensive neurological and hemodynamic assessments.</p>
+                                                <h3 className="text-lg font-bold mb-1 tracking-tight">Clinical Decision Support</h3>
+                                                <p className="text-slate-400 text-xs font-medium">Execute neurological and hemodynamic assessments.</p>
                                             </div>
 
-                                            <div className="mt-10 flex flex-col gap-3">
+                                            <div className="mt-6 flex flex-col gap-2">
                                                 <button
                                                     onClick={handleGenerateReport}
                                                     disabled={isGeneratingReport}
-                                                    className="w-full h-16 bg-white text-slate-950 rounded-[1.5rem] font-black uppercase text-[10px] tracking-[0.2em] shadow-2xl shadow-black/20 flex items-center justify-center gap-3 hover:bg-slate-100 active:scale-95 transition-all"
+                                                    className="w-full h-12 bg-white text-slate-950 rounded-xl font-black uppercase text-[9px] tracking-widest shadow-lg flex items-center justify-center gap-2 hover:bg-slate-100 active:scale-95 transition-all"
                                                 >
                                                     {isGeneratingReport ? (
-                                                        <div className="w-5 h-5 border-2 border-slate-900/30 border-t-slate-900 rounded-full animate-spin" />
-                                                    ) : <Activity size={20} />}
-                                                    {isGeneratingReport ? 'Processing Assessment...' : 'Generate Clinical Review'}
+                                                        <div className="w-4 h-4 border-2 border-slate-900/30 border-t-slate-900 rounded-full animate-spin" />
+                                                    ) : <Activity size={16} />}
+                                                    {isGeneratingReport ? 'Processing...' : 'Generate Clinical Review'}
                                                 </button>
-                                                <div className="flex gap-3">
-                                                    <button className="flex-1 h-16 bg-white/10 rounded-[1.5rem] border border-white/10 font-bold text-xs hover:bg-white/20 transition-all">Protocol Guide</button>
-                                                    <button className="flex-1 h-16 bg-white/10 rounded-[1.5rem] border border-white/10 font-bold text-xs hover:bg-white/20 transition-all">Peer Review</button>
+                                                <div className="flex gap-2">
+                                                    <button className="flex-1 h-12 bg-white/10 rounded-xl border border-white/10 font-bold text-[10px] hover:bg-white/20 transition-all uppercase">Protocol</button>
+                                                    <button className="flex-1 h-12 bg-white/10 rounded-xl border border-white/10 font-bold text-[10px] hover:bg-white/20 transition-all uppercase">Peer Review</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -2754,43 +2737,39 @@ const Dashboard = () => {
 
 
                                     {/* Clinical Insight Banner - High-End Medical AI */}
-                                    <div className="bg-[linear-gradient(135deg,#0f172a_0%,#1e293b_100%)] text-white rounded-[4rem] p-12 relative overflow-hidden shadow-2xl mt-12 group">
-                                        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-teal-500/10 rounded-full -mr-64 -mt-64 blur-[100px] group-hover:bg-teal-500/20 transition-all duration-1000"></div>
-                                        <div className="relative z-10 flex flex-col xl:flex-row items-center justify-between gap-12">
+                                    <div className="bg-[#0f172a] text-white rounded-3xl p-8 relative overflow-hidden shadow-xl mt-8 group">
+                                        <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-teal-500/10 rounded-full -mr-48 -mt-48 blur-[80px]"></div>
+                                        <div className="relative z-10 flex flex-col xl:flex-row items-center justify-between gap-8">
                                             <div className="max-w-2xl">
-                                                <div className="inline-flex items-center gap-3 px-5 py-2.5 bg-white/5 backdrop-blur-md text-teal-400 rounded-2xl border border-white/10 mb-8">
-                                                    <div className="relative">
-                                                        <Sparkles size={18} />
-                                                        <div className="absolute top-0 right-0 w-2 h-2 bg-teal-400 rounded-full animate-ping"></div>
-                                                    </div>
-                                                    <span className="text-xs font-black uppercase tracking-[0.2em]">Clinical Stability Index</span>
+                                                <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/5 backdrop-blur-md text-teal-400 rounded-xl border border-white/10 mb-6">
+                                                    <Sparkles size={14} />
+                                                    <span className="text-[9px] font-black uppercase tracking-widest">Analytical Insight Engine</span>
                                                 </div>
-                                                <h3 className="text-5xl font-black mb-8 leading-[1.1] tracking-tight text-white">
-                                                    Intelligent Clinical <br />
-                                                    <span className="text-teal-400">Insight Analytics</span>
+                                                <h3 className="text-2xl font-bold mb-4 tracking-tight">
+                                                    Intelligent Clinical <span className="text-teal-400">Insight Analytics</span>
                                                 </h3>
-                                                <p className="text-slate-300 text-xl font-medium leading-relaxed">
+                                                <p className="text-slate-400 text-sm leading-relaxed mb-6 font-medium">
                                                     {logs.length > 0 ? (
                                                         getRiskStatus(logs[0]).level === 'normal'
-                                                            ? "Current neural telemetry demonstrates optimal maternal stability. Predictive modeling suggests maintaining the current clinical protocol with standard prenatal vigilance."
-                                                            : "Heuristic variance in hemodynamic markers detected. Computational analysis indicates a priority requirement for closer observation of hypertensive trends over the next 48-hour cycle."
+                                                            ? "Current neural telemetry demonstrates optimal maternal stability. Predictive modeling suggests maintaining the current clinical protocol."
+                                                            : "Heuristic variance in hemodynamic markers detected. Computational analysis indicates a priority requirement for closer observation."
                                                     ) : "Initialize clinical log stream to activate the Maatri Shield predictive stability engine."}
                                                 </p>
                                             </div>
-                                            <div className="flex flex-col sm:flex-row gap-6 w-full xl:w-auto">
-                                                <div className="bg-white/5 backdrop-blur-2xl p-10 rounded-[3rem] border border-white/10 text-center min-w-[220px] shadow-2xl">
-                                                    <div className="w-14 h-14 bg-teal-500/20 rounded-2xl flex items-center justify-center mx-auto mb-6 text-teal-400">
-                                                        <CheckCircle2 size={28} />
+                                            <div className="flex flex-col sm:flex-row gap-4 w-full xl:w-auto">
+                                                <div className="bg-white/5 backdrop-blur-2xl p-6 rounded-2xl border border-white/10 text-center min-w-[160px] shadow-xl">
+                                                    <div className="w-10 h-10 bg-teal-500/20 rounded-xl flex items-center justify-center mx-auto mb-4 text-teal-400">
+                                                        <CheckCircle2 size={20} />
                                                     </div>
-                                                    <p className="text-[10px] uppercase font-black tracking-[0.3em] text-slate-400 mb-2">Protocol Goal</p>
-                                                    <p className="text-4xl font-black text-white">92.4%</p>
+                                                    <p className="text-[9px] uppercase font-black tracking-widest text-slate-400 mb-1">Goal</p>
+                                                    <p className="text-2xl font-black text-white">92.4%</p>
                                                 </div>
-                                                <div className="bg-white/5 backdrop-blur-2xl p-10 rounded-[3rem] border border-white/10 text-center min-w-[220px] shadow-2xl">
-                                                    <div className="w-14 h-14 bg-brand-500/20 rounded-2xl flex items-center justify-center mx-auto mb-6 text-brand-400">
-                                                        <TrendingUp size={28} />
+                                                <div className="bg-white/5 backdrop-blur-2xl p-6 rounded-2xl border border-white/10 text-center min-w-[160px] shadow-xl">
+                                                    <div className="w-10 h-10 bg-brand-500/20 rounded-xl flex items-center justify-center mx-auto mb-4 text-brand-400">
+                                                        <TrendingUp size={20} />
                                                     </div>
-                                                    <p className="text-[10px] uppercase font-black tracking-[0.3em] text-slate-400 mb-2">Stability Grade</p>
-                                                    <p className="text-4xl font-black text-white">Alpha</p>
+                                                    <p className="text-[9px] uppercase font-black tracking-widest text-slate-400 mb-1">Grade</p>
+                                                    <p className="text-2xl font-black text-white">Alpha</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -2847,55 +2826,55 @@ const Dashboard = () => {
                                             <div key={p.email} className="group relative">
                                                 <button
                                                     onClick={() => handleSelectPatient(p)}
-                                                    className={`w-full p-8 rounded-[3rem] text-left transition-all duration-500 border-2 flex flex-col xl:flex-row items-center gap-8 shadow-sm hover:shadow-[0_30px_60px_rgba(0,0,0,0.06)] ${isSelected
-                                                        ? 'bg-slate-900 text-white border-slate-900 shadow-xl'
-                                                        : 'bg-white text-slate-600 border-slate-50 hover:border-slate-100'
+                                                    className={`w-full p-5 rounded-2xl text-left transition-all duration-300 border flex flex-col xl:flex-row items-center gap-6 shadow-sm ${isSelected
+                                                        ? 'bg-slate-900 text-white border-slate-900 shadow-lg'
+                                                        : 'bg-white text-slate-600 border-slate-100 hover:border-slate-200'
                                                         }`}
                                                 >
-                                                    <div className="flex items-center gap-8 flex-1 w-full">
-                                                        <div className={`w-20 h-20 rounded-[2rem] flex-shrink-0 flex items-center justify-center text-3xl font-black border-2 transition-transform duration-500 group-hover:scale-105 ${isSelected ? 'bg-white/10 text-white border-white/20' : 'bg-slate-50 text-slate-400 border-slate-100 shadow-inner'} overflow-hidden`}>
+                                                    <div className="flex items-center gap-5 flex-1 w-full">
+                                                        <div className={`w-14 h-14 rounded-xl flex-shrink-0 flex items-center justify-center text-xl font-bold border transition-all ${isSelected ? 'bg-white/10 text-white border-white/20' : 'bg-slate-50 text-slate-400 border-slate-100 shadow-inner'} overflow-hidden`}>
                                                             {p.photo ? <img src={p.photo} alt={p.name} className="w-full h-full object-cover" /> : (p.name?.[0]?.toUpperCase() || 'P')}
                                                         </div>
                                                         <div className="flex-1 min-w-0">
-                                                            <div className="flex flex-wrap items-center gap-4 mb-2">
-                                                                <p className="font-black text-2xl leading-tight truncate tracking-tight">{p.name || 'Anonymous Patient'}</p>
-                                                                <div className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-[0.2em] border ${isSelected
+                                                            <div className="flex flex-wrap items-center gap-3 mb-1">
+                                                                <p className="font-bold text-lg leading-tight truncate tracking-tight">{p.name || 'Anonymous Patient'}</p>
+                                                                <div className={`px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest border ${isSelected
                                                                     ? 'bg-white/10 text-white border-white/20'
                                                                     : `${risk.bg} ${risk.color} ${risk.border}`
                                                                     }`}>
                                                                     {risk.label}
                                                                 </div>
                                                             </div>
-                                                            <div className="flex flex-wrap items-center gap-4">
-                                                                <span className={`text-xs font-bold flex items-center gap-1.5 ${isSelected ? 'text-slate-400' : 'text-slate-400'}`}>
+                                                            <div className="flex flex-wrap items-center gap-3">
+                                                                <span className="text-[10px] font-bold flex items-center gap-1.5 text-slate-400">
                                                                     <div className={`w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-teal-400' : 'bg-teal-500'}`}></div>
                                                                     #{p.email.split('@')[0].toUpperCase()}
                                                                 </span>
-                                                                <span className={`text-xs font-bold ${isSelected ? 'text-slate-400' : 'text-slate-400'}`}>
+                                                                <span className="text-[10px] font-bold text-slate-400">
                                                                     • {p.age} Years
                                                                 </span>
-                                                                <span className={`text-xs font-bold ${isSelected ? 'text-slate-400' : 'text-slate-400'}`}>
+                                                                <span className="text-[10px] font-bold text-slate-400">
                                                                     • {p.pregnancyType}
                                                                 </span>
                                                             </div>
                                                         </div>
                                                     </div>
 
-                                                    <div className={`flex flex-wrap items-center justify-between xl:justify-end gap-10 w-full xl:w-auto px-8 xl:border-l ${isSelected ? 'border-white/10' : 'border-slate-100'}`}>
+                                                    <div className={`flex flex-wrap items-center justify-between xl:justify-end gap-8 w-full xl:w-auto px-6 xl:border-l ${isSelected ? 'border-white/10' : 'border-slate-100'}`}>
                                                         <div className="text-center">
-                                                            <p className={`text-[10px] font-black uppercase tracking-[0.2em] mb-2 ${isSelected ? 'text-slate-500' : 'text-slate-400'}`}>Heart Rate</p>
-                                                            <p className="font-black text-2xl tabular-nums">{pData.latestLog?.heartRate || '--'}<span className="text-[10px] ml-1 opacity-50 uppercase font-black">bpm</span></p>
+                                                            <p className={`text-[9px] font-black uppercase tracking-widest mb-1 ${isSelected ? 'text-slate-400' : 'text-slate-400'}`}>Heart Rate</p>
+                                                            <p className="font-bold text-lg tabular-nums">{pData.latestLog?.heartRate || '--'}<span className="text-[9px] ml-0.5 opacity-50 uppercase">bpm</span></p>
                                                         </div>
                                                         <div className="text-center">
-                                                            <p className={`text-[10px] font-black uppercase tracking-[0.2em] mb-2 ${isSelected ? 'text-slate-500' : 'text-slate-400'}`}>Blood Pressure</p>
-                                                            <p className="font-black text-2xl tabular-nums">{pData.latestLog ? `${pData.latestLog.systolic}/${pData.latestLog.diastolic}` : '--/--'}</p>
+                                                            <p className={`text-[9px] font-black uppercase tracking-widest mb-1 ${isSelected ? 'text-slate-400' : 'text-slate-400'}`}>Blood Pressure</p>
+                                                            <p className="font-bold text-lg tabular-nums">{pData.latestLog ? `${pData.latestLog.systolic}/${pData.latestLog.diastolic}` : '--/--'}</p>
                                                         </div>
                                                         <div className="hidden sm:block text-right">
-                                                            <p className={`text-[10px] font-black uppercase tracking-[0.2em] mb-2 ${isSelected ? 'text-slate-500' : 'text-slate-400'}`}>Last Sync</p>
-                                                            <p className="font-black text-xl">{pData.latestLog ? new Date(pData.latestLog.timestamp).toLocaleDateString([], { month: 'short', day: 'numeric' }) : 'Pending'}</p>
+                                                            <p className={`text-[9px] font-black uppercase tracking-widest mb-1 ${isSelected ? 'text-slate-400' : 'text-slate-400'}`}>Last Sync</p>
+                                                            <p className="font-bold text-base">{pData.latestLog ? new Date(pData.latestLog.timestamp).toLocaleDateString([], { month: 'short', day: 'numeric' }) : 'Pending'}</p>
                                                         </div>
-                                                        <div className={`p-4 rounded-[1.5rem] transition-all duration-300 ${isSelected ? 'bg-white text-slate-950 shadow-xl' : 'bg-slate-50 text-slate-400 group-hover:bg-slate-900 group-hover:text-white'}`}>
-                                                            <ChevronRight size={20} />
+                                                        <div className={`p-3 rounded-xl transition-all ${isSelected ? 'bg-white text-slate-950 shadow-md' : 'bg-slate-50 text-slate-400 group-hover:bg-slate-900 group-hover:text-white'}`}>
+                                                            <ChevronRight size={18} />
                                                         </div>
                                                     </div>
                                                 </button>
@@ -2927,12 +2906,12 @@ const Dashboard = () => {
                                     })}
 
                                 {patients.length === 0 && (
-                                    <div className="py-24 text-center bg-white rounded-[4rem] border-4 border-dashed border-slate-50 flex flex-col items-center justify-center">
-                                        <div className="w-24 h-24 bg-slate-50 rounded-full flex items-center justify-center text-slate-200 mb-8">
-                                            <UsersIcon size={48} />
+                                    <div className="py-16 text-center bg-white rounded-3xl border-2 border-dashed border-slate-100 flex flex-col items-center justify-center">
+                                        <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center text-slate-200 mb-6">
+                                            <UsersIcon size={32} />
                                         </div>
-                                        <h3 className="text-2xl font-black text-slate-400 mb-2">No Clinical Records Found</h3>
-                                        <p className="text-slate-300 font-medium max-w-xs mx-auto">Patient connections will appear here once care links are established.</p>
+                                        <h3 className="text-xl font-bold text-slate-400 mb-1">No Clinical Records Found</h3>
+                                        <p className="text-slate-300 text-sm max-w-xs mx-auto">Patient connections will appear here once care links are established.</p>
                                     </div>
                                 )}
                             </div>
@@ -2942,13 +2921,13 @@ const Dashboard = () => {
 
                 {
                     activeTab === 'reports' && (
-                        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-8 pb-12">
+                        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6 pb-12">
                             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                                 <div>
-                                    <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 mb-2">
+                                    <h2 className="text-2xl font-bold tracking-tight text-slate-900 mb-1">
                                         {role === 'doctor' ? 'Clinical Report Center' : 'My Clinical Reports'}
                                     </h2>
-                                    <div className="text-slate-500 flex flex-col md:flex-row md:items-center gap-2 mt-1">
+                                    <div className="text-slate-500 text-sm flex flex-col md:flex-row md:items-center gap-2 mt-1">
                                         {role === 'doctor'
                                             ? <span>Select a patient to generate a comprehensive AI-powered clinical assessment.</span>
                                             : <>
@@ -3058,22 +3037,22 @@ const Dashboard = () => {
                                                     </div>
                                                 </div>
                                             ) : (
-                                                <div className="bg-white/40 p-12 rounded-[3rem] border-2 border-dashed border-slate-100 text-center">
-                                                    <Activity className="mx-auto mb-4 text-slate-200" size={48} />
+                                                <div className="bg-white/40 p-8 rounded-2xl border-2 border-dashed border-slate-100 text-center">
+                                                    <Activity className="mx-auto mb-4 text-slate-200" size={32} />
                                                     <p className="text-slate-400 font-bold">No reports generated yet.</p>
                                                 </div>
                                             )}
 
                                             {/* Generate Report Button */}
-                                            <div className="bg-white/60 backdrop-blur-md rounded-[2.5rem] border-2 border-dashed border-slate-200 p-8 text-center h-fit flex flex-col items-center justify-center group hover:border-brand-200 transition-colors max-w-2xl mx-auto">
+                                            <div className="bg-white/60 backdrop-blur-md rounded-2xl border-2 border-dashed border-slate-200 p-6 text-center h-fit flex flex-col items-center justify-center group hover:border-brand-200 transition-colors max-w-xl mx-auto">
                                                 <div className="flex flex-col items-center">
-                                                    <div className="flex items-center gap-4 mb-6">
-                                                        <div className="w-12 h-12 bg-[#F8F7FF] rounded-2xl flex items-center justify-center text-brand-600 group-hover:scale-110 transition-transform">
-                                                            <Sparkles size={24} />
+                                                    <div className="flex items-center gap-4 mb-4">
+                                                        <div className="w-10 h-10 bg-[#F8F7FF] rounded-xl flex items-center justify-center text-brand-600 group-hover:scale-110 transition-transform">
+                                                            <Sparkles size={20} />
                                                         </div>
                                                         <div className="text-left">
-                                                            <h3 className="text-xl font-black text-slate-900 leading-none">Generate Fresh Report</h3>
-                                                            <p className="text-xs text-slate-500 font-medium mt-1">
+                                                            <h3 className="text-lg font-bold text-slate-900 leading-none">Generate Fresh Report</h3>
+                                                            <p className="text-[11px] text-slate-500 font-medium mt-1">
                                                                 {role === 'doctor'
                                                                     ? `Analyze ${selectedPatient.name}'s recent clinical progression`
                                                                     : "Analyze your recent clinical data & interaction logs"
@@ -3096,12 +3075,12 @@ const Dashboard = () => {
                                             </div>
                                         </div>
                                     ) : (
-                                        <div className="bg-white/40 backdrop-blur-md p-20 rounded-[3rem] border-2 border-dashed border-slate-200 text-center flex flex-col items-center justify-center animate-in fade-in zoom-in duration-500">
-                                            <div className="w-24 h-24 bg-slate-50 rounded-[2rem] flex items-center justify-center text-slate-200 mb-6">
-                                                <UsersIcon size={48} />
+                                        <div className="bg-white/40 backdrop-blur-md p-10 rounded-2xl border-2 border-dashed border-slate-200 text-center flex flex-col items-center justify-center animate-in fade-in zoom-in duration-500">
+                                            <div className="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center text-slate-200 mb-4">
+                                                <UsersIcon size={32} />
                                             </div>
-                                            <h3 className="text-2xl font-black text-slate-400 mb-2">Patient Select Required</h3>
-                                            <p className="text-slate-300 font-medium max-w-xs mx-auto">Please select a patient from the sidebar to view their clinical history and generate reports.</p>
+                                            <h3 className="text-xl font-bold text-slate-400 mb-1">Patient Select Required</h3>
+                                            <p className="text-slate-300 text-sm font-medium max-w-xs mx-auto">Please select a patient from the sidebar to view their clinical history and generate reports.</p>
                                         </div>
                                     )}
                                 </div>
@@ -3115,44 +3094,41 @@ const Dashboard = () => {
                 {isProfileModalOpen && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
                         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setIsProfileModalOpen(false)} className="absolute inset-0 bg-slate-900/60 backdrop-blur-md" />
-                        <motion.div initial={{ opacity: 0, scale: 0.9, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.9, y: 20 }} className="relative bg-white w-full max-w-xl rounded-[3rem] shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+                        <motion.div initial={{ opacity: 0, scale: 0.9, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.9, y: 20 }} className="relative bg-white w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
                             {/* Header - Fixed */}
-                            <div className="p-8 pb-4 border-b border-slate-100 bg-white z-10">
+                            <div className="p-6 pb-4 border-b border-slate-100 bg-white z-10">
                                 <div className="flex justify-between items-center">
                                     <div>
-                                        <h3 className="text-2xl font-black tracking-tight text-slate-900">Account Settings</h3>
-                                        <div className="flex items-center gap-2 mt-1">
-                                            <p className="text-brand-500 text-[10px] uppercase font-black tracking-widest">Manage your clinical profile</p>
-                                            <span className="px-2 py-0.5 bg-brand-50 text-brand-600 rounded-full text-[8px] font-black uppercase border border-brand-100 flex items-center gap-1">
-                                                <Zap size={8} fill="currentColor" /> Simulation Mode
-                                            </span>
+                                        <h3 className="text-xl font-bold tracking-tight text-slate-900">Account Settings</h3>
+                                        <div className="flex items-center gap-2 mt-0.5">
+                                            <p className="text-brand-500 text-[9px] uppercase font-black tracking-widest">Manage your clinical profile</p>
                                         </div>
                                     </div>
-                                    <button onClick={() => setIsProfileModalOpen(false)} className="p-3 hover:bg-slate-100 rounded-2xl transition-all text-slate-400"><X size={24} /></button>
+                                    <button onClick={() => setIsProfileModalOpen(false)} className="p-2 hover:bg-slate-100 rounded-xl transition-all text-slate-400"><X size={20} /></button>
                                 </div>
                             </div>
 
                             {/* Scrollable Content */}
-                            <div className="flex-1 overflow-y-auto p-8 pt-6 custom-scrollbar">
-                                <form id="profileForm" onSubmit={handleUpdateProfile} className="space-y-8">
+                            <div className="flex-1 overflow-y-auto p-6 pt-4 custom-scrollbar">
+                                <form id="profileForm" onSubmit={handleUpdateProfile} className="space-y-6">
                                     {/* Photo Upload Section */}
-                                    <div className="flex flex-col items-center mb-4">
+                                    <div className="flex flex-col items-center mb-2">
                                         <div className="relative group">
-                                            <div className={`w-32 h-32 rounded-[2.5rem] border-4 border-white shadow-2xl flex items-center justify-center overflow-hidden transition-all group-hover:scale-105 ${role === 'doctor' ? 'bg-blue-600' : role === 'guardian' ? 'bg-purple-600' : 'bg-brand-600'}`}>
+                                            <div className={`w-24 h-24 rounded-2xl border-4 border-white shadow-xl flex items-center justify-center overflow-hidden transition-all group-hover:scale-105 ${role === 'doctor' ? 'bg-blue-600' : role === 'guardian' ? 'bg-purple-600' : 'bg-brand-600'}`}>
                                                 {profileForm.photo ? (
                                                     <img src={profileForm.photo} alt="Preview" className="w-full h-full object-cover" />
                                                 ) : (
-                                                    <span className="text-white text-5xl font-black">
+                                                    <span className="text-white text-3xl font-black">
                                                         {profileForm.name?.[0]?.toUpperCase() || 'U'}
                                                     </span>
                                                 )}
                                             </div>
-                                            <label className="absolute -right-2 -bottom-2 p-3 bg-white text-brand-600 rounded-2xl shadow-xl cursor-pointer hover:bg-brand-50 transition-all border-2 border-brand-100">
-                                                <Camera size={20} />
+                                            <label className="absolute -right-1 -bottom-1 p-2 bg-white text-brand-600 rounded-xl shadow-lg cursor-pointer hover:bg-brand-50 transition-all border border-brand-100">
+                                                <Camera size={16} />
                                                 <input type="file" accept="image/*" className="hidden" onChange={handlePhotoUpload} />
                                             </label>
                                         </div>
-                                        <p className="text-[10px] font-bold text-slate-400 mt-4 uppercase tracking-widest">Profile Picture</p>
+                                        <p className="text-[9px] font-bold text-slate-400 mt-2 uppercase tracking-widest">Profile Picture</p>
                                     </div>
 
                                     <div className="grid grid-cols-2 gap-6">
@@ -3263,36 +3239,36 @@ const Dashboard = () => {
                 {isLogModalOpen && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
                         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setIsLogModalOpen(false)} className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" />
-                        <motion.div initial={{ opacity: 0, scale: 0.9, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.9, y: 20 }} className="relative bg-white w-full max-w-lg rounded-[2.5rem] p-8 shadow-2xl">
-                            <div className="flex justify-between items-center mb-6">
-                                <h3 className="text-2xl font-extrabold tracking-tight">Add Health Log</h3>
-                                <button onClick={() => setIsLogModalOpen(false)} className="p-2 hover:bg-slate-100 rounded-xl"><X size={24} /></button>
+                        <motion.div initial={{ opacity: 0, scale: 0.9, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.9, y: 20 }} className="relative bg-white w-full max-w-md rounded-2xl p-6 shadow-2xl">
+                            <div className="flex justify-between items-center mb-4">
+                                <h3 className="text-xl font-bold tracking-tight">Add Health Log</h3>
+                                <button onClick={() => setIsLogModalOpen(false)} className="p-2 hover:bg-slate-100 rounded-xl"><X size={20} /></button>
                             </div>
                             <form onSubmit={handleSaveLog} className="space-y-4">
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div className="bg-slate-50 p-4 rounded-3xl border border-slate-100 transition-all hover:border-rose-200 group">
-                                        <label className="block text-[10px] font-black text-slate-400 mb-2 uppercase px-1 flex items-center gap-2">
-                                            <div className="p-1.5 bg-rose-100 text-rose-600 rounded-lg group-hover:scale-110 transition-transform"><Activity size={18} /></div> Heart Rate
+                                <div className="grid grid-cols-2 gap-3">
+                                    <div className="bg-slate-50 p-3 rounded-2xl border border-slate-100 transition-all hover:border-rose-200 group">
+                                        <label className="block text-[9px] font-black text-slate-400 mb-1 uppercase px-1 flex items-center gap-2">
+                                            <div className="p-1 bg-rose-100 text-rose-600 rounded-lg group-hover:scale-110 transition-transform"><Activity size={14} /></div> Heart Rate
                                         </label>
-                                        <input type="number" placeholder="72" className="input-field bg-white border-none shadow-none focus:ring-0" value={logForm.heartRate} onChange={e => setLogForm({ ...logForm, heartRate: e.target.value })} required />
+                                        <input type="number" placeholder="72" className="input-field bg-white border-none shadow-none focus:ring-0 py-1" value={logForm.heartRate} onChange={e => setLogForm({ ...logForm, heartRate: e.target.value })} required />
                                     </div>
-                                    <div className="bg-slate-50 p-4 rounded-3xl border border-slate-100 transition-all hover:border-indigo-200 group">
-                                        <label className="block text-[10px] font-black text-slate-400 mb-2 uppercase px-1 flex items-center gap-2">
-                                            <div className="p-1.5 bg-indigo-100 text-indigo-600 rounded-lg group-hover:scale-110 transition-transform"><Droplets size={18} /></div> Glucose
+                                    <div className="bg-slate-50 p-3 rounded-2xl border border-slate-100 transition-all hover:border-indigo-200 group">
+                                        <label className="block text-[9px] font-black text-slate-400 mb-1 uppercase px-1 flex items-center gap-2">
+                                            <div className="p-1 bg-indigo-100 text-indigo-600 rounded-lg group-hover:scale-110 transition-transform"><Droplets size={14} /></div> Glucose
                                         </label>
-                                        <input type="number" placeholder="95" className="input-field bg-white border-none shadow-none focus:ring-0" value={logForm.glucose} onChange={e => setLogForm({ ...logForm, glucose: e.target.value })} required />
+                                        <input type="number" placeholder="95" className="input-field bg-white border-none shadow-none focus:ring-0 py-1" value={logForm.glucose} onChange={e => setLogForm({ ...logForm, glucose: e.target.value })} required />
                                     </div>
-                                    <div className="bg-slate-50 p-4 rounded-3xl border border-slate-100 transition-all hover:border-brand-200 group">
-                                        <label className="block text-[10px] font-black text-slate-400 mb-2 uppercase px-1 flex items-center gap-2">
-                                            <div className="p-1.5 bg-brand-100 text-brand-600 rounded-lg group-hover:scale-110 transition-transform"><Heart size={18} /></div> BP (Systolic)
+                                    <div className="bg-slate-50 p-3 rounded-2xl border border-slate-100 transition-all hover:border-brand-200 group">
+                                        <label className="block text-[9px] font-black text-slate-400 mb-1 uppercase px-1 flex items-center gap-2">
+                                            <div className="p-1 bg-brand-100 text-brand-600 rounded-lg group-hover:scale-110 transition-transform"><Heart size={14} /></div> BP (Sys)
                                         </label>
-                                        <input type="number" placeholder="120" className="input-field bg-white border-none shadow-none focus:ring-0" value={logForm.systolic} onChange={e => setLogForm({ ...logForm, systolic: e.target.value })} required />
+                                        <input type="number" placeholder="120" className="input-field bg-white border-none shadow-none focus:ring-0 py-1" value={logForm.systolic} onChange={e => setLogForm({ ...logForm, systolic: e.target.value })} required />
                                     </div>
-                                    <div className="bg-slate-50 p-4 rounded-3xl border border-slate-100 transition-all hover:border-brand-200 group">
-                                        <label className="block text-[10px] font-black text-slate-400 mb-2 uppercase px-1 flex items-center gap-2">
-                                            <div className="p-1.5 bg-brand-100 text-brand-400 rounded-lg group-hover:scale-110 transition-transform"><Heart size={18} /></div> BP (Diastolic)
+                                    <div className="bg-slate-50 p-3 rounded-2xl border border-slate-100 transition-all hover:border-brand-200 group">
+                                        <label className="block text-[9px] font-black text-slate-400 mb-1 uppercase px-1 flex items-center gap-2">
+                                            <div className="p-1 bg-brand-100 text-brand-400 rounded-lg group-hover:scale-110 transition-transform"><Heart size={14} /></div> BP (Dia)
                                         </label>
-                                        <input type="number" placeholder="80" className="input-field bg-white border-none shadow-none focus:ring-0" value={logForm.diastolic} onChange={e => setLogForm({ ...logForm, diastolic: e.target.value })} required />
+                                        <input type="number" placeholder="80" className="input-field bg-white border-none shadow-none focus:ring-0 py-1" value={logForm.diastolic} onChange={e => setLogForm({ ...logForm, diastolic: e.target.value })} required />
                                     </div>
                                 </div>
                                 <div>
@@ -3311,46 +3287,46 @@ const Dashboard = () => {
                 {isDoctorModalOpen && selectedViewDoctor && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
                         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setIsDoctorModalOpen(false)} className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" />
-                        <motion.div initial={{ opacity: 0, scale: 0.9, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.9, y: 20 }} className="relative bg-white w-full max-w-xl rounded-[3rem] overflow-hidden shadow-2xl">
-                            <div className="absolute right-6 top-6 z-10">
-                                <button onClick={() => setIsDoctorModalOpen(false)} className="p-2 bg-white/80 backdrop-blur-sm hover:bg-white rounded-2xl shadow-sm transition-colors"><X size={24} /></button>
+                        <motion.div initial={{ opacity: 0, scale: 0.9, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.9, y: 20 }} className="relative bg-white w-full max-w-lg rounded-2xl overflow-hidden shadow-2xl">
+                            <div className="absolute right-4 top-4 z-10">
+                                <button onClick={() => setIsDoctorModalOpen(false)} className="p-2 bg-white/80 backdrop-blur-sm hover:bg-white rounded-xl shadow-sm transition-colors"><X size={20} /></button>
                             </div>
 
-                            <div className="bg-brand-600 p-8 text-center text-white relative">
+                            <div className="bg-brand-600 p-6 text-center text-white relative">
                                 <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none overflow-hidden">
                                     <Activity className="absolute -top-10 -left-10 w-48 h-48 rotate-12" />
                                     <Heart className="absolute -bottom-10 -right-10 w-48 h-48 -rotate-12" />
                                 </div>
 
-                                <div className="relative inline-block mb-4">
-                                    <div className="w-24 h-24 rounded-[2rem] bg-white p-1 shadow-2xl">
-                                        <div className="w-full h-full rounded-[1.5rem] bg-blue-50 flex items-center justify-center text-blue-600 text-4xl font-black overflow-hidden uppercase">
+                                <div className="relative inline-block mb-3">
+                                    <div className="w-20 h-20 rounded-2xl bg-white p-1 shadow-2xl">
+                                        <div className="w-full h-full rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 text-2xl font-black overflow-hidden uppercase">
                                             {selectedViewDoctor.photo ? <img src={selectedViewDoctor.photo} alt={selectedViewDoctor.name} className="w-full h-full object-cover" /> : (selectedViewDoctor.name?.[0] || 'D')}
                                         </div>
                                     </div>
-                                    <div className="absolute -bottom-1 -right-1 w-8 h-8 bg-green-500 border-4 border-white rounded-xl flex items-center justify-center text-white shadow-lg">
-                                        <Activity size={14} />
+                                    <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 border-2 border-white rounded-lg flex items-center justify-center text-white shadow-lg">
+                                        <Activity size={12} />
                                     </div>
                                 </div>
 
-                                <h3 className="text-2xl font-extrabold tracking-tight leading-tight mb-1">{selectedViewDoctor.name}</h3>
-                                <p className="text-brand-100 font-bold uppercase tracking-[0.2em] text-[10px] mb-2">Medical Specialist</p>
+                                <h3 className="text-xl font-bold tracking-tight leading-tight mb-0.5">{selectedViewDoctor.name}</h3>
+                                <p className="text-brand-100 font-bold uppercase tracking-widest text-[9px] mb-1">Medical Specialist</p>
                             </div>
 
                             <div className="p-6 space-y-6">
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-center">
-                                    <div className="bg-slate-50 p-4 rounded-3xl border border-slate-200">
-                                        <p className="text-[9px] text-slate-400 font-black uppercase mb-0.5 tracking-widest">Clinical Affiliation</p>
-                                        <p className="font-bold text-slate-800 text-sm">{selectedViewDoctor.hospitalName || 'Independent Practice'}</p>
+                                    <div className="bg-slate-50 p-3 rounded-2xl border border-slate-200">
+                                        <p className="text-[8px] text-slate-400 font-black uppercase mb-0.5 tracking-widest">Clinical Affiliation</p>
+                                        <p className="font-bold text-slate-800 text-xs">{selectedViewDoctor.hospitalName || 'Independent Practice'}</p>
                                     </div>
-                                    <div className="bg-slate-50 p-4 rounded-3xl border border-slate-200">
-                                        <p className="text-[9px] text-slate-400 font-black uppercase mb-0.5 tracking-widest">Mobile Contact</p>
-                                        <p className="font-bold text-slate-800 text-sm">{selectedViewDoctor.mobile || 'Confidential'}</p>
+                                    <div className="bg-slate-50 p-3 rounded-2xl border border-slate-200">
+                                        <p className="text-[8px] text-slate-400 font-black uppercase mb-0.5 tracking-widest">Mobile Contact</p>
+                                        <p className="font-bold text-slate-800 text-xs">{selectedViewDoctor.mobile || 'Confidential'}</p>
                                     </div>
                                     {selectedViewDoctor.address && (
-                                        <div className="bg-slate-50 p-4 rounded-3xl border border-slate-200 sm:col-span-2">
-                                            <p className="text-[9px] text-slate-400 font-black uppercase mb-0.5 tracking-widest">Professional Address</p>
-                                            <p className="font-bold text-slate-800 text-sm">{selectedViewDoctor.address}</p>
+                                        <div className="bg-slate-50 p-3 rounded-2xl border border-slate-200 sm:col-span-2">
+                                            <p className="text-[8px] text-slate-400 font-black uppercase mb-0.5 tracking-widest">Professional Address</p>
+                                            <p className="font-bold text-slate-800 text-xs">{selectedViewDoctor.address}</p>
                                         </div>
                                     )}
                                 </div>
@@ -3405,53 +3381,53 @@ const Dashboard = () => {
                 {isPatientModalOpen && selectedPatient && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
                         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setIsPatientModalOpen(false)} className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" />
-                        <motion.div initial={{ opacity: 0, scale: 0.9, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.9, y: 20 }} className="relative bg-white w-full max-w-4xl rounded-[3rem] overflow-hidden shadow-2xl flex flex-col md:flex-row max-h-[90vh]">
-                            <div className="absolute right-6 top-6 z-10">
-                                <button onClick={() => setIsPatientModalOpen(false)} className="p-2 bg-white/80 backdrop-blur-sm hover:bg-white rounded-2xl shadow-sm transition-colors"><X size={24} /></button>
+                        <motion.div initial={{ opacity: 0, scale: 0.9, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.9, y: 20 }} className="relative bg-white w-full max-w-4xl rounded-2xl overflow-hidden shadow-2xl flex flex-col md:flex-row max-h-[90vh]">
+                            <div className="absolute right-4 top-4 z-10">
+                                <button onClick={() => setIsPatientModalOpen(false)} className="p-2 bg-white/80 backdrop-blur-sm hover:bg-white rounded-xl shadow-sm transition-colors"><X size={20} /></button>
                             </div>
 
-                            {/* Sidebar Info */}
-                            <div className="w-full md:w-80 bg-slate-50 p-10 border-r border-slate-200 flex flex-col items-center text-center overflow-y-auto">
-                                <div className="w-32 h-32 shrink-0 mb-6">
-                                    <div className="w-full h-full rounded-[2.5rem] bg-brand-50 border-4 border-white shadow-2xl flex items-center justify-center text-brand-600 text-5xl font-black overflow-hidden relative">
+                             {/* Sidebar Info */}
+                             <div className="w-full md:w-72 bg-slate-50 p-6 border-r border-slate-200 flex flex-col items-center text-center overflow-y-auto">
+                                <div className="w-24 h-24 shrink-0 mb-4">
+                                    <div className="w-full h-full rounded-2xl bg-brand-50 border-2 border-white shadow-xl flex items-center justify-center text-brand-600 text-3xl font-black overflow-hidden relative">
                                         {selectedPatient.photo ? <img src={selectedPatient.photo} alt={selectedPatient.name} className="w-full h-full object-cover" /> : (selectedPatient.name?.[0] || 'P')}
-                                        <div className={`absolute bottom-3 right-3 w-6 h-6 rounded-full border-4 border-white ${getRiskStatus(patientHealthData[selectedPatient.email]?.latestLog).bg} animate-pulse shadow-sm`} />
+                                        <div className={`absolute bottom-2 right-2 w-4 h-4 rounded-full border-2 border-white ${getRiskStatus(patientHealthData[selectedPatient.email]?.latestLog).bg} animate-pulse shadow-sm`} />
                                     </div>
                                 </div>
-                                <h3 className="text-2xl font-extrabold tracking-tight text-slate-900 mb-1">{selectedPatient.name}</h3>
-                                <p className="text-slate-400 font-bold uppercase tracking-widest text-[10px] mb-6">Patient Profile</p>
+                                <h3 className="text-xl font-bold tracking-tight text-slate-900 mb-0.5">{selectedPatient.name}</h3>
+                                <p className="text-slate-400 font-bold uppercase tracking-widest text-[8px] mb-4">Patient Profile</p>
 
-                                <div className="w-full space-y-3">
-                                    <div className="bg-white p-4 rounded-2xl border border-slate-200 flex justify-between items-center text-sm shadow-sm">
-                                        <span className="text-slate-400 font-bold uppercase text-[9px]">Age</span>
-                                        <span className="text-slate-900 font-black">{selectedPatient.age} Years</span>
+                                <div className="w-full space-y-2">
+                                    <div className="bg-white p-3 rounded-xl border border-slate-200 flex justify-between items-center text-xs shadow-sm">
+                                        <span className="text-slate-400 font-bold uppercase text-[8px]">Age</span>
+                                        <span className="text-slate-900 font-bold">{selectedPatient.age} Years</span>
                                     </div>
-                                    <div className="bg-white p-4 rounded-2xl border border-slate-200 flex flex-col items-start gap-1 text-sm shadow-sm text-left">
-                                        <span className="text-slate-400 font-bold uppercase text-[9px]">Pregnancy Stage</span>
-                                        <span className="text-slate-900 font-black capitalize">{selectedPatient.pregnancyType}</span>
+                                    <div className="bg-white p-3 rounded-xl border border-slate-200 flex flex-col items-start gap-0.5 text-xs shadow-sm text-left">
+                                        <span className="text-slate-400 font-bold uppercase text-[8px]">Pregnancy Stage</span>
+                                        <span className="text-slate-900 font-bold capitalize">{selectedPatient.pregnancyType}</span>
                                     </div>
-                                    <div className="bg-white p-4 rounded-2xl border border-slate-200 flex flex-col items-start gap-1 text-sm shadow-sm text-left">
-                                        <span className="text-slate-400 font-bold uppercase text-[9px]">Contact</span>
-                                        <span className="text-slate-900 font-black">{selectedPatient.mobile || 'Private'}</span>
+                                    <div className="bg-white p-3 rounded-xl border border-slate-200 flex flex-col items-start gap-0.5 text-xs shadow-sm text-left">
+                                        <span className="text-slate-400 font-bold uppercase text-[8px]">Contact</span>
+                                        <span className="text-slate-900 font-bold">{selectedPatient.mobile || 'Private'}</span>
                                     </div>
                                 </div>
 
-                                <div className="mt-auto pt-10 w-full text-left">
-                                    <div className={`p-6 rounded-[2rem] border ${getRiskStatus(patientHealthData[selectedPatient.email]?.latestLog).bg} ${getRiskStatus(patientHealthData[selectedPatient.email]?.latestLog).border}`}>
-                                        <p className={`${getRiskStatus(patientHealthData[selectedPatient.email]?.latestLog).color} font-black text-[10px] uppercase mb-1`}>Status</p>
-                                        <p className="font-black text-slate-900">{getRiskStatus(patientHealthData[selectedPatient.email]?.latestLog).label}</p>
+                                <div className="mt-auto pt-6 w-full text-left">
+                                    <div className={`p-4 rounded-2xl border ${getRiskStatus(patientHealthData[selectedPatient.email]?.latestLog).bg} ${getRiskStatus(patientHealthData[selectedPatient.email]?.latestLog).border}`}>
+                                        <p className={`${getRiskStatus(patientHealthData[selectedPatient.email]?.latestLog).color} font-bold text-[8px] uppercase mb-0.5`}>Status</p>
+                                        <p className="font-bold text-slate-900 text-sm">{getRiskStatus(patientHealthData[selectedPatient.email]?.latestLog).label}</p>
                                     </div>
                                 </div>
                             </div>
 
                             {/* Main Content */}
-                            <div className="flex-1 p-10 overflow-y-auto space-y-10">
+                            <div className="flex-1 p-6 md:p-8 overflow-y-auto space-y-8">
                                 {/* Risk Assessment */}
                                 <section>
-                                    <div className={`p-8 rounded-[2.5rem] border relative overflow-hidden ${getRiskStatus(patientHealthData[selectedPatient.email]?.latestLog).bg} ${getRiskStatus(patientHealthData[selectedPatient.email]?.latestLog).border}`}>
+                                    <div className={`p-6 rounded-2xl border relative overflow-hidden ${getRiskStatus(patientHealthData[selectedPatient.email]?.latestLog).bg} ${getRiskStatus(patientHealthData[selectedPatient.email]?.latestLog).border}`}>
                                         <div className="relative z-10">
-                                            <h4 className="text-2xl font-black text-slate-900 mb-3 flex items-center gap-2">
-                                                <AlertTriangle className={getRiskStatus(patientHealthData[selectedPatient.email]?.latestLog).color} /> Clinical Assessment
+                                            <h4 className="text-xl font-bold text-slate-900 mb-2 flex items-center gap-2">
+                                                <AlertTriangle className={getRiskStatus(patientHealthData[selectedPatient.email]?.latestLog).color} size={20} /> Clinical Assessment
                                             </h4>
                                             <div className="text-slate-600 text-sm leading-relaxed mb-6 font-medium">
                                                 {patientHealthData[selectedPatient.email]?.latestLog?.symptoms && (
@@ -3499,18 +3475,18 @@ const Dashboard = () => {
                                     <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-6 flex items-center gap-2">
                                         <Heart className="text-brand-600" size={16} /> Latest Recorded Vitals
                                     </h4>
-                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                         {[
                                             { label: "Heart Rate", value: patientHealthData[selectedPatient.email]?.latestLog?.heartRate ? `${patientHealthData[selectedPatient.email].latestLog.heartRate} bpm` : '--', icon: Activity, color: "text-rose-500", bg: "bg-rose-50" },
                                             { label: "Blood Pressure", value: patientHealthData[selectedPatient.email]?.latestLog?.systolic ? `${patientHealthData[selectedPatient.email].latestLog.systolic}/${patientHealthData[selectedPatient.email].latestLog.diastolic}` : '--', icon: Heart, color: "text-brand-600", bg: "bg-brand-50" },
                                             { label: "Glucose", value: patientHealthData[selectedPatient.email]?.latestLog?.glucose ? `${patientHealthData[selectedPatient.email].latestLog.glucose} mg/dL` : '--', icon: Droplets, color: "text-blue-500", bg: "bg-blue-50" }
                                         ].map((stat, i) => (
-                                            <div key={i} className="bg-slate-50/50 p-8 rounded-[2.5rem] border border-slate-200 flex flex-col items-center text-center shadow-sm hover:border-brand-400 hover:shadow-md hover:bg-white transition-all cursor-pointer group">
-                                                <div className={`p-4 rounded-2xl ${stat.bg} ${stat.color} mb-4 shadow-sm`}>
-                                                    <stat.icon size={24} />
+                                            <div key={i} className="bg-slate-50/50 p-6 rounded-2xl border border-slate-200 flex flex-col items-center text-center shadow-sm hover:border-brand-400 hover:shadow-md hover:bg-white transition-all cursor-pointer group">
+                                                <div className={`p-3 rounded-xl ${stat.bg} ${stat.color} mb-3 shadow-sm`}>
+                                                    <stat.icon size={20} />
                                                 </div>
-                                                <p className="text-[10px] font-black text-slate-400 uppercase mb-1 tracking-wider">{stat.label}</p>
-                                                <p className="text-2xl font-black text-slate-900">{stat.value}</p>
+                                                <p className="text-[9px] font-black text-slate-400 uppercase mb-1 tracking-wider">{stat.label}</p>
+                                                <p className="text-xl font-bold text-slate-900">{stat.value}</p>
                                             </div>
                                         ))}
                                     </div>
@@ -3524,8 +3500,8 @@ const Dashboard = () => {
                                     {logs.length > 0 ? (
                                         <div className="space-y-4">
                                             {logs.map((log) => (
-                                                <div key={log.id} className="bg-white p-8 rounded-[2.5rem] border border-slate-200 shadow-sm hover:border-brand-100 transition-colors group/log">
-                                                    <div className="flex justify-between items-center bg-slate-50 px-6 py-3 rounded-2xl border border-slate-200 mb-6">
+                                                <div key={log.id} className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:border-brand-100 transition-colors group/log">
+                                                    <div className="flex justify-between items-center bg-slate-50 px-4 py-2 rounded-xl border border-slate-200 mb-4">
                                                         <span className="text-[11px] font-black text-slate-800 uppercase tracking-tight">
                                                             {new Date(log.timestamp).toLocaleDateString(undefined, {
                                                                 weekday: 'short', year: 'numeric', month: 'short', day: 'numeric'
@@ -3562,7 +3538,7 @@ const Dashboard = () => {
                                             ))}
                                         </div>
                                     ) : (
-                                        <div className="py-20 text-center text-slate-300 border-2 border-dashed border-slate-200 rounded-[3rem]">
+                                        <div className="py-12 text-center text-slate-300 border-2 border-dashed border-slate-200 rounded-2xl">
                                             <Activity size={48} className="mx-auto mb-4 opacity-20" />
                                             <p className="font-bold text-lg">No clinical history records found.</p>
                                         </div>
@@ -3579,13 +3555,13 @@ const Dashboard = () => {
                                         return (
                                             <div className="space-y-5">
                                                 {/* Body Metrics */}
-                                                <div className="grid grid-cols-3 gap-4">
+                                                <div className="grid grid-cols-3 gap-3">
                                                     {[
                                                         { label: 'Weight', value: hp.weight ? `${hp.weight} kg` : null, icon: Activity, color: 'text-rose-500', bg: 'bg-rose-50' },
                                                         { label: 'Height', value: hp.height ? `${hp.height} cm` : null, icon: TrendingUp, color: 'text-blue-500', bg: 'bg-blue-50' },
                                                         { label: 'Blood Type', value: hp.blood_type, icon: Droplets, color: 'text-brand-600', bg: 'bg-brand-50' }
                                                     ].map((item, i) => (
-                                                        <div key={i} className="bg-slate-50 p-5 rounded-3xl border border-slate-200 flex flex-col items-center text-center">
+                                                        <div key={i} className="bg-slate-50 p-4 rounded-2xl border border-slate-200 flex flex-col items-center text-center">
                                                             <div className={`p-3 rounded-2xl ${item.bg} ${item.color} mb-3`}><item.icon size={18} /></div>
                                                             <p className="text-[9px] font-black text-slate-400 uppercase mb-1">{item.label}</p>
                                                             <p className="text-lg font-black text-slate-900">{item.value || <span className="text-slate-300 text-sm font-bold">—</span>}</p>
@@ -3626,7 +3602,7 @@ const Dashboard = () => {
                                             </div>
                                         );
                                     })() : (
-                                        <div className="py-12 text-center text-slate-300 border-2 border-dashed border-slate-200 rounded-[3rem]">
+                                        <div className="py-12 text-center text-slate-300 border-2 border-dashed border-slate-200 rounded-2xl">
                                             <Heart size={40} className="mx-auto mb-3 opacity-20" />
                                             <p className="font-bold">Patient has not filled their health profile yet.</p>
                                         </div>
@@ -3666,14 +3642,14 @@ const Dashboard = () => {
                             initial={{ opacity: 0, scale: 0.9, y: 20 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                            className="bg-white w-full max-w-2xl h-[700px] rounded-[3.5rem] shadow-2xl flex flex-col overflow-hidden border-8 border-white"
+                            className="bg-white w-full max-w-2xl h-[650px] rounded-3xl shadow-2xl flex flex-col overflow-hidden border-4 border-white"
                         >
-                            {/* AI Header */}
-                            <div className="p-8 bg-brand-600 text-white flex items-center justify-between shadow-lg relative overflow-hidden">
+                             {/* AI Header */}
+                            <div className="p-6 bg-brand-600 text-white flex items-center justify-between shadow-lg relative overflow-hidden">
                                 <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-16 -mt-16 blur-3xl" />
                                 <div className="flex items-center gap-4 relative z-10">
-                                    <div className="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-md">
-                                        <Bot size={28} />
+                                    <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-md">
+                                        <Bot size={24} />
                                     </div>
                                     <div>
                                         <h3 className="text-xl font-black tracking-tight">Maatri AI</h3>
@@ -3685,23 +3661,23 @@ const Dashboard = () => {
                                 <div className="flex items-center gap-3 relative z-10">
                                     <button
                                         onClick={handleClearAiChat}
-                                        className="p-3 hover:bg-white/10 rounded-2xl transition-colors"
+                                        className="p-2 hover:bg-white/10 rounded-xl transition-colors"
                                         title="Clear History"
                                     >
-                                        <Trash2 size={24} />
+                                        <Trash2 size={20} />
                                     </button>
-                                    <button onClick={() => setIsAiAssistantOpen(false)} className="p-3 hover:bg-white/10 rounded-2xl transition-colors">
-                                        <X size={28} />
+                                    <button onClick={() => setIsAiAssistantOpen(false)} className="p-2 hover:bg-white/10 rounded-xl transition-colors">
+                                        <X size={24} />
                                     </button>
                                 </div>
                             </div>
 
                             {/* AI Chat History */}
-                            <div className="flex-1 overflow-y-auto p-8 space-y-6 bg-slate-50">
+                            <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-slate-50">
                                 {aiChatHistory.length === 0 ? (
-                                    <div className="h-full flex flex-col items-center justify-center text-center space-y-6 px-12">
-                                        <div className="w-24 h-24 bg-brand-50 rounded-[2.5rem] flex items-center justify-center text-brand-600">
-                                            <Sparkles size={48} />
+                                    <div className="h-full flex flex-col items-center justify-center text-center space-y-5 px-10">
+                                        <div className="w-20 h-20 bg-brand-50 rounded-2xl flex items-center justify-center text-brand-600">
+                                            <Sparkles size={40} />
                                         </div>
                                         <div>
                                             <h4 className="text-xl font-black text-slate-900 mb-2">How can I support you today?</h4>
@@ -3729,8 +3705,8 @@ const Dashboard = () => {
                                 ) : (
                                     aiChatHistory.map((msg, i) => (
                                         <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                                            <div className={`max-w-[85%] p-6 rounded-[2rem] text-sm leading-relaxed ${msg.role === 'user'
-                                                ? 'bg-brand-600 text-white rounded-tr-none shadow-xl'
+                                            <div className={`max-w-[85%] p-4 rounded-2xl text-sm leading-relaxed ${msg.role === 'user'
+                                                ? 'bg-brand-600 text-white rounded-tr-none shadow-lg'
                                                 : 'bg-white text-slate-800 rounded-tl-none border border-slate-200 shadow-sm'
                                                 }`}>
                                                 {msg.parts[0].text}
@@ -3753,12 +3729,12 @@ const Dashboard = () => {
                                 <div ref={aiChatEndRef} />
                             </div>
 
-                            {/* AI Input */}
-                            <form onSubmit={handleSendAiQuestion} className="p-8 bg-white border-t border-slate-200 flex gap-4">
+                             {/* AI Input */}
+                            <form onSubmit={handleSendAiQuestion} className="p-6 bg-white border-t border-slate-200 flex gap-3">
                                 <input
                                     type="text"
                                     placeholder="Ask anything about your health..."
-                                    className="flex-1 bg-slate-50 border-none px-8 py-5 rounded-[2rem] text-lg focus:ring-4 focus:ring-brand-50 transition-all font-medium"
+                                    className="flex-1 bg-slate-50 border-none px-6 py-4 rounded-2xl text-base focus:ring-4 focus:ring-brand-50 transition-all font-medium"
                                     value={aiNewMessage}
                                     onChange={e => setAiNewMessage(e.target.value)}
                                     disabled={isAiLoading}
@@ -3766,9 +3742,9 @@ const Dashboard = () => {
                                 <button
                                     type="submit"
                                     disabled={isAiLoading}
-                                    className="p-5 bg-brand-600 text-white rounded-[2rem] shadow-xl hover:bg-brand-700 active:scale-95 transition-all disabled:opacity-50"
+                                    className="p-4 bg-brand-600 text-white rounded-2xl shadow-lg hover:bg-brand-700 active:scale-95 transition-all disabled:opacity-50"
                                 >
-                                    <ChevronRight size={32} />
+                                    <ChevronRight size={24} />
                                 </button>
                             </form>
                         </motion.div>
@@ -3785,7 +3761,7 @@ const Dashboard = () => {
                             initial={{ opacity: 0, scale: 0.9, y: 20 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                            className="relative bg-white w-full max-w-4xl max-h-[90vh] rounded-[3rem] overflow-hidden shadow-2xl flex flex-col border-4 border-white"
+                            className="relative bg-white w-full max-w-4xl max-h-[90vh] rounded-2xl overflow-hidden shadow-2xl flex flex-col border-4 border-white"
                         >
                             <div className="p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
                                 <div className="flex items-center gap-4">
@@ -3815,11 +3791,11 @@ const Dashboard = () => {
                                         <Download size={16} /> Download
                                     </button>
                                     <div className="w-px h-10 bg-slate-200 mx-1" />
-                                    <button onClick={() => setIsReportModalOpen(false)} className="p-3 bg-white border border-slate-200 text-slate-400 hover:text-slate-600 rounded-2xl shadow-sm transition-all"><X size={24} /></button>
+                                    <button onClick={() => setIsReportModalOpen(false)} className="p-2.5 bg-white border border-slate-200 text-slate-400 hover:text-slate-600 rounded-xl shadow-sm transition-all"><X size={20} /></button>
                                 </div>
                             </div>
 
-                            <div className="flex-1 overflow-y-auto p-10 print:p-0">
+                            <div className="flex-1 overflow-y-auto p-8 print:p-0">
                                 <div className="prose prose-slate max-w-none print:shadow-none">
                                     <div className="whitespace-pre-wrap font-sans text-slate-700 leading-relaxed text-sm">
                                         {reportContent || "No clinical data available for this period."}
@@ -3832,7 +3808,7 @@ const Dashboard = () => {
                                     <div className="p-2 bg-white/10 rounded-xl"><Sparkles size={20} className="text-teal-300" /></div>
                                     <p className="text-xs font-medium opacity-100 flex items-center gap-2">
                                         <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-                                        Saved to My Reports � Data as of {selectedReportTimestamp ? new Date(selectedReportTimestamp).toLocaleString() : new Date().toLocaleString()}
+                                        Saved to My Reports  Data as of {selectedReportTimestamp ? new Date(selectedReportTimestamp).toLocaleString() : new Date().toLocaleString()}
                                     </p>
                                 </div>
                                 <p className="text-[10px] font-black uppercase tracking-widest opacity-50">Confidential Medical Document</p>
@@ -3849,7 +3825,7 @@ const Dashboard = () => {
                             initial={{ opacity: 0, y: 50, scale: 0.9, filter: 'blur(10px)' }}
                             animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
                             exit={{ opacity: 0, y: 50, scale: 0.9, filter: 'blur(10px)' }}
-                            className="w-full h-full bg-white shadow-[0_20px_50px_rgba(0,0,0,0.1)] rounded-[2.5rem] overflow-hidden flex flex-col pointer-events-auto border border-slate-100"
+                            className="w-full h-full bg-white shadow-[0_20px_50px_rgba(0,0,0,0.1)] rounded-3xl overflow-hidden flex flex-col pointer-events-auto border border-slate-100"
                         >
                             {/* Instagram Header */}
                             <div className="px-6 py-4 flex justify-between items-center border-b border-slate-50 shrink-0 bg-white">
@@ -4004,11 +3980,11 @@ const Dashboard = () => {
                 {
                     incomingCall && (
                         <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 backdrop-blur-md bg-slate-900/60">
-                            <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="bg-white w-full max-w-sm rounded-[3rem] p-10 text-center shadow-2xl relative overflow-hidden">
+                            <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="bg-white w-full max-w-xs rounded-2xl p-8 text-center shadow-2xl relative overflow-hidden">
                                 <div className="absolute top-0 left-0 w-full h-1 bg-brand-500 animate-[loading_2s_infinite]" />
-                                <div className="w-24 h-24 rounded-[2rem] bg-brand-50 mx-auto mb-6 flex items-center justify-center relative">
-                                    <div className="absolute inset-0 rounded-[2rem] border-4 border-brand-500 animate-ping opacity-20" />
-                                    <Activity className="text-brand-600" size={40} />
+                                <div className="w-20 h-20 rounded-2xl bg-brand-50 mx-auto mb-4 flex items-center justify-center relative">
+                                    <div className="absolute inset-0 rounded-2xl border-4 border-brand-500 animate-ping opacity-20" />
+                                    <Activity className="text-brand-600" size={32} />
                                 </div>
                                 <h3 className="text-2xl font-black text-slate-900 mb-2">Doctor Calling...</h3>
                                 <p className="text-slate-500 font-bold text-xs uppercase tracking-widest mb-10">Incoming {incomingCall.callType} call</p>
@@ -4033,8 +4009,8 @@ const Dashboard = () => {
                     isCalling && (
                         <div className="fixed inset-0 z-[100] bg-slate-950 flex flex-col items-center justify-between p-12 text-white">
                             <div className="text-center space-y-4">
-                                <div className="w-32 h-32 rounded-[3.5rem] bg-white/10 p-1 mx-auto backdrop-blur-xl">
-                                    <div className="w-full h-full rounded-[3rem] bg-brand-600 flex items-center justify-center text-5xl font-black">
+                                <div className="w-28 h-28 rounded-3xl bg-white/10 p-1 mx-auto backdrop-blur-xl">
+                                    <div className="w-full h-full rounded-2xl bg-brand-600 flex items-center justify-center text-4xl font-black">
                                         {activeChatPartner?.name?.[0] || '?'}
                                     </div>
                                 </div>
@@ -4051,7 +4027,7 @@ const Dashboard = () => {
                                 </div>
                             )}
 
-                            <div className="flex items-center gap-8 bg-white/10 backdrop-blur-2xl p-6 rounded-[3rem] border border-white/10 shadow-2xl">
+                            <div className="flex items-center gap-6 bg-white/10 backdrop-blur-2xl p-5 rounded-3xl border border-white/10 shadow-2xl">
                                 <button className="p-5 bg-white/10 hover:bg-white/20 rounded-full transition-all active:scale-90"><Settings size={28} /></button>
                                 <button className="p-5 bg-white/10 hover:bg-white/20 rounded-full transition-all active:scale-90"><Activity size={28} /></button>
                                 <button onClick={endCall} className="p-8 bg-rose-600 hover:bg-rose-700 rounded-full shadow-2xl shadow-rose-900/40 transition-all active:scale-90 scale-110">
@@ -4139,7 +4115,7 @@ const Dashboard = () => {
                             initial={{ y: 50, scale: 0.95 }}
                             animate={{ y: 0, scale: 1 }}
                             exit={{ y: 50, scale: 0.95 }}
-                            className="bg-white rounded-[2.5rem] p-8 w-full max-w-md shadow-2xl relative"
+                            className="bg-white rounded-2xl p-8 w-full max-w-md shadow-2xl relative"
                         >
                             <button
                                 onClick={() => setIsAppointmentModalOpen(false)}
@@ -4312,7 +4288,7 @@ const Dashboard = () => {
                             initial={{ opacity: 0, scale: 0.9, y: 20 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                            className="relative bg-white w-full max-w-2xl rounded-[3rem] overflow-hidden shadow-2xl flex flex-col max-h-[90vh]"
+                            className="relative bg-white w-full max-w-2xl rounded-2xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]"
                         >
                             {/* Header */}
                             <div className="p-8 bg-gradient-to-r from-brand-600 to-brand-700 text-white flex items-center justify-between shrink-0">
