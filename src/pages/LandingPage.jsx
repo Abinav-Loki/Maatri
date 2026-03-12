@@ -1,43 +1,36 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import portalBg from '../assets/portal_bg.png';
+import portalBg from '../assets/portal_bg_premium.png';
 import { Users, UserRound, ShieldCheck } from 'lucide-react';
 
 const PortalCard = ({ role, title, description, icon: Icon, colorClass, delay }) => (
     <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay, duration: 0.5 }}
-        whileHover={{ scale: 1.05, y: -10 }}
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay, duration: 0.7, ease: "easeOut" }}
+        whileHover={{ y: -15 }}
         className="relative group cursor-pointer h-full"
     >
-        {/* Card Glow Effect */}
-        <div className="absolute -inset-0.5 bg-gradient-to-r from-brand-400 to-accent-400 rounded-[2.5rem] opacity-0 group-hover:opacity-30 blur-xl transition duration-500" />
+        {/* Advanced Card Glow Effect */}
+        <div className="absolute -inset-1 bg-gradient-to-r from-brand-500/20 to-teal-500/20 rounded-[3rem] opacity-0 group-hover:opacity-100 blur-2xl transition duration-700" />
         
         <div 
-            style={{ 
-                background: 'rgba(255, 255, 255, 0.05)',
-                backdropFilter: 'blur(20px)',
-                WebkitBackdropFilter: 'blur(20px)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.3)'
-            }}
-            className="relative h-full rounded-[2.5rem] p-8 flex flex-col items-center text-center transition-all duration-500 hover:bg-white/10"
+            className="relative h-full rounded-[3rem] p-10 flex flex-col items-center text-center transition-all duration-700 bg-[#0f172a]/40 backdrop-blur-2xl border border-white/5 group-hover:bg-[#0f172a]/60 group-hover:border-white/10 shadow-2xl"
         >
-            <div className={`p-5 rounded-2xl ${colorClass} text-white mb-6 group-hover:scale-110 transition-all duration-300 shadow-lg`}>
-                <Icon size={32} />
+            <div className={`w-20 h-20 rounded-[2rem] ${colorClass} text-white mb-8 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 shadow-2xl flex items-center justify-center`}>
+                <Icon size={36} />
             </div>
-            <h3 className="text-2xl font-bold mb-3 text-white tracking-tight">{title}</h3>
-            <p className="text-slate-300 mb-8 leading-relaxed font-medium">
+            <h3 className="text-3xl font-black mb-4 text-white tracking-tight">{title}</h3>
+            <p className="text-slate-400 mb-10 leading-relaxed font-medium text-lg">
                 {description}
             </p>
             <div className="mt-auto w-full">
                 <Link
                     to={`/auth/${role}`}
-                    className="block w-full bg-white text-slate-900 font-bold py-4 px-6 rounded-2xl transition-all duration-300 transform group-hover:bg-brand-400 group-hover:text-white shadow-xl"
+                    className="block w-full bg-white text-[#0f172a] font-black py-5 px-8 rounded-[2rem] transition-all duration-500 transform group-hover:bg-teal-400 group-hover:scale-105 shadow-2xl uppercase tracking-[0.2em] text-xs"
                 >
-                    Enter Portal
+                    Initialize Workspace
                 </Link>
             </div>
         </div>
@@ -46,17 +39,21 @@ const PortalCard = ({ role, title, description, icon: Icon, colorClass, delay })
 
 const LandingPage = () => {
     return (
-        <div className="relative min-h-screen font-sans overflow-hidden bg-slate-950 flex items-center justify-center py-12 px-4 md:px-8">
-            {/* Professional Background Image - Merged Perfectly */}
-            <div className="absolute inset-0 z-0 bg-slate-950">
-                <img 
+        <div className="relative min-h-screen font-sans overflow-hidden bg-[#020617] flex items-center justify-center py-20 px-4 md:px-8">
+            {/* Unified Clinical Background */}
+            <div className="absolute inset-0 z-0 overflow-hidden">
+                <motion.img 
+                    initial={{ scale: 1.1, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 0.4 }}
+                    transition={{ duration: 2 }}
                     src={portalBg} 
-                    alt="Portal Background" 
-                    className="w-full h-full object-cover opacity-30"
+                    alt="Clinical Environment" 
+                    className="w-full h-full object-cover"
                 />
-                {/* Sophisticated Dark Overlays */}
-                <div className="absolute inset-0 bg-gradient-to-tr from-slate-950 via-slate-950/40 to-slate-900/60" />
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_0%,_#020617_90%)]" />
+                {/* Multi-layered merging gradients */}
+                <div className="absolute inset-0 bg-gradient-to-b from-[#020617] via-transparent to-[#020617]" />
+                <div className="absolute inset-0 bg-gradient-to-r from-[#020617] via-transparent to-[#020617]" />
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_0%,_#020617_85%)]" />
             </div>
 
             <div className="max-w-7xl mx-auto relative z-10 w-full">
@@ -91,7 +88,7 @@ const LandingPage = () => {
                     <PortalCard
                         role="doctor"
                         title="Doctor Portal"
-                        description="Monitor high-risk cases and manage patient care with real-time analytics."
+                        description="Monitor high-risk cases and manage patient care with data-driven analytics."
                         icon={Users}
                         colorClass="bg-brand-700/80"
                         delay={0.2}

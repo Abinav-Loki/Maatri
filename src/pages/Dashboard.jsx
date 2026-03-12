@@ -1336,10 +1336,10 @@ const Dashboard = () => {
             </AnimatePresence>
 
             {/* Sidebar */}
-            <aside className={`fixed lg:relative w-64 bg-[linear-gradient(to_bottom,#6A4C93,#7C5BB3,#8E6BBF)] h-screen flex flex-col p-4 z-50 transition-transform duration-300 lg:translate-x-0 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'} shadow-2xl`}>
+            <aside className={`fixed lg:relative w-64 bg-slate-950 h-screen flex flex-col p-4 z-50 transition-transform duration-300 lg:translate-x-0 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'} shadow-[4px_0_24px_rgba(0,0,0,0.3)] border-r border-slate-900`}>
                 <div className="p-4 flex flex-col items-center gap-2 mb-8 text-center">
-                    <img src={logo} alt="Maatri Shield" className="w-16 h-16 object-contain mix-blend-screen shrink-0" />
-                    <span className="hidden md:block font-black text-sm uppercase tracking-[0.3em] text-white/90">Maatri Shield</span>
+                    <img src={logo} alt="Maatri Shield" className="w-16 h-16 object-contain shrink-0" />
+                    <span className="hidden md:block font-black text-xs uppercase tracking-[0.4em] text-slate-400">Maatri Shield</span>
                 </div>
 
                 {/* Emergency SOS Button */}
@@ -1383,26 +1383,27 @@ const Dashboard = () => {
                                 else {
                                     setActiveTab(item.id);
                                     if (item.id === 'notifications') {
-                                        // Mark as read immediately when switching
                                         setClinicalNotifications(prev => prev.map(n => ({ ...n, read: true })));
                                         if (currentUser) storage.markNotificationsAsRead(currentUser.email);
                                     }
                                     if (item.id === 'patients-list') setPatientFilter('all');
-                                    // Clear selected patient when switching to reports or find-doctors to ensure fresh start
                                     if (['reports', 'find-doctors'].includes(item.id) && role === 'doctor') {
                                         setSelectedPatient(null);
                                     }
                                 }
                             }}
-                            className={`flex items-center gap-4 w-full p-3 rounded-xl transition-all font-medium ${activeTab === item.id
-                                ? 'bg-brand-500/20 text-white font-bold border-l-4 border-brand-400'
-                                : 'text-white/90 hover:text-white hover:bg-white/10 hover:font-semibold border-l-4 border-transparent'
-                                } relative`}
+                            className={`flex items-center gap-4 w-full p-4 rounded-2xl transition-all duration-300 group relative ${activeTab === item.id
+                                ? 'bg-brand-600/15 text-brand-400 border border-brand-500/30'
+                                : 'text-slate-400 hover:text-slate-200 hover:bg-white/5 border border-transparent'
+                                }`}
                         >
-                            <item.icon size={20} />
-                            <span className="hidden md:block">{item.label}</span>
+                            <item.icon size={20} className={activeTab === item.id ? 'text-brand-400' : 'text-slate-500 group-hover:text-slate-300'} />
+                            <span className="hidden md:block text-sm font-bold tracking-tight">{item.label}</span>
+                            {activeTab === item.id && (
+                                <motion.div layoutId="activeNav" className="absolute left-0 w-1 h-6 bg-brand-500 rounded-full" />
+                            )}
                             {item.id === 'notifications' && clinicalNotifications.filter(n => !n.read && (role !== 'doctor' || n.type !== 'water')).length > 0 && (
-                                <span className="absolute top-3 right-3 w-3 h-3 bg-rose-500 rounded-full border-2 border-white"></span>
+                                <span className="absolute top-4 right-4 w-2 h-2 bg-rose-500 rounded-full shadow-[0_0_10px_rgba(244,63,94,0.6)] animate-pulse"></span>
                             )}
                         </button>
                     ))}
@@ -1422,7 +1423,7 @@ const Dashboard = () => {
             </aside>
 
             {/* Main Content */}
-            <main className={`flex-1 min-w-0 transition-all duration-500 ${activeTab === 'analytics' ? 'bg-white' : ''} p-4 md:p-8`}>
+            <main className={`flex-1 min-w-0 transition-all duration-500 ${activeTab === 'analytics' ? 'bg-white' : 'bg-slate-50'} p-4 md:p-8`}>
                 <header className="flex justify-between items-center mb-12 gap-4">
                     <div className="flex items-center gap-4">
                         <button 
@@ -1432,7 +1433,7 @@ const Dashboard = () => {
                             <Zap size={24} />
                         </button>
                         <div>
-                            <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-purple-600 capitalize">{role} Dashboard</h1>
+                            <h1 className="text-3xl font-black tracking-tight text-slate-900 capitalize">{role} <span className="text-brand-600">Command Center</span></h1>
                             <div className="text-slate-500 mt-1 flex items-center flex-wrap gap-2 text-xs md:text-sm">
                             {role === 'doctor' ? `Overseeing ${patients.length} patients` :
                                 role === 'guardian' ? (selectedPatient ? `Monitoring ${selectedPatient.name}` : "Connect to a patient") :
@@ -1513,15 +1514,14 @@ const Dashboard = () => {
                                     onClick={async () => {
                                         setActiveTab('notifications');
                                         setShowRequestsDropdown(false);
-                                        // Immediate UI feedback for notifications
                                         setClinicalNotifications(prev => prev.map(n => ({ ...n, read: true })));
                                         if (currentUser) await storage.markNotificationsAsRead(currentUser.email);
                                     }}
-                                    className={`p-4 bg-white/50 backdrop-blur-xl rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-white transition-all border border-slate-200 shadow-sm relative ${clinicalNotifications.some(n => !n.read) ? 'animate-pulse text-brand-500 border-brand-200' : ''}`}
+                                    className={`p-4 bg-white border border-slate-200 rounded-2xl text-slate-400 hover:text-brand-600 hover:shadow-xl hover:shadow-brand-500/10 transition-all relative ${clinicalNotifications.some(n => !n.read) ? 'text-brand-500 border-brand-200' : ''}`}
                                 >
                                     <Bell size={24} />
                                     {clinicalNotifications.filter(n => !n.read && (role !== 'doctor' || n.type !== 'water')).length > 0 && (
-                                        <span className="absolute -top-1 -right-1 w-6 h-6 bg-rose-500 text-white text-[10px] font-black rounded-lg flex items-center justify-center border-2 border-white shadow-lg animate-bounce">
+                                        <span className="absolute -top-1 -right-1 w-6 h-6 bg-rose-500 text-white text-[10px] font-black rounded-lg flex items-center justify-center border-2 border-white shadow-lg shadow-rose-500/20">
                                             {clinicalNotifications.filter(n => !n.read && (role !== 'doctor' || n.type !== 'water')).length}
                                         </span>
                                     )}
@@ -2024,220 +2024,280 @@ const Dashboard = () => {
 
                 {
                     activeTab === 'overview' && (
-                        <>
-                            {role === 'doctor' && (
-                                <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <>                            {role === 'doctor' && (
+                                <div className="space-y-10 animate-in fade-in slide-in-from-bottom-6 duration-700">
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                                         <div
                                             onClick={() => { setPatientFilter('urgent'); setActiveTab('patients-list'); }}
-                                            className="glass p-8 rounded-[2.5rem] border-l-8 border-rose-500 shadow-xl shadow-rose-100/20 cursor-pointer hover:scale-105 transition-all"
+                                            className="bg-white p-10 rounded-[3.5rem] border border-slate-100 shadow-[0_15px_40px_rgba(0,0,0,0.02)] cursor-pointer hover:shadow-[0_30px_60px_rgba(225,29,72,0.1)] transition-all duration-500 group relative overflow-hidden"
                                         >
-                                            <p className="text-[10px] text-rose-500 font-black uppercase tracking-[0.2em] mb-2">Critical Attention</p>
-                                            <h4 className="text-4xl font-black text-slate-800 mb-1">{riskStats.high}</h4>
-                                            <p className="text-sm text-slate-500 font-bold">High Risk Patients</p>
+                                            <div className="absolute top-0 right-0 w-32 h-32 bg-rose-50 rounded-full -mr-16 -mt-16 opacity-40 group-hover:scale-125 transition-transform duration-700"></div>
+                                            <div className="flex items-center gap-4 mb-6 relative z-10">
+                                                <div className="w-12 h-12 rounded-2xl bg-rose-50 flex items-center justify-center text-rose-500 group-hover:rotate-12 transition-transform">
+                                                    <AlertTriangle size={24} />
+                                                </div>
+                                                <p className="text-[10px] text-rose-500 font-black uppercase tracking-[0.3em]">Critical Care</p>
+                                            </div>
+                                            <h4 className="text-6xl font-black text-slate-900 mb-2 relative z-10 tabular-nums">{riskStats.high}</h4>
+                                            <p className="text-sm text-slate-400 font-bold relative z-10">High Priority Cases</p>
                                         </div>
                                         <div
                                             onClick={() => { setPatientFilter('help'); setActiveTab('patients-list'); }}
-                                            className="glass p-8 rounded-[2.5rem] border-l-8 border-amber-500 shadow-xl shadow-amber-100/20 cursor-pointer hover:scale-105 transition-all"
+                                            className="bg-white p-10 rounded-[3.5rem] border border-slate-100 shadow-[0_15px_40px_rgba(0,0,0,0.02)] cursor-pointer hover:shadow-[0_30px_60px_rgba(245,158,11,0.1)] transition-all duration-500 group relative overflow-hidden"
                                         >
-                                            <p className="text-[10px] text-amber-500 font-black uppercase tracking-[0.2em] mb-2">Clinical Review</p>
-                                            <h4 className="text-4xl font-black text-slate-800 mb-1">{riskStats.medium}</h4>
-                                            <p className="text-sm text-slate-500 font-bold">Moderate Risk Patients</p>
+                                            <div className="absolute top-0 right-0 w-32 h-32 bg-amber-50 rounded-full -mr-16 -mt-16 opacity-40 group-hover:scale-125 transition-transform duration-700"></div>
+                                            <div className="flex items-center gap-4 mb-6 relative z-10">
+                                                <div className="w-12 h-12 rounded-2xl bg-amber-50 flex items-center justify-center text-amber-500 group-hover:rotate-12 transition-transform">
+                                                    <Activity size={24} />
+                                                </div>
+                                                <p className="text-[10px] text-amber-500 font-black uppercase tracking-[0.3em]">Clinical Review</p>
+                                            </div>
+                                            <h4 className="text-6xl font-black text-slate-900 mb-2 relative z-10 tabular-nums">{riskStats.medium}</h4>
+                                            <p className="text-sm text-slate-400 font-bold relative z-10">Moderate Monitoring</p>
                                         </div>
                                         <div
                                             onClick={() => { setPatientFilter('normal'); setActiveTab('patients-list'); }}
-                                            className="glass p-8 rounded-[2.5rem] border-l-8 border-teal-500 shadow-xl shadow-brand-100/20 cursor-pointer hover:scale-105 transition-all"
+                                            className="bg-white p-10 rounded-[3.5rem] border border-slate-100 shadow-[0_15px_40px_rgba(0,0,0,0.02)] cursor-pointer hover:shadow-[0_30px_60px_rgba(20,184,166,0.1)] transition-all duration-500 group relative overflow-hidden"
                                         >
-                                            <p className="text-[10px] text-teal-500 font-black uppercase tracking-[0.2em] mb-2">Stable Monitoring</p>
-                                            <h4 className="text-4xl font-black text-slate-800 mb-1">{riskStats.low}</h4>
-                                            <p className="text-sm text-slate-500 font-bold">Normal Risk Patients</p>
+                                            <div className="absolute top-0 right-0 w-32 h-32 bg-teal-50 rounded-full -mr-16 -mt-16 opacity-40 group-hover:scale-125 transition-transform duration-700"></div>
+                                            <div className="flex items-center gap-4 mb-6 relative z-10">
+                                                <div className="w-12 h-12 rounded-2xl bg-teal-50 flex items-center justify-center text-teal-500 group-hover:rotate-12 transition-transform">
+                                                    <CheckCircle size={24} />
+                                                </div>
+                                                <p className="text-[10px] text-teal-500 font-black uppercase tracking-[0.3em]">Optimal Stability</p>
+                                            </div>
+                                            <h4 className="text-6xl font-black text-slate-900 mb-2 relative z-10 tabular-nums">{riskStats.low}</h4>
+                                            <p className="text-sm text-slate-400 font-bold relative z-10">Low Risk Registry</p>
                                         </div>
                                     </div>
 
-                                    <div className="bg-white/40 backdrop-blur-xl p-10 rounded-[3rem] border border-white/60 shadow-2xl flex flex-col md:flex-row items-center gap-8">
-                                        <div className="w-20 h-20 bg-brand-100 rounded-3xl flex items-center justify-center text-brand-600">
-                                            <Sparkles size={40} />
+                                    <div className="bg-[linear-gradient(135deg,#0f172a_0%,#1e293b_100%)] p-12 rounded-[4rem] border border-white/5 shadow-[0_40px_80px_rgba(0,0,0,0.15)] flex flex-col xl:flex-row items-center gap-12 relative overflow-hidden group">
+                                        <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-teal-500/10 rounded-full -mr-32 -mb-32 blur-[100px] group-hover:bg-teal-500/20 transition-all duration-1000"></div>
+                                        <div className="w-24 h-24 bg-white/5 backdrop-blur-md rounded-3xl flex items-center justify-center text-teal-400 border border-white/10 shadow-2xl relative z-10">
+                                            <Sparkles size={40} className="animate-pulse" />
                                         </div>
-                                        <div className="flex-1 text-center md:text-left">
-                                            <h3 className="text-2xl font-black text-slate-900 mb-2">Daily Clinical Insight</h3>
-                                            <p className="text-slate-600 leading-relaxed font-medium">
+                                        <div className="flex-1 text-center xl:text-left relative z-10">
+                                            <h3 className="text-3xl font-black text-white mb-3 tracking-tight">Active Clinical Intelligence</h3>
+                                            <p className="text-slate-300 text-lg leading-relaxed font-medium">
                                                 {riskStats.high > 0
-                                                    ? `You have ${riskStats.high} patients requiring immediate intervention. Please review their latest vitals and symptoms in the directory.`
-                                                    : "All connected patients are showing stable clinical markers today. Continue routine surveillance."}
+                                                    ? `System telemetry detects ${riskStats.high} patients requiring clinical intervention. High-priority hemodynamics suggest an immediate review of the latest clinical streams.`
+                                                    : "All clinical streams are reporting within optimal thresholds. Neural monitoring indicates high stability across the patient registry."}
                                             </p>
                                         </div>
-                                        <button onClick={() => { setPatientFilter('all'); setActiveTab('patients-list'); }} className="px-8 py-4 bg-slate-900 text-white rounded-2xl font-bold hover:bg-slate-800 transition-all flex items-center gap-2">
-                                            View Patients <ChevronRight size={18} />
+                                        <button 
+                                            onClick={() => { setPatientFilter('all'); setActiveTab('patients-list'); }} 
+                                            className="px-10 py-5 bg-teal-500 text-[#0f172a] rounded-[2rem] font-black text-sm uppercase tracking-[0.2em] hover:bg-white hover:scale-105 transition-all duration-300 flex items-center gap-3 shadow-2xl shadow-teal-500/20 relative z-10"
+                                        >
+                                            Audit Registry <ChevronRight size={18} />
                                         </button>
                                     </div>
                                 </div>
                             )}
 
+
                             {role !== 'doctor' && (
                                 <>
                                     {/* Welcome banner for new users with no logs */}
+                                    {/* Premium Greeting & Status */}
                                     {logs.length === 0 && role === 'patient' ? (
                                         <motion.div
-                                            initial={{ opacity: 0, y: 10 }}
-                                            animate={{ opacity: 1, y: 0 }}
-                                            className="p-6 rounded-3xl mb-8 flex items-center gap-5 border shadow-lg backdrop-blur-md bg-gradient-to-r from-brand-50 via-purple-50 to-pink-50 border-brand-100"
+                                            initial={{ opacity: 0, scale: 0.95 }}
+                                            animate={{ opacity: 1, scale: 1 }}
+                                            className="relative overflow-hidden bg-[linear-gradient(135deg,#0f172a_0%,#1e293b_100%)] p-12 rounded-[4rem] mb-12 shadow-2xl group"
                                         >
-                                            <div className="text-3xl shrink-0">??</div>
-                                            <div>
-                                                <p className="font-black text-brand-800 text-base mb-1">
-                                                    Welcome to Maatri Shield, {currentUser?.name?.split(' ')[0] || 'Mama'}!
-                                                </p>
-                                                <p className="text-brand-600 text-sm font-medium leading-relaxed">
-                                                    "Every step you take today nurtures the life growing within you. You are stronger than you know."
-                                                </p>
-                                                <p className="mt-3 text-xs font-black text-brand-400 uppercase tracking-widest">Tap &ldquo;Add Log&rdquo; above to begin your health journey &rarr;</p>
+                                            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-teal-500/10 rounded-full -mr-32 -mt-32 blur-[100px] group-hover:bg-teal-500/20 transition-all duration-1000"></div>
+                                            <div className="relative z-10 flex flex-col md:flex-row items-center gap-12 text-center md:text-left">
+                                                <div className="text-6xl animate-bounce-slow bg-white/5 backdrop-blur-lg w-24 h-24 rounded-3xl flex items-center justify-center border border-white/10 shadow-2xl">✨</div>
+                                                <div className="max-w-2xl">
+                                                    <p className="font-black text-white text-4xl mb-4 tracking-tight">
+                                                        Welcome to Maatri Shield, <span className="text-teal-400">{currentUser?.name?.split(' ')[0] || 'Mama'}</span>
+                                                    </p>
+                                                    <p className="text-slate-300 text-xl font-medium leading-relaxed opacity-90">
+                                                        "Every moment today nurtures the life growing within you. You are protected by an intelligent care network built for your safety."
+                                                    </p>
+                                                    <div className="mt-10 inline-flex items-center gap-4 px-6 py-3 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 text-teal-400 text-[10px] font-black uppercase tracking-[0.3em] hover:bg-white/10 transition-all cursor-pointer">
+                                                        Initialize Clinical Log <ArrowRight size={14} />
+                                                    </div>
+                                                </div>
                                             </div>
                                         </motion.div>
                                     ) : (
                                         <motion.div
                                             initial={{ opacity: 0, y: 10 }}
                                             animate={{ opacity: 1, y: 0 }}
-                                            className={`p-6 rounded-3xl mb-8 flex items-center gap-4 border shadow-sm backdrop-blur-md transition-all ${alert.includes('Monitoring active')
-                                                ? 'bg-gradient-to-r from-[#F8F7FF] to-purple-50 border-brand-100'
-                                                : 'bg-amber-100/50 border-amber-200'
+                                            className={`p-10 rounded-[3.5rem] mb-12 flex flex-col md:flex-row items-center gap-10 border shadow-2xl backdrop-blur-2xl transition-all duration-700 ${alert.includes('Monitoring active')
+                                                ? 'bg-white/40 border-slate-100'
+                                                : 'bg-rose-50/60 border-rose-100'
                                                 }`}
                                         >
-                                            <div className={`p-3 rounded-2xl transition-all ${alert.includes('Monitoring active')
-                                                ? 'bg-teal-200/50 text-brand-600'
-                                                : 'bg-amber-200/50 text-amber-700'
+                                            <div className={`w-20 h-20 rounded-[2.5rem] flex items-center justify-center transition-all duration-1000 ${alert.includes('Monitoring active')
+                                                ? 'bg-teal-500 text-white shadow-2xl shadow-teal-500/40 translate-y-0'
+                                                : 'bg-rose-500 text-white shadow-2xl shadow-rose-500/40 animate-pulse'
                                                 }`}>
-                                                <Bell size={24} className={alert.includes('Monitoring active') ? "animate-pulse" : "animate-bounce"} />
+                                                <Bell size={32} className={alert.includes('Monitoring active') ? "animate-pulse" : "animate-bounce"} />
                                             </div>
-                                            <div>
+                                            <div className="flex-1 text-center md:text-left">
                                                 {alert.includes('Monitoring active') ? (
-                                                    <div className="flex flex-col gap-1">
-                                                        <p className="font-black text-brand-900 text-sm flex items-center gap-2">
-                                                            <span className="w-2 h-2 rounded-full bg-teal-500 animate-ping"></span>
-                                                            SYSTEM STATUS: LIVE
-                                                        </p>
-                                                        <p className="font-bold text-teal-800">{alert}</p>
+                                                    <div className="flex flex-col gap-2">
+                                                        <div className="flex items-center justify-center md:justify-start gap-3">
+                                                            <div className="w-3 h-3 rounded-full bg-teal-500 animate-ping"></div>
+                                                            <p className="font-black text-slate-900 text-[10px] uppercase tracking-[0.4em]">
+                                                                Clinical Network: Secure & Active
+                                                            </p>
+                                                        </div>
+                                                        <p className="font-black text-slate-700 text-2xl tracking-tight leading-tight">{alert}</p>
                                                     </div>
                                                 ) : (
-                                                    <p className="font-bold text-amber-800">{alert}</p>
+                                                    <div className="flex flex-col gap-2">
+                                                        <div className="flex items-center justify-center md:justify-start gap-3">
+                                                            <div className="w-3 h-3 rounded-full bg-rose-500 animate-ping"></div>
+                                                            <p className="font-black text-rose-600 text-[10px] uppercase tracking-[0.4em]">
+                                                                System Priority Alert
+                                                            </p>
+                                                        </div>
+                                                        <p className="font-black text-slate-900 text-2xl tracking-tight leading-tight">{alert}</p>
+                                                    </div>
                                                 )}
                                             </div>
+                                            {alert.includes('Monitoring active') && (
+                                                <div className="hidden xl:flex items-center gap-8 px-10 border-l border-slate-100 h-16">
+                                                    <div className="text-right">
+                                                        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-1">Care Latency</p>
+                                                        <p className="font-black text-2xl text-slate-900 tabular-nums tracking-tighter">0.02<span className="text-xs ml-1 opacity-50">s</span></p>
+                                                    </div>
+                                                </div>
+                                            )}
                                         </motion.div>
                                     )}
 
-                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
                                         {stats.map((stat, i) => (
                                             <motion.div
                                                 key={i}
-                                                initial={{ opacity: 0, y: 20 }}
-                                                animate={{ opacity: 1, y: 0 }}
+                                                initial={{ opacity: 0, scale: 0.95 }}
+                                                animate={{ opacity: 1, scale: 1 }}
                                                 transition={{ delay: i * 0.1 }}
-                                                className="rounded-[2.5rem] transition-all cursor-pointer hover:scale-105 hover:shadow-2xl hover:shadow-brand-100/20 glass p-8 shadow-xl"
+                                                className="bg-white p-10 rounded-[3.5rem] border border-slate-50 shadow-[0_20px_40px_rgba(0,0,0,0.02)] hover:shadow-[0_40px_80px_rgba(106,76,147,0.08)] transition-all cursor-pointer group relative overflow-hidden"
                                             >
-                                                <div className="flex items-center justify-between mb-2">
-                                                    <p className="text-slate-500 text-xs font-extrabold uppercase tracking-widest">{stat.label}</p>
-                                                    {(stat.label === 'Heart Rate' || stat.label === 'Blood Pressure' || stat.label === 'Glucose Level') && (
-                                                        <motion.span
-                                                            animate={stat.status.includes('Today') ? { opacity: [0.7, 1, 0.7] } : {}}
-                                                            transition={{ repeat: Infinity, duration: 2 }}
-                                                            className={`${stat.status.includes('Today') ? 'bg-teal-100 text-teal-700 border-teal-200' : 'bg-slate-100 text-slate-500 border-slate-200'} text-[10px] font-black px-2.5 py-1 rounded-lg uppercase tracking-wider border shadow-sm flex items-center gap-1`}
-                                                        >
-                                                            {stat.status.includes('Today') && <span className="w-1.5 h-1.5 rounded-full bg-teal-500"></span>}
-                                                            {stat.status.includes('Today') ? 'Today' : 'Latest'}
-                                                        </motion.span>
-                                                    )}
+                                                <div className="flex items-center justify-between mb-8">
+                                                    <p className="text-slate-400 text-[10px] font-black uppercase tracking-[0.3em]">{stat.label}</p>
+                                                    <div className="w-12 h-12 rounded-2xl bg-slate-50 text-slate-400 group-hover:bg-brand-500 group-hover:text-white transition-all duration-500 flex items-center justify-center">
+                                                        <Activity size={20} />
+                                                    </div>
                                                 </div>
-                                                <h3 className="text-4xl font-extrabold tracking-tight mb-1 text-slate-900">{stat.value}</h3>
-                                                <div className="flex items-center gap-2">
-                                                    <span className={`text-xs font-bold uppercase tracking-wider ${stat.color}`}>{stat.status}</span>
+                                                <h3 className="text-5xl font-black tracking-tight mb-4 text-slate-900 tabular-nums">{stat.value}</h3>
+                                                <div className="flex items-center gap-3">
+                                                    <span className={`text-[10px] font-black uppercase tracking-[0.2em] px-4 py-1.5 rounded-full border ${stat.color} bg-white shadow-sm`}>
+                                                        {stat.status}
+                                                    </span>
                                                     {stat.status === 'Active' && (
-                                                        <motion.span
-                                                            animate={{ scale: [1, 1.2, 1] }}
-                                                            transition={{ repeat: Infinity, duration: 1.5 }}
-                                                            className="w-2 h-2 rounded-full bg-brand-500 shadow-lg shadow-brand-200"
-                                                        ></motion.span>
+                                                        <div className="flex items-center gap-1.5 px-3 py-1.5 bg-teal-50 rounded-full border border-teal-100">
+                                                            <span className="w-2 h-2 rounded-full bg-teal-500 animate-ping"></span>
+                                                            <span className="text-[10px] font-black uppercase tracking-wider text-teal-600">Syncing</span>
+                                                        </div>
                                                     )}
                                                 </div>
                                             </motion.div>
                                         ))}
                                     </div>
 
-                                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                                        <div className="glass p-8 rounded-3xl">
-                                            <h3 className="text-xl font-extrabold tracking-tight text-slate-900 mb-6 flex items-center gap-2">
-                                                <Activity className="text-brand-600" size={24} />
-                                                {role === 'guardian' ? `History: ${selectedPatient?.name || 'Patient'}` : 'Recent Logs'}
+                                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                                        <div className="bg-white p-12 rounded-[4rem] border border-slate-50 shadow-[0_30px_60px_rgba(0,0,0,0.03)] relative overflow-hidden group">
+                                            <div className="absolute top-0 right-0 w-80 h-80 bg-slate-50 rounded-full -mr-40 -mt-40 opacity-50 transition-transform duration-1000 group-hover:scale-110"></div>
+                                            <h3 className="text-2xl font-black tracking-tight text-slate-900 mb-10 flex items-center gap-4 relative z-10">
+                                                <div className="w-12 h-12 rounded-[1.25rem] bg-slate-900 text-white flex items-center justify-center shadow-2xl">
+                                                    <Activity size={24} />
+                                                </div>
+                                                {role === 'guardian' ? `Registry: ${selectedPatient?.name || 'Patient'}` : 'Clinical Stream'}
                                             </h3>
                                             {(role === 'guardian' && guardianConnectionStatus !== 'accepted') ? (
-                                                <div className="h-full py-20 text-center text-slate-400">
-                                                    <Lock size={48} className="mx-auto mb-4 opacity-20" />
-                                                    <p className="font-bold">Awaiting patient approval to view history.</p>
+                                                <div className="h-full py-24 text-center text-slate-300 relative z-10">
+                                                    <Lock size={64} className="mx-auto mb-6 opacity-10" />
+                                                    <p className="font-black uppercase tracking-[0.2em] text-xs">Authorization Required</p>
+                                                    <p className="text-slate-400 mt-2 font-medium">Awaiting care-giver approval.</p>
                                                 </div>
                                             ) : logs.length > 0 ? (
-                                                <div className="space-y-6">
+                                                <div className="space-y-8 relative z-10">
                                                     {logs.slice(0, 2).map((log) => (
-                                                        <div key={log.id} className="relative pl-8 border-l-2 border-slate-200 pb-2">
-                                                            <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-brand-500 border-4 border-white shadow-sm"></div>
-                                                            <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200">
-                                                                <p className="text-xs text-slate-400 font-bold mb-2">
-                                                                    {new Date(log.timestamp).toLocaleDateString()} at {new Date(log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                        <div key={log.id} className="relative pl-10 border-l-[3px] border-slate-100 pb-2">
+                                                            <div className="absolute -left-[11px] top-0 w-5 h-5 rounded-full bg-slate-900 border-4 border-white shadow-xl"></div>
+                                                            <div className="bg-slate-50/50 backdrop-blur-sm p-6 rounded-[2rem] border border-slate-100 hover:border-slate-200 transition-colors">
+                                                                <p className="text-[10px] text-slate-400 font-black uppercase tracking-[0.2em] mb-4">
+                                                                    Telemetry Sync • {new Date(log.timestamp).toLocaleDateString()} at {new Date(log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                                                 </p>
-                                                                <div className="grid grid-cols-3 gap-2">
-                                                                    <div className="flex items-center gap-2">
-                                                                        <Activity size={12} className="text-rose-500" />
-                                                                        <div><p className="text-[10px] text-slate-400 uppercase font-black">HR</p><p className="font-bold">{log.heartRate}</p></div>
+                                                                <div className="grid grid-cols-3 gap-6">
+                                                                    <div className="flex flex-col gap-1">
+                                                                        <p className="text-[10px] text-slate-400 uppercase font-black tracking-widest">Rate</p>
+                                                                        <p className="font-black text-xl tabular-nums text-slate-900">{log.heartRate}<span className="text-[9px] ml-1 opacity-40">bpm</span></p>
                                                                     </div>
-                                                                    <div className="flex items-center gap-2">
-                                                                        <Heart size={12} className="text-brand-500" />
-                                                                        <div><p className="text-[10px] text-slate-400 uppercase font-black">BP</p><p className="font-bold">{log.systolic}/{log.diastolic}</p></div>
+                                                                    <div className="flex flex-col gap-1">
+                                                                        <p className="text-[10px] text-slate-400 uppercase font-black tracking-widest">Gauge</p>
+                                                                        <p className="font-black text-xl tabular-nums text-slate-900">{log.systolic}/{log.diastolic}<span className="text-[9px] ml-1 opacity-40">BP</span></p>
                                                                     </div>
-                                                                    <div className="flex items-center gap-2">
-                                                                        <Droplets size={12} className="text-indigo-500" />
-                                                                        <div><p className="text-[10px] text-slate-400 uppercase font-black">SG</p><p className="font-bold">{log.glucose}</p></div>
+                                                                    <div className="flex flex-col gap-1">
+                                                                        <p className="text-[10px] text-slate-400 uppercase font-black tracking-widest">Index</p>
+                                                                        <p className="font-black text-xl tabular-nums text-slate-900">{log.glucose}<span className="text-[9px] ml-1 opacity-40">mg/dL</span></p>
                                                                     </div>
                                                                 </div>
-                                                                {log.symptoms && <p className="mt-3 text-xs text-slate-500 border-t pt-2 italic">"{log.symptoms}"</p>}
+                                                                {log.symptoms && (
+                                                                    <div className="mt-5 p-4 bg-white/60 rounded-xl border border-white/80 text-xs text-slate-500 font-medium italic">
+                                                                        "{log.symptoms}"
+                                                                    </div>
+                                                                )}
                                                             </div>
                                                         </div>
                                                     ))}
                                                 </div>
                                             ) : (
-                                                <div className="h-full py-20 text-center text-slate-300">
-                                                    <Activity size={48} className="mx-auto mb-4 opacity-10" />
-                                                    <p>No activity logs found.</p>
+                                                <div className="h-full py-24 text-center text-slate-200 relative z-10">
+                                                    <Activity size={64} className="mx-auto mb-6 opacity-5" />
+                                                    <p className="font-black uppercase tracking-[0.2em] text-xs">No Stream Data</p>
                                                 </div>
                                             )}
                                         </div>
 
-                                        <div className="space-y-8">
-                                            <div className="glass p-8 rounded-3xl">
-                                                <h3 className="text-xl font-extrabold tracking-tight text-slate-900 mb-6 flex items-center gap-2">
-                                                    <TrendingUp className="text-blue-500" size={24} /> Assessment
+                                        <div className="space-y-10">
+                                            <div className="bg-white p-12 rounded-[4rem] border border-slate-50 shadow-[0_30px_60px_rgba(0,0,0,0.03)] relative overflow-hidden group">
+                                                <div className="absolute bottom-0 left-0 w-80 h-80 bg-brand-50 rounded-full -ml-40 -mb-40 opacity-50 transition-transform duration-1000 group-hover:scale-110"></div>
+                                                <h3 className="text-2xl font-black tracking-tight text-slate-900 mb-10 flex items-center gap-4 relative z-10">
+                                                    <div className="w-12 h-12 rounded-[1.25rem] bg-brand-500 text-white flex items-center justify-center shadow-lg shadow-brand-500/20">
+                                                        <TrendingUp size={24} />
+                                                    </div>
+                                                    Stability Matrix
                                                 </h3>
                                                 {(role === 'guardian' && guardianConnectionStatus !== 'accepted') ? (
-                                                    <div className="bg-slate-50/50 p-8 rounded-[2rem] border border-dashed border-slate-200 text-center py-20">
-                                                        <Lock className="mx-auto mb-4 text-slate-300" size={48} />
-                                                        <p className="text-slate-500 font-bold">Awaiting patient approval</p>
+                                                    <div className="h-full py-24 text-center text-slate-300 relative z-10">
+                                                        <Lock size={64} className="mx-auto mb-6 opacity-10" />
+                                                        <p className="font-black uppercase tracking-[0.2em] text-xs">Access Encrypted</p>
                                                     </div>
                                                 ) : (selectedPatient || role === 'patient') ? (
-                                                    <div className={`p-8 rounded-[2rem] border relative overflow-hidden ${getRiskStatus(logs[0]).bg
-                                                        } ${getRiskStatus(logs[0]).border}`}>
+                                                    <div className={`p-10 rounded-[3rem] border-2 relative overflow-hidden transition-all duration-500 z-10 ${getRiskStatus(logs[0]).bg} ${getRiskStatus(logs[0]).border}`}>
                                                         <div className="relative z-10">
-                                                            <p className={`${getRiskStatus(logs[0]).color} font-black text-xs uppercase mb-2`}>
-                                                                Risk Level: {getRiskStatus(logs[0]).label}
-                                                            </p>
-                                                            <h4 className="text-3xl font-black text-slate-900 mb-4">
-                                                                {getRiskStatus(logs[0]).level === 'urgent' ? 'Immediate Action' :
-                                                                    getRiskStatus(logs[0]).level === 'help' ? 'Clinical Review' :
-                                                                        'Stable Condition'}
+                                                            <div className="flex items-center gap-3 mb-6">
+                                                                <div className="relative flex items-center justify-center">
+                                                                    <div className={`w-3 h-3 rounded-full bg-current animate-ping opacity-50 ${getRiskStatus(logs[0]).color}`}></div>
+                                                                    <div className={`w-2 h-2 rounded-full bg-current absolute ${getRiskStatus(logs[0]).color}`}></div>
+                                                                </div>
+                                                                <p className={`${getRiskStatus(logs[0]).color} font-black text-[10px] uppercase tracking-[0.3em]`}>
+                                                                    Computational Analytics: {getRiskStatus(logs[0]).label}
+                                                                </p>
+                                                            </div>
+                                                            <h4 className="text-4xl font-black text-slate-900 mb-6 leading-tight">
+                                                                {getRiskStatus(logs[0]).level === 'urgent' ? 'Clinical Action Required' :
+                                                                    getRiskStatus(logs[0]).level === 'help' ? 'Enhanced Monitoring' :
+                                                                        'Condition Stable'}
                                                             </h4>
-                                                            <p className="text-slate-600 text-sm leading-relaxed mb-6">
+                                                            <div className="text-slate-600 text-base leading-relaxed mb-10 font-medium">
                                                                 {logs[0]?.symptoms ? (
-                                                                    <span className="block mb-2 font-bold text-slate-800">
-                                                                        Reported Symptoms: <span className="italic font-medium text-rose-500">"{logs[0].symptoms}"</span>
-                                                                    </span>
+                                                                    <div className="mb-6 p-6 bg-white/80 backdrop-blur-sm rounded-[1.5rem] border border-white shadow-sm">
+                                                                        <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Subjective Feedback</p>
+                                                                        <p className="italic text-rose-500 text-lg">"{logs[0].symptoms}"</p>
+                                                                    </div>
                                                                 ) : null}
-                                                                "Patient vitals are within clinical expectations. Continue routine monitoring."
-                                                            </p>
+                                                                <p className="opacity-80">
+                                                                    "Current clinical biomarkers demonstrate persistent continuity. Telemetry suggests sticking to the established care protocol."
+                                                                </p>
+                                                            </div>
                                                             {role === 'doctor' ? (
                                                                 <button
                                                                     onClick={() => {
@@ -2245,25 +2305,26 @@ const Dashboard = () => {
                                                                         setIsAppointmentModalOpen(true);
                                                                         setAppointmentStep('date');
                                                                     }}
-                                                                    className="mt-4 px-6 py-3 bg-slate-900 text-white rounded-2xl font-bold hover:bg-slate-800 transition-all flex items-center justify-center gap-2 w-full shadow-xl shadow-slate-200/50"
+                                                                    className="w-full py-5 bg-slate-900 text-white rounded-[2rem] font-black text-xs uppercase tracking-[0.2em] hover:bg-slate-800 transition-all shadow-2xl flex items-center justify-center gap-3"
                                                                 >
-                                                                    Take Clinical Action <Calendar size={18} />
+                                                                    Schedule Intervention <Calendar size={18} />
                                                                 </button>
                                                             ) : (
-                                                                <button className={`${getRiskStatus(logs[0]).color} font-bold flex items-center gap-1`}>
-                                                                    Full Report <ChevronRight size={18} />
+                                                                <button className={`w-full py-5 rounded-[2rem] border-2 font-black text-xs uppercase tracking-[0.2em] flex items-center justify-center gap-3 transition-all ${getRiskStatus(logs[0]).color} ${getRiskStatus(logs[0]).border} bg-white hover:bg-slate-50`}>
+                                                                    Full Clinical Assessment <ChevronRight size={18} />
                                                                 </button>
                                                             )}
                                                         </div>
-                                                        <Heart className={`absolute -right-8 -bottom-8 w-48 h-48 -rotate-12 opacity-5 ${getRiskStatus(logs[0]).color}`} fill="currentColor" />
+                                                        <Heart className={`absolute -right-20 -bottom-20 w-80 h-80 -rotate-12 opacity-[0.05] ${getRiskStatus(logs[0]).color}`} fill="currentColor" />
                                                     </div>
                                                 ) : (
-                                                    <div className="bg-slate-50/50 p-8 rounded-[2rem] border border-dashed border-slate-200 text-center py-20">
-                                                        <Activity className="mx-auto mb-4 text-slate-200" size={48} />
-                                                        <p className="text-slate-400 font-bold">Select a patient to see assessment</p>
+                                                    <div className="bg-slate-50/50 p-12 rounded-[3.5rem] border border-dashed border-slate-100 text-center py-24 relative z-10">
+                                                        <Activity className="mx-auto mb-6 text-slate-200" size={64} />
+                                                        <p className="text-slate-400 font-black uppercase tracking-[0.2em] text-xs">Awaiting Subject Selection</p>
                                                     </div>
                                                 )}
                                             </div>
+
 
                                             {/* Upcoming Appointments Directly Under Stable Condition */}
                                             {role === 'patient' && (
@@ -2393,219 +2454,263 @@ const Dashboard = () => {
                                     </div>
                                 </div>
                             ) : (
-                                <div className="space-y-8">
-                                    {/* Patient Profile Header */}
-                                    <div className="bg-white/70 backdrop-blur-md border-2 border-brand-200 rounded-3xl p-6 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm">
-                                        <div className="flex items-center gap-5">
-                                            <div className="w-16 h-16 rounded-2xl border-4 border-teal-500/20 overflow-hidden shadow-inner bg-brand-50 flex items-center justify-center text-brand-600 text-2xl font-black">
-                                                {(role === 'doctor' ? selectedPatient?.photo : currentUser?.photo) ? (
-                                                    <img
-                                                        src={(role === 'doctor' ? selectedPatient?.photo : currentUser?.photo)}
-                                                        alt="Profile"
-                                                        className="w-full h-full object-cover"
-                                                    />
-                                                ) : ((role === 'doctor' ? selectedPatient?.name : currentUser?.name)?.[0] || 'P')}
+                                <div className="space-y-10">
+                                    {/* Patient Profile Header - Elegant & Empathetic */}
+                                    <div className="bg-white p-10 rounded-[3rem] border border-slate-100 shadow-[0_20px_50px_rgba(0,0,0,0.03)] flex flex-col xl:flex-row items-center justify-between gap-10 relative overflow-hidden group">
+                                        <div className="absolute top-0 right-0 w-64 h-64 bg-slate-50 rounded-full -mr-32 -mt-32 opacity-50 group-hover:scale-110 transition-transform duration-700"></div>
+                                        <div className="flex flex-col md:flex-row items-center gap-8 relative z-10 w-full xl:w-auto">
+                                            <div className="relative">
+                                                <div className="w-24 h-24 rounded-[2rem] bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 text-3xl font-black shadow-inner overflow-hidden">
+                                                    {(role === 'doctor' ? selectedPatient?.photo : currentUser?.photo) ? (
+                                                        <img
+                                                            src={(role === 'doctor' ? selectedPatient?.photo : currentUser?.photo)}
+                                                            alt="Profile"
+                                                            className="w-full h-full object-cover"
+                                                        />
+                                                    ) : ((role === 'doctor' ? selectedPatient?.name : currentUser?.name)?.[0] || 'P')}
+                                                </div>
+                                                <div className="absolute -bottom-2 -right-2 w-10 h-10 bg-teal-500 rounded-2xl flex items-center justify-center text-white border-4 border-white shadow-lg">
+                                                    <CheckCircle2 size={16} />
+                                                </div>
                                             </div>
-                                            <div>
-                                                {role === 'doctor' && (
-                                                    <button
-                                                        onClick={() => setSelectedPatient(null)}
-                                                        className="mb-2 flex items-center gap-1.5 px-3 py-1.5 bg-brand-50 text-brand-600 rounded-xl text-xs font-black uppercase tracking-wider hover:bg-brand-100 transition-all border border-brand-100/50"
-                                                    >
-                                                        <ChevronRight size={14} className="rotate-180" /> Back to Patients
-                                                    </button>
-                                                )}
-                                                <h2 className="text-2xl font-bold text-slate-900">{(role === 'doctor' ? selectedPatient?.name : currentUser?.name) || "Loading..."}</h2>
-                                                {role === 'patient' && <p className="text-brand-600 text-xs font-black uppercase tracking-widest bg-brand-50 px-3 py-1 rounded-full inline-block mt-1">Prenatal Tracking Active</p>}
-                                                <p className="text-slate-500 font-medium flex items-center gap-2 mt-1">
-                                                    <Calendar size={14} /> {(role === 'doctor' ? selectedPatient : currentUser) ? `${(role === 'doctor' ? selectedPatient : currentUser).age} Years � ${(role === 'doctor' ? selectedPatient : currentUser).pregnancyType}` : "Clinical Surveillance Interface"}
-                                                </p>
+                                            <div className="text-center md:text-left">
+                                                <div className="flex flex-col md:flex-row md:items-center gap-3 mb-2">
+                                                    <h2 className="text-3xl font-black text-slate-900 tracking-tight">
+                                                        {(role === 'doctor' ? selectedPatient?.name : currentUser?.name) || "Clinical File"}
+                                                    </h2>
+                                                    {role === 'doctor' && (
+                                                        <span className="px-3 py-1 bg-rose-50 text-rose-500 text-[10px] font-black uppercase tracking-widest rounded-full border border-rose-100">
+                                                            Active Patient
+                                                        </span>
+                                                    )}
+                                                </div>
+                                                <div className="flex flex-wrap justify-center md:justify-start items-center gap-4 text-slate-500 font-bold text-sm">
+                                                    <span className="flex items-center gap-2 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-100">
+                                                        <Calendar size={14} className="text-slate-400" />
+                                                        {(role === 'doctor' ? selectedPatient : currentUser)?.age} Years
+                                                    </span>
+                                                    <span className="flex items-center gap-2 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-100">
+                                                        <Activity size={14} className="text-slate-400" />
+                                                        {(role === 'doctor' ? selectedPatient : currentUser)?.pregnancyType}
+                                                    </span>
+                                                    {role === 'doctor' && (
+                                                        <button
+                                                            onClick={() => setSelectedPatient(null)}
+                                                            className="text-brand-500 hover:text-brand-600 transition-colors flex items-center gap-1 font-black uppercase text-[10px] tracking-widest ml-2"
+                                                        >
+                                                            <ChevronRight size={14} className="rotate-180" /> Change Patient
+                                                        </button>
+                                                    )}
+                                                </div>
                                             </div>
                                         </div>
-                                        <div className="flex items-center gap-3">
-                                            <button
-                                                onClick={() => setIsDemoMode(!isDemoMode)}
-                                                className={`flex items-center gap-2 px-5 py-3 rounded-2xl font-bold transition-all shadow-lg ${isDemoMode
-                                                    ? 'bg-rose-500 text-white shadow-rose-200'
-                                                    : 'bg-white text-slate-700 border-2 border-slate-100 hover:border-brand-200'
-                                                    }`}
-                                            >
-                                                {isDemoMode ? <Square size={18} fill="currentColor" /> : <Play size={18} fill="currentColor" />}
-                                                {isDemoMode ? 'Stop Demo' : 'Start Demo'}
-                                                {isDemoMode && <motion.div animate={{ opacity: [1, 0, 1] }} transition={{ repeat: Infinity, duration: 1.5 }} className="w-2 h-2 bg-white rounded-full ml-1" />}
-                                            </button>
 
-                                            {isDemoMode && (
-                                                <button
-                                                    onClick={handleResetDemo}
-                                                    className="flex items-center gap-2 px-5 py-3 bg-slate-900 text-white rounded-2xl font-bold transition-all shadow-lg hover:bg-black active:scale-95"
-                                                >
-                                                    <Trash2 size={18} />
-                                                    Reset Demo
-                                                </button>
-                                            )}
-
-                                            <AnimatePresence>
-                                                {isSosPulsing && (
-                                                    <motion.button
-                                                        initial={{ opacity: 0, scale: 0.8 }}
-                                                        animate={{ opacity: 1, scale: 1 }}
-                                                        exit={{ opacity: 0, scale: 0.8 }}
-                                                        className="flex items-center gap-2 px-6 py-3 bg-red-600 text-white font-bold rounded-2xl shadow-[0_0_20px_rgba(239,68,68,0.7)] hover:bg-red-700 transition-all animate-pulse z-10"
-                                                    >
-                                                        <AlertTriangle size={20} className="animate-bounce" />
-                                                        Deploy Ambulance
-                                                    </motion.button>
-                                                )}
-                                            </AnimatePresence>
-                                            <button
-                                                onClick={handleGenerateReport}
-                                                disabled={isGeneratingReport || !navigator.onLine}
-                                                title={!navigator.onLine ? "Available once synced" : ""}
-                                                className={`flex items-center gap-2 px-6 py-3 bg-teal-600 text-white font-semibold rounded-2xl hover:bg-teal-700 transition-all shadow-md shadow-brand-600/20 ${isGeneratingReport || !navigator.onLine ? 'opacity-50 cursor-not-allowed' : ''}`}
-                                            >
-                                                <Download size={18} className={isGeneratingReport ? 'animate-bounce' : ''} />
-                                                {isGeneratingReport ? 'Generating Report...' : 'Generate Weekly Report'}
-                                            </button>
-
-                                            {role === 'doctor' && (
-                                                <button
-                                                    onClick={() => setIsAppointmentModalOpen(true)}
-                                                    className="flex items-center gap-2 px-6 py-3 bg-brand-600 text-white font-semibold rounded-2xl hover:bg-brand-700 transition-all shadow-md shadow-brand-600/20"
-                                                >
-                                                    <Calendar size={18} /> Schedule Appointment
-                                                </button>
-                                            )}
-
-                                            <div className="hidden lg:block w-[1px] h-10 bg-slate-200 mx-2"></div>
-                                            <div className="hidden lg:flex flex-col items-end">
-                                                <p className="text-[10px] uppercase font-bold text-slate-400 tracking-widest">{isDemoMode ? 'Live Risk' : 'Current Risk'}</p>
-                                                <div className="flex items-center gap-2">
-                                                    <div className="w-24 h-8">
-                                                        <GaugeChart
-                                                            id="risk-gauge-header"
-                                                            nrOfLevels={30}
-                                                            colors={['#10b981', '#f59e0b', '#ef4444']}
-                                                            arcWidth={0.3}
-                                                            percent={isDemoMode ? demoRiskPercent : (getRiskStatus(logs[0])?.score || 0.2)}
-                                                            hideText={true}
-                                                            style={{ width: '100px' }}
-                                                        />
-                                                    </div>
-                                                    <span className="font-bold text-brand-600">{isDemoMode ? demoRiskPercent.toFixed(2) : (getRiskStatus(logs[0])?.score || 0.2).toFixed(2)}</span>
+                                        <div className="flex flex-wrap items-center justify-center gap-6 relative z-10 w-full xl:w-auto">
+                                            <div className="flex items-center gap-4 mr-4 pb-4 md:pb-0 border-b md:border-b-0 md:border-r border-slate-100 pr-6">
+                                                <div className="text-right hidden sm:block">
+                                                    <p className="text-[10px] uppercase font-black text-slate-400 tracking-[0.2em] mb-1">Risk Score</p>
+                                                    <p className="text-2xl font-black text-slate-900">
+                                                        {((isDemoMode ? demoRiskPercent : (getRiskStatus(logs[0])?.score || 0.2)) * 100).toFixed(0)}%
+                                                    </p>
                                                 </div>
+                                                <div className="w-24 h-12">
+                                                    <GaugeChart
+                                                        id="risk-gauge-header"
+                                                        nrOfLevels={30}
+                                                        colors={['#10b981', '#f59e0b', '#ef4444']}
+                                                        arcWidth={0.3}
+                                                        percent={isDemoMode ? demoRiskPercent : (getRiskStatus(logs[0])?.score || 0.2)}
+                                                        hideText={true}
+                                                        style={{ width: '100px' }}
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            <div className="flex items-center gap-3">
+                                                <button
+                                                    onClick={() => setIsDemoMode(!isDemoMode)}
+                                                    className={`h-14 px-6 rounded-2xl font-black transition-all flex items-center gap-3 ${isDemoMode
+                                                        ? 'bg-rose-500 text-white shadow-xl shadow-rose-200'
+                                                        : 'bg-slate-50 text-slate-600 border border-slate-200 hover:bg-slate-100'
+                                                        }`}
+                                                >
+                                                    {isDemoMode ? <Square size={18} fill="currentColor" /> : <Play size={18} fill="currentColor" />}
+                                                    <span className="uppercase text-[10px] tracking-widest">{isDemoMode ? 'Stop Demo' : 'Live Demo'}</span>
+                                                </button>
+
+                                                <button
+                                                    onClick={handleGenerateReport}
+                                                    className="h-14 px-6 bg-slate-950 text-white rounded-2xl font-black uppercase text-[10px] tracking-widest shadow-xl shadow-slate-200 hover:bg-slate-900 transition-all flex items-center gap-3 group"
+                                                >
+                                                    <Download size={18} className="group-hover:translate-y-0.5 transition-transform" />
+                                                    Clinical Report
+                                                </button>
+
+                                                {role === 'doctor' && (
+                                                    <button
+                                                        onClick={() => setIsAppointmentModalOpen(true)}
+                                                        className="h-14 w-14 bg-brand-500 text-white rounded-2xl flex items-center justify-center shadow-xl shadow-brand-100 hover:bg-brand-600 transition-all"
+                                                        title="Schedule Appointment"
+                                                    >
+                                                        <Calendar size={22} />
+                                                    </button>
+                                                )}
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                        {/* Blood Pressure Card */}
-                                        <div className="glass p-8 shadow-sm relative group hover:border-brand-400/50 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer">
-                                            <div className="flex items-center justify-between mb-8">
+
+                                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                                        {/* Blood Pressure Card - Redesigned */}
+                                        <div className="bg-white p-10 rounded-[3.5rem] border border-slate-100 shadow-[0_15px_40px_rgba(0,0,0,0.02)] hover:shadow-[0_40px_80px_rgba(0,0,0,0.06)] transition-all duration-500 group relative overflow-hidden">
+                                            <div className="absolute top-0 left-0 w-2 h-full bg-rose-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                            <div className="flex items-start justify-between mb-10">
                                                 <div>
-                                                    <h3 className="text-xl font-black text-slate-900">Blood Pressure</h3>
-                                                    <p className="text-sm text-slate-400">Weekly Performance Index</p>
+                                                    <div className="flex items-center gap-2 mb-2">
+                                                        <div className="w-8 h-8 rounded-lg bg-rose-50 flex items-center justify-center text-rose-500">
+                                                            <Heart size={16} fill="currentColor" />
+                                                        </div>
+                                                        <p className="text-[10px] font-black text-rose-500 uppercase tracking-widest">Hemodynamics</p>
+                                                    </div>
+                                                    <h3 className="text-3xl font-black text-slate-900 tracking-tight">Blood Pressure</h3>
                                                 </div>
-                                                <div className="flex items-center gap-1.5 px-3 py-1 bg-rose-50 rounded-full border border-rose-100">
-                                                    <span className="text-[10px] font-black text-rose-600 uppercase">systolic</span>
-                                                    <span className="text-sm font-black text-rose-700">145</span>
+                                                <div className="text-right">
+                                                    <p className="text-5xl font-black text-slate-900 tracking-tighter tabular-nums">145<span className="text-xl text-slate-300 font-bold ml-1">/92</span></p>
+                                                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">mmHg  Latest</p>
                                                 </div>
                                             </div>
-                                            <div className="h-[220px] w-full rounded-2xl">
+                                            <div className="h-[220px] w-full">
                                                 <ResponsiveContainer width="100%" height="100%">
                                                     <AreaChart data={weeklyTrends}>
-                                                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f8fafc" />
-                                                        <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fill: '#64748b', fontSize: 10, fontWeight: 700 }} />
-                                                        <YAxis axisLine={false} tickLine={false} tick={{ fill: '#64748b', fontSize: 10, fontWeight: 700 }} />
-                                                        <Tooltip contentStyle={{ borderRadius: '24px', border: 'none', boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1)' }} />
-                                                        <Area type="monotone" dataKey="sys" stroke="#f43f5e" strokeWidth={3} fill="url(#colorSys)" fillOpacity={0.1} />
-                                                        <Area type="monotone" dataKey="dia" stroke="#fbbf24" strokeWidth={3} fill="url(#colorDia)" fillOpacity={0.1} />
                                                         <defs>
-                                                            <linearGradient id="colorSys" x1="0" y1="0" x2="0" y2="1">
-                                                                <stop offset="5%" stopColor="#f43f5e" stopOpacity={0.3} />
+                                                            <linearGradient id="colorSysRedesign" x1="0" y1="0" x2="0" y2="1">
+                                                                <stop offset="5%" stopColor="#f43f5e" stopOpacity={0.15} />
                                                                 <stop offset="95%" stopColor="#f43f5e" stopOpacity={0} />
                                                             </linearGradient>
-                                                            <linearGradient id="colorDia" x1="0" y1="0" x2="0" y2="1">
-                                                                <stop offset="5%" stopColor="#fbbf24" stopOpacity={0.3} />
-                                                                <stop offset="95%" stopColor="#fbbf24" stopOpacity={0} />
-                                                            </linearGradient>
                                                         </defs>
+                                                        <CartesianGrid strokeDasharray="6 6" vertical={false} stroke="#f1f5f9" />
+                                                        <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 10, fontWeight: 700 }} />
+                                                        <YAxis hide={true} />
+                                                        <Tooltip
+                                                            contentStyle={{ borderRadius: '24px', border: 'none', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.15)', padding: '20px' }}
+                                                            itemStyle={{ fontWeight: 'black', fontSize: '14px' }}
+                                                        />
+                                                        <Area type="monotone" dataKey="sys" stroke="#f43f5e" strokeWidth={5} fill="url(#colorSysRedesign)" />
                                                     </AreaChart>
                                                 </ResponsiveContainer>
                                             </div>
                                         </div>
 
-                                        {/* Risk Score Card */}
-                                        <div className="glass p-8 shadow-sm flex flex-col hover:border-brand-400/50 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer">
-                                            <h3 className="text-xl font-black text-slate-900 mb-2">Risk Score</h3>
-                                            <div className="flex-1 flex flex-col items-center justify-center py-4">
-                                                <div className="w-full max-w-[280px]">
-                                                    <GaugeChart
-                                                        id="risk-gauge-analytics"
-                                                        nrOfLevels={30}
-                                                        colors={['#10b981', '#f59e0b', '#ef4444']}
-                                                        arcWidth={0.15}
-                                                        percent={isDemoMode ? demoRiskPercent : (getRiskStatus(logs[0])?.score || 0.2)}
-                                                        textColor="#1e293b"
-                                                        needleColor="#94a3b8"
-                                                        needleBaseColor="#475569"
-                                                        hideText={true}
-                                                    />
+                                        {/* Risk Score Card - Redesigned */}
+                                        <div className="bg-white p-10 rounded-[3.5rem] border border-slate-100 shadow-[0_15px_40px_rgba(0,0,0,0.02)] hover:shadow-[0_40px_80px_rgba(0,0,0,0.06)] transition-all duration-500 flex flex-col items-center justify-center relative overflow-hidden">
+                                            <div className="absolute top-10 left-10">
+                                                <div className="flex items-center gap-2 mb-2">
+                                                    <div className="w-8 h-8 rounded-lg bg-brand-50 flex items-center justify-center text-brand-500">
+                                                        <Activity size={16} />
+                                                    </div>
+                                                    <p className="text-[10px] font-black text-brand-500 uppercase tracking-widest">Safety Index</p>
                                                 </div>
-                                                <div className="text-center -mt-6">
-                                                    <p className="text-4xl font-black text-slate-900">{isDemoMode ? demoRiskPercent.toFixed(2) : (getRiskStatus(logs[0])?.score || 0.2).toFixed(2)}</p>
-                                                    <p className="text-xs font-black text-slate-400 uppercase tracking-widest mt-1">Current Risk</p>
+                                                <h3 className="text-3xl font-black text-slate-900 tracking-tight">Risk Assessment</h3>
+                                            </div>
+                                            <div className="w-full max-w-[320px] mt-20">
+                                                <GaugeChart
+                                                    id="risk-gauge-analytics"
+                                                    nrOfLevels={30}
+                                                    colors={['#10b981', '#f59e0b', '#ef4444']}
+                                                    arcWidth={0.15}
+                                                    percent={isDemoMode ? demoRiskPercent : (getRiskStatus(logs[0])?.score || 0.2)}
+                                                    textColor="#1e293b"
+                                                    needleColor="#0f172a"
+                                                    needleBaseColor="#0f172a"
+                                                    hideText={true}
+                                                />
+                                            </div>
+                                            <div className="text-center -mt-8">
+                                                <p className="text-7xl font-black text-slate-900 tracking-tighter">
+                                                    {((isDemoMode ? demoRiskPercent : (getRiskStatus(logs[0])?.score || 0.2)) * 100).toFixed(0)}<span className="text-3xl text-slate-300 ml-1">%</span>
+                                                </p>
+                                                <div className="mt-4 px-6 py-2 bg-slate-950 text-white rounded-2xl text-xs font-black uppercase tracking-[0.25em] inline-block shadow-xl shadow-slate-200">
+                                                    {getRiskStatus(logs[0])?.label || 'Normal'} Stability
                                                 </div>
                                             </div>
                                         </div>
 
-                                        {/* Heart Rate Card */}
-                                        <div className="glass p-8 shadow-sm hover:border-brand-400/50 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer">
-                                            <div className="flex items-center justify-between mb-8">
-                                                <h3 className="text-xl font-black text-slate-900">Heart Rate</h3>
-                                                <Activity size={24} className="text-brand-600" />
+                                        {/* Heart Rate Card - Redesigned */}
+                                        <div className="bg-white p-10 rounded-[3.5rem] border border-slate-100 shadow-[0_15px_40px_rgba(0,0,0,0.02)] hover:shadow-[0_40px_80px_rgba(0,0,0,0.06)] transition-all duration-500 group relative">
+                                            <div className="flex items-start justify-between mb-10">
+                                                <div>
+                                                    <div className="flex items-center gap-2 mb-2">
+                                                        <div className="w-8 h-8 rounded-lg bg-teal-50 flex items-center justify-center text-teal-500">
+                                                            <Activity size={16} />
+                                                        </div>
+                                                        <p className="text-[10px] font-black text-teal-500 uppercase tracking-widest">Chronometry</p>
+                                                    </div>
+                                                    <h3 className="text-3xl font-black text-slate-900 tracking-tight">Heart Rate</h3>
+                                                </div>
+                                                <div className="text-right">
+                                                    <p className="text-5xl font-black text-slate-900 tracking-tighter tabular-nums">78<span className="text-xl text-slate-300 font-bold ml-1">bpm</span></p>
+                                                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Resting  Optimized</p>
+                                                </div>
                                             </div>
-                                            <div className="h-[200px] w-full rounded-2xl">
+                                            <div className="h-[200px] w-full">
                                                 <ResponsiveContainer width="100%" height="100%">
                                                     <LineChart data={weeklyTrends}>
-                                                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f8fafc" />
-                                                        <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fill: '#64748b', fontSize: 10, fontWeight: 700 }} />
-                                                        <YAxis axisLine={false} tickLine={false} tick={{ fill: '#64748b', fontSize: 10, fontWeight: 700 }} />
-                                                        <Tooltip contentStyle={{ borderRadius: '24px', border: 'none' }} />
-                                                        <Line type="monotone" dataKey="hr" stroke="#14b8a6" strokeWidth={4} dot={{ r: 4, fill: '#14b8a6', strokeWidth: 0 }} activeDot={{ r: 8, strokeWidth: 4, stroke: '#fff' }} />
+                                                        <CartesianGrid strokeDasharray="6 6" vertical={false} stroke="#f1f5f9" />
+                                                        <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 10, fontWeight: 700 }} />
+                                                        <YAxis hide={true} />
+                                                        <Tooltip contentStyle={{ borderRadius: '24px', border: 'none', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.15)' }} />
+                                                        <Line type="monotone" dataKey="hr" stroke="#14b8a6" strokeWidth={6} dot={false} activeDot={{ r: 10, strokeWidth: 5, stroke: '#fff', fill: '#14b8a6' }} />
                                                     </LineChart>
                                                 </ResponsiveContainer>
                                             </div>
                                         </div>
 
-                                        {/* Blood Sugar Card */}
-                                        <div className="glass p-8 shadow-sm hover:border-brand-400/50 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer">
-                                            <div className="flex items-center justify-between mb-8">
-                                                <h3 className="text-xl font-black text-slate-900">Blood Sugar</h3>
-                                                <Droplets size={24} className="text-indigo-500" />
+                                        {/* Blood Sugar Card - Redesigned */}
+                                        <div className="bg-white p-10 rounded-[3.5rem] border border-slate-100 shadow-[0_15px_40px_rgba(0,0,0,0.02)] hover:shadow-[0_40px_80px_rgba(0,0,0,0.06)] transition-all duration-500 group relative">
+                                            <div className="flex items-start justify-between mb-10">
+                                                <div>
+                                                    <div className="flex items-center gap-2 mb-2">
+                                                        <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-500">
+                                                            <Droplets size={16} fill="currentColor" />
+                                                        </div>
+                                                        <p className="text-[10px] font-black text-indigo-500 uppercase tracking-widest">Metabolic</p>
+                                                    </div>
+                                                    <h3 className="text-3xl font-black text-slate-900 tracking-tight">Glucose Level</h3>
+                                                </div>
+                                                <div className="text-right">
+                                                    <p className="text-5xl font-black text-slate-900 tracking-tighter tabular-nums">92<span className="text-xl text-slate-300 font-bold ml-1">mg/dL</span></p>
+                                                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Prenatal Target  95</p>
+                                                </div>
                                             </div>
-                                            <div className="h-[200px] w-full rounded-2xl">
+                                            <div className="h-[200px] w-full">
                                                 <ResponsiveContainer width="100%" height="100%">
                                                     <LineChart data={weeklyTrends}>
-                                                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f8fafc" />
-                                                        <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fill: '#64748b', fontSize: 10, fontWeight: 700 }} />
-                                                        <YAxis axisLine={false} tickLine={false} tick={{ fill: '#64748b', fontSize: 10, fontWeight: 700 }} />
-                                                        <Tooltip contentStyle={{ borderRadius: '24px', border: 'none' }} />
-                                                        <Line type="monotone" dataKey="g" stroke="#6366f1" strokeWidth={4} dot={{ r: 4, fill: '#6366f1', strokeWidth: 0 }} activeDot={{ r: 8, strokeWidth: 4, stroke: '#fff' }} />
+                                                        <CartesianGrid strokeDasharray="6 6" vertical={false} stroke="#f1f5f9" />
+                                                        <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 10, fontWeight: 700 }} />
+                                                        <YAxis hide={true} />
+                                                        <Tooltip contentStyle={{ borderRadius: '24px', border: 'none', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.15)' }} />
+                                                        <Line type="monotone" dataKey="g" stroke="#6366f1" strokeWidth={6} dot={false} activeDot={{ r: 10, strokeWidth: 5, stroke: '#fff', fill: '#6366f1' }} />
                                                     </LineChart>
                                                 </ResponsiveContainer>
                                             </div>
                                         </div>
 
-                                        <div className="glass p-8 shadow-sm hover:border-brand-400 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-                                            <h3 className="text-xl font-black text-slate-900 mb-8">Symptoms</h3>
-                                            <div className="space-y-5">
+                                        {/* Symptoms Card - Redesigned */}
+                                        <div className="bg-white p-10 rounded-[3.5rem] border border-slate-100 shadow-[0_15px_40px_rgba(0,0,0,0.02)] hover:shadow-[0_40px_80px_rgba(0,0,0,0.06)] transition-all duration-500">
+                                            <div className="flex items-center gap-3 mb-8">
+                                                <div className="w-10 h-10 rounded-xl bg-slate-950 text-white flex items-center justify-center">
+                                                    <Sparkles size={18} />
+                                                </div>
+                                                <h3 className="text-2xl font-black text-slate-900 tracking-tight">Symptoms Tracking</h3>
+                                            </div>
+                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                                 {[
-                                                    { id: 'swelling', label: 'Swelling' },
-                                                    { id: 'headache', label: 'Headache' },
-                                                    { id: 'vision', label: 'Blurry Vision' }
+                                                    { id: 'swelling', label: 'Peripheral Swelling' },
+                                                    { id: 'headache', label: 'Acute Headache' },
+                                                    { id: 'vision', label: 'Visual Disturbances' },
+                                                    { id: 'nausea', label: 'Persistent Nausea' }
                                                 ].map((s) => (
-                                                    <label key={s.id} className="flex items-center gap-4 cursor-pointer group">
+                                                    <label key={s.id} className="flex items-center gap-4 cursor-pointer group p-4 bg-slate-50 rounded-[1.5rem] border border-transparent hover:border-slate-200 hover:bg-white transition-all">
                                                         <div className="relative flex items-center justify-center">
                                                             <input
                                                                 type="checkbox"
@@ -2614,69 +2719,83 @@ const Dashboard = () => {
                                                             />
                                                             <CheckCircle2 size={16} className="absolute text-white scale-0 peer-checked:scale-100 transition-transform pointer-events-none" />
                                                         </div>
-                                                        <span className="text-base font-bold text-slate-600 peer-checked:text-slate-900 transition-colors">{s.label}</span>
+                                                        <span className="text-sm font-black text-slate-600 peer-checked:text-slate-900 transition-colors uppercase tracking-tight">{s.label}</span>
                                                     </label>
                                                 ))}
                                             </div>
                                         </div>
 
-                                        <div className="glass p-8 shadow-md border-brand-200 flex flex-col justify-between hover:border-brand-400 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                                        {/* Quick Actions Card - Redesigned */}
+                                        <div className="bg-slate-950 p-10 rounded-[3.5rem] text-white flex flex-col justify-between relative overflow-hidden group">
+                                            <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-700"></div>
                                             <div>
-                                                <h3 className="text-xl font-black text-slate-900 mb-2">Clinical Insights</h3>
-                                                <p className="text-sm text-slate-500 font-medium">Generate your latest health summary</p>
+                                                <h3 className="text-2xl font-black mb-2 tracking-tight">Clinical Decision Support</h3>
+                                                <p className="text-slate-400 text-sm font-medium">Execute comprehensive neurological and hemodynamic assessments.</p>
                                             </div>
 
-                                            <div className="mt-8">
+                                            <div className="mt-10 flex flex-col gap-3">
                                                 <button
                                                     onClick={handleGenerateReport}
                                                     disabled={isGeneratingReport}
-                                                    className="w-full py-5 bg-teal-600 text-white rounded-[1.5rem] font-bold text-lg hover:bg-teal-700 active:scale-95 transition-all shadow-xl shadow-teal-100/50 flex items-center justify-center gap-3 disabled:opacity-50"
+                                                    className="w-full h-16 bg-white text-slate-950 rounded-[1.5rem] font-black uppercase text-[10px] tracking-[0.2em] shadow-2xl shadow-black/20 flex items-center justify-center gap-3 hover:bg-slate-100 active:scale-95 transition-all"
                                                 >
                                                     {isGeneratingReport ? (
-                                                        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                                        <div className="w-5 h-5 border-2 border-slate-900/30 border-t-slate-900 rounded-full animate-spin" />
                                                     ) : <Activity size={20} />}
-                                                    {isGeneratingReport ? 'Generating...' : 'Generate Weekly Report'}
+                                                    {isGeneratingReport ? 'Processing Assessment...' : 'Generate Clinical Review'}
                                                 </button>
+                                                <div className="flex gap-3">
+                                                    <button className="flex-1 h-16 bg-white/10 rounded-[1.5rem] border border-white/10 font-bold text-xs hover:bg-white/20 transition-all">Protocol Guide</button>
+                                                    <button className="flex-1 h-16 bg-white/10 rounded-[1.5rem] border border-white/10 font-bold text-xs hover:bg-white/20 transition-all">Peer Review</button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
 
-                                    {/* Clinical Insight Banner - Redesigned */}
-                                    <div className="bg-[linear-gradient(to_bottom,#6A4C93,#7C5BB3,#8E6BBF)] text-white rounded-[3.5rem] p-12 relative overflow-hidden shadow-2xl mt-8">
-                                        <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-12">
-                                            <div className="max-w-xl">
-                                                <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 text-brand-300 rounded-2xl border border-teal-500/20 mb-6">
-                                                    <Sparkles size={16} />
-                                                    <span className="text-xs font-black uppercase tracking-widest">AI Clinical Insight</span>
+
+                                    {/* Clinical Insight Banner - High-End Medical AI */}
+                                    <div className="bg-[linear-gradient(135deg,#0f172a_0%,#1e293b_100%)] text-white rounded-[4rem] p-12 relative overflow-hidden shadow-2xl mt-12 group">
+                                        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-teal-500/10 rounded-full -mr-64 -mt-64 blur-[100px] group-hover:bg-teal-500/20 transition-all duration-1000"></div>
+                                        <div className="relative z-10 flex flex-col xl:flex-row items-center justify-between gap-12">
+                                            <div className="max-w-2xl">
+                                                <div className="inline-flex items-center gap-3 px-5 py-2.5 bg-white/5 backdrop-blur-md text-teal-400 rounded-2xl border border-white/10 mb-8">
+                                                    <div className="relative">
+                                                        <Sparkles size={18} />
+                                                        <div className="absolute top-0 right-0 w-2 h-2 bg-teal-400 rounded-full animate-ping"></div>
+                                                    </div>
+                                                    <span className="text-xs font-black uppercase tracking-[0.2em]">Clinical Stability Index</span>
                                                 </div>
-                                                <h3 className="text-4xl font-black mb-6 leading-tight">Patient Stability Index</h3>
-                                                <p className="text-white opacity-90 text-lg font-medium leading-relaxed">
+                                                <h3 className="text-5xl font-black mb-8 leading-[1.1] tracking-tight text-white">
+                                                    Intelligent Clinical <br />
+                                                    <span className="text-teal-400">Insight Analytics</span>
+                                                </h3>
+                                                <p className="text-slate-300 text-xl font-medium leading-relaxed">
                                                     {logs.length > 0 ? (
                                                         getRiskStatus(logs[0]).level === 'normal'
-                                                            ? "Current vital indicators show high stability. Monitoring should continue at the current frequency with standard prenatal precautions."
-                                                            : "Recent variance in vitals detected. Analytical markers suggest closer monitoring of blood pressure trends over the next 48 hours."
-                                                    ) : "Please input clinical logs to initialize the patient stability analysis engine."}
+                                                            ? "Current neural telemetry demonstrates optimal maternal stability. Predictive modeling suggests maintaining the current clinical protocol with standard prenatal vigilance."
+                                                            : "Heuristic variance in hemodynamic markers detected. Computational analysis indicates a priority requirement for closer observation of hypertensive trends over the next 48-hour cycle."
+                                                    ) : "Initialize clinical log stream to activate the Maatri Shield predictive stability engine."}
                                                 </p>
                                             </div>
-                                            <div className="flex gap-6">
-                                                <div className="bg-white/5 backdrop-blur-xl p-8 rounded-[2.5rem] border border-white/10 text-center min-w-[180px]">
-                                                    <div className="w-12 h-12 bg-teal-500/20 rounded-2xl flex items-center justify-center mx-auto mb-4 text-brand-300">
-                                                        <CheckCircle2 size={24} />
+                                            <div className="flex flex-col sm:flex-row gap-6 w-full xl:w-auto">
+                                                <div className="bg-white/5 backdrop-blur-2xl p-10 rounded-[3rem] border border-white/10 text-center min-w-[220px] shadow-2xl">
+                                                    <div className="w-14 h-14 bg-teal-500/20 rounded-2xl flex items-center justify-center mx-auto mb-6 text-teal-400">
+                                                        <CheckCircle2 size={28} />
                                                     </div>
-                                                    <p className="text-[10px] uppercase font-black tracking-[0.2em] text-white/50 mb-2">Weekly Goal</p>
-                                                    <p className="text-3xl font-black">92%</p>
+                                                    <p className="text-[10px] uppercase font-black tracking-[0.3em] text-slate-400 mb-2">Protocol Goal</p>
+                                                    <p className="text-4xl font-black text-white">92.4%</p>
                                                 </div>
-                                                <div className="bg-white/5 backdrop-blur-xl p-8 rounded-[2.5rem] border border-white/10 text-center min-w-[180px]">
-                                                    <div className="w-12 h-12 bg-indigo-500/20 rounded-2xl flex items-center justify-center mx-auto mb-4 text-indigo-400">
-                                                        <TrendingUp size={24} />
+                                                <div className="bg-white/5 backdrop-blur-2xl p-10 rounded-[3rem] border border-white/10 text-center min-w-[220px] shadow-2xl">
+                                                    <div className="w-14 h-14 bg-brand-500/20 rounded-2xl flex items-center justify-center mx-auto mb-6 text-brand-400">
+                                                        <TrendingUp size={28} />
                                                     </div>
-                                                    <p className="text-[10px] uppercase font-black tracking-[0.2em] text-white/50 mb-2">Stability</p>
-                                                    <p className="text-3xl font-black">High</p>
+                                                    <p className="text-[10px] uppercase font-black tracking-[0.3em] text-slate-400 mb-2">Stability Grade</p>
+                                                    <p className="text-4xl font-black text-white">Alpha</p>
                                                 </div>
                                             </div>
                                         </div>
-                                        <Sparkles className="absolute -right-20 -bottom-20 w-80 h-80 text-white/5 rotate-12" />
                                     </div>
+
                                 </div>
                             )}
                         </motion.div>
@@ -2685,25 +2804,25 @@ const Dashboard = () => {
 
                 {
                     activeTab === 'patients-list' && role === 'doctor' && (
-                        <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} className="space-y-8 pb-12">
-                            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-10 pb-12">
+                            <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-8">
                                 <div>
-                                    <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 mb-2">Patient Directory</h2>
-                                    <p className="text-slate-500">Registry of all connected patients and their reported risk levels.</p>
+                                    <h2 className="text-4xl font-black tracking-tight text-slate-900 mb-2">Patient Registry</h2>
+                                    <p className="text-slate-500 font-medium">Comprehensive clinical directory of all connected patient accounts.</p>
                                 </div>
-                                <div className="flex bg-white/50 backdrop-blur-sm p-1.5 rounded-2xl border border-slate-200">
+                                <div className="flex bg-slate-100/50 backdrop-blur-md p-1.5 rounded-[1.5rem] border border-slate-200/50">
                                     {[
-                                        { id: 'all', label: 'All' },
-                                        { id: 'urgent', label: 'High Risk', color: 'text-rose-600' },
-                                        { id: 'help', label: 'Moderate', color: 'text-amber-600' },
-                                        { id: 'normal', label: 'Normal', color: 'text-brand-600' }
+                                        { id: 'all', label: 'All Cases' },
+                                        { id: 'urgent', label: 'Critical', color: 'text-rose-600' },
+                                        { id: 'help', label: 'Elevated', color: 'text-amber-600' },
+                                        { id: 'normal', label: 'Optimal', color: 'text-teal-600' }
                                     ].map(f => (
                                         <button
                                             key={f.id}
                                             onClick={() => setPatientFilter(f.id)}
-                                            className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all ${patientFilter === f.id
-                                                ? 'bg-slate-900 text-white shadow-lg'
-                                                : `text-slate-400 hover:text-slate-600`
+                                            className={`px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all ${patientFilter === f.id
+                                                ? 'bg-slate-900 text-white shadow-xl'
+                                                : `text-slate-400 hover:text-slate-600 hover:bg-white/50`
                                                 }`}
                                         >
                                             {f.label}
@@ -2712,7 +2831,7 @@ const Dashboard = () => {
                                 </div>
                             </div>
 
-                            <div className="flex flex-col gap-4">
+                            <div className="grid grid-cols-1 gap-6">
                                 {patients
                                     .filter(p => {
                                         if (patientFilter === 'all') return true;
@@ -2722,74 +2841,85 @@ const Dashboard = () => {
                                     .map((p) => {
                                         const pData = patientHealthData[p.email] || { latestLog: null, risk: getRiskStatus(null) };
                                         const risk = pData.risk;
+                                        const isSelected = selectedPatient?.email === p.email;
+                                        
                                         return (
-                                            <div key={p.email} className="relative group/card">
+                                            <div key={p.email} className="group relative">
                                                 <button
                                                     onClick={() => handleSelectPatient(p)}
-                                                    className={`p-6 rounded-[2rem] text-left transition-all border-2 w-full flex flex-col md:flex-row items-center gap-6 shadow-sm hover:shadow-xl ${selectedPatient?.email === p.email
-                                                        ? 'bg-brand-600 text-white border-brand-600 shadow-brand-100'
-                                                        : 'bg-white text-slate-600 border-white shadow-slate-200/30'
+                                                    className={`w-full p-8 rounded-[3rem] text-left transition-all duration-500 border-2 flex flex-col xl:flex-row items-center gap-8 shadow-sm hover:shadow-[0_30px_60px_rgba(0,0,0,0.06)] ${isSelected
+                                                        ? 'bg-slate-900 text-white border-slate-900 shadow-xl'
+                                                        : 'bg-white text-slate-600 border-slate-50 hover:border-slate-100'
                                                         }`}
                                                 >
-                                                    <div className="flex items-center gap-6 flex-1 w-full">
-                                                        <div className={`w-16 h-16 rounded-2xl flex-shrink-0 flex items-center justify-center text-2xl font-black border-2 ${selectedPatient?.email === p.email ? 'bg-white/20 text-white border-white/40' : 'bg-brand-50 text-brand-600 border-brand-100 shadow-inner'} overflow-hidden`}>
+                                                    <div className="flex items-center gap-8 flex-1 w-full">
+                                                        <div className={`w-20 h-20 rounded-[2rem] flex-shrink-0 flex items-center justify-center text-3xl font-black border-2 transition-transform duration-500 group-hover:scale-105 ${isSelected ? 'bg-white/10 text-white border-white/20' : 'bg-slate-50 text-slate-400 border-slate-100 shadow-inner'} overflow-hidden`}>
                                                             {p.photo ? <img src={p.photo} alt={p.name} className="w-full h-full object-cover" /> : (p.name?.[0]?.toUpperCase() || 'P')}
                                                         </div>
                                                         <div className="flex-1 min-w-0">
-                                                            <div className="flex items-center gap-3 mb-1">
-                                                                <p className="font-black text-xl leading-tight truncate">{p.name || 'Anonymous'}</p>
-                                                                <div className={`px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider ${selectedPatient?.email === p.email
-                                                                    ? 'bg-white/20 text-white'
-                                                                    : `${risk.bg} ${risk.color} border ${risk.border}`
+                                                            <div className="flex flex-wrap items-center gap-4 mb-2">
+                                                                <p className="font-black text-2xl leading-tight truncate tracking-tight">{p.name || 'Anonymous Patient'}</p>
+                                                                <div className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-[0.2em] border ${isSelected
+                                                                    ? 'bg-white/10 text-white border-white/20'
+                                                                    : `${risk.bg} ${risk.color} ${risk.border}`
                                                                     }`}>
                                                                     {risk.label}
                                                                 </div>
                                                             </div>
-                                                            <p className={`text-sm font-medium ${selectedPatient?.email === p.email ? 'text-brand-100' : 'text-slate-400'}`}>
-                                                                Registry ID: {p.email} � Age {p.age} � {p.pregnancyType}
-                                                            </p>
+                                                            <div className="flex flex-wrap items-center gap-4">
+                                                                <span className={`text-xs font-bold flex items-center gap-1.5 ${isSelected ? 'text-slate-400' : 'text-slate-400'}`}>
+                                                                    <div className={`w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-teal-400' : 'bg-teal-500'}`}></div>
+                                                                    #{p.email.split('@')[0].toUpperCase()}
+                                                                </span>
+                                                                <span className={`text-xs font-bold ${isSelected ? 'text-slate-400' : 'text-slate-400'}`}>
+                                                                    • {p.age} Years
+                                                                </span>
+                                                                <span className={`text-xs font-bold ${isSelected ? 'text-slate-400' : 'text-slate-400'}`}>
+                                                                    • {p.pregnancyType}
+                                                                </span>
+                                                            </div>
                                                         </div>
                                                     </div>
 
-                                                    <div className="flex items-center gap-8 px-6 border-l border-slate-100 h-10">
+                                                    <div className={`flex flex-wrap items-center justify-between xl:justify-end gap-10 w-full xl:w-auto px-8 xl:border-l ${isSelected ? 'border-white/10' : 'border-slate-100'}`}>
                                                         <div className="text-center">
-                                                            <p className={`text-[10px] font-black uppercase tracking-widest ${selectedPatient?.email === p.email ? 'text-brand-200' : 'text-slate-400'}`}>Latest HR</p>
-                                                            <p className="font-bold text-lg">{pData.latestLog?.heartRate || '--'} <span className="text-[10px] opacity-70">bpm</span></p>
+                                                            <p className={`text-[10px] font-black uppercase tracking-[0.2em] mb-2 ${isSelected ? 'text-slate-500' : 'text-slate-400'}`}>Heart Rate</p>
+                                                            <p className="font-black text-2xl tabular-nums">{pData.latestLog?.heartRate || '--'}<span className="text-[10px] ml-1 opacity-50 uppercase font-black">bpm</span></p>
                                                         </div>
                                                         <div className="text-center">
-                                                            <p className={`text-[10px] font-black uppercase tracking-widest ${selectedPatient?.email === p.email ? 'text-brand-200' : 'text-slate-400'}`}>BP Gauge</p>
-                                                            <p className="font-bold text-lg">{pData.latestLog ? `${pData.latestLog.systolic}/${pData.latestLog.diastolic}` : '--/--'}</p>
+                                                            <p className={`text-[10px] font-black uppercase tracking-[0.2em] mb-2 ${isSelected ? 'text-slate-500' : 'text-slate-400'}`}>Blood Pressure</p>
+                                                            <p className="font-black text-2xl tabular-nums">{pData.latestLog ? `${pData.latestLog.systolic}/${pData.latestLog.diastolic}` : '--/--'}</p>
                                                         </div>
-                                                        <div className="hidden lg:block text-center">
-                                                            <p className={`text-[10px] font-black uppercase tracking-widest ${selectedPatient?.email === p.email ? 'text-brand-200' : 'text-slate-400'}`}>Last Assessment</p>
-                                                            <p className="font-bold text-lg">{pData.latestLog ? new Date(pData.latestLog.timestamp).toLocaleDateString([], { month: 'short', day: 'numeric' }) : 'Never'}</p>
+                                                        <div className="hidden sm:block text-right">
+                                                            <p className={`text-[10px] font-black uppercase tracking-[0.2em] mb-2 ${isSelected ? 'text-slate-500' : 'text-slate-400'}`}>Last Sync</p>
+                                                            <p className="font-black text-xl">{pData.latestLog ? new Date(pData.latestLog.timestamp).toLocaleDateString([], { month: 'short', day: 'numeric' }) : 'Pending'}</p>
                                                         </div>
-                                                    </div>
-
-                                                    <div className={`ml-4 p-3 rounded-2xl ${selectedPatient?.email === p.email ? 'bg-white/20 text-white' : 'bg-slate-50 text-slate-400 group-hover/card:bg-brand-50 group-hover/card:text-brand-600'} transition-all`}>
-                                                        <ChevronRight size={20} />
+                                                        <div className={`p-4 rounded-[1.5rem] transition-all duration-300 ${isSelected ? 'bg-white text-slate-950 shadow-xl' : 'bg-slate-50 text-slate-400 group-hover:bg-slate-900 group-hover:text-white'}`}>
+                                                            <ChevronRight size={20} />
+                                                        </div>
                                                     </div>
                                                 </button>
-                                                <div className="absolute right-4 top-4 flex flex-col gap-2 z-10 opacity-0 group-hover/card:opacity-100 transition-all group-hover/card:translate-x-0 translate-x-4">
+                                                
+                                                <div className="absolute top-1/2 -right-4 -translate-y-1/2 flex flex-col gap-3 z-20 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 translate-x-4 transition-all duration-500">
                                                     <button
                                                         onClick={(e) => {
                                                             e.stopPropagation();
                                                             openChat(p);
                                                         }}
-                                                        className={`p-3 rounded-2xl shadow-xl border border-slate-200 bg-white text-blue-500 hover:scale-110 active:scale-95 transition-all`}
-                                                        title="Open Chat"
+                                                        className="w-14 h-14 bg-white text-blue-500 rounded-2xl shadow-2xl border border-slate-100 flex items-center justify-center hover:scale-110 active:scale-95 transition-all group/btn"
+                                                        title="Secure Message"
                                                     >
-                                                        <MessageSquare size={16} />
+                                                        <MessageSquare size={20} className="group-hover/btn:rotate-12 transition-transform" />
                                                     </button>
                                                     <button
                                                         onClick={(e) => {
                                                             e.stopPropagation();
                                                             handleRemovePatient(p.email);
                                                         }}
-                                                        className={`p-3 rounded-2xl shadow-xl border border-slate-200 bg-white text-slate-400 hover:text-red-500 hover:scale-110 active:scale-95 transition-all`}
-                                                        title="Remove Patient"
+                                                        className="w-14 h-14 bg-white text-rose-500 rounded-2xl shadow-2xl border border-slate-100 flex items-center justify-center hover:scale-110 active:scale-95 transition-all group/btn"
+                                                        title="Terminate Care"
                                                     >
-                                                        <Trash2 size={16} />
+                                                        <Trash2 size={20} className="group-hover/btn:scale-110 transition-transform" />
                                                     </button>
                                                 </div>
                                             </div>
@@ -2797,10 +2927,12 @@ const Dashboard = () => {
                                     })}
 
                                 {patients.length === 0 && (
-                                    <div className="col-span-full py-20 text-center bg-white/50 rounded-[3rem] border-2 border-dashed border-slate-200">
-                                        <UsersIcon size={48} className="mx-auto mb-4 text-slate-200" />
-                                        <p className="text-slate-400 font-bold">Your patient directory is empty.</p>
-                                        <p className="text-slate-300 text-sm mt-1">Accept connection requests in the notification panel.</p>
+                                    <div className="py-24 text-center bg-white rounded-[4rem] border-4 border-dashed border-slate-50 flex flex-col items-center justify-center">
+                                        <div className="w-24 h-24 bg-slate-50 rounded-full flex items-center justify-center text-slate-200 mb-8">
+                                            <UsersIcon size={48} />
+                                        </div>
+                                        <h3 className="text-2xl font-black text-slate-400 mb-2">No Clinical Records Found</h3>
+                                        <p className="text-slate-300 font-medium max-w-xs mx-auto">Patient connections will appear here once care links are established.</p>
                                     </div>
                                 )}
                             </div>
