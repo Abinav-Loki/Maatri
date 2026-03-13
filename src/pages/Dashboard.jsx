@@ -239,9 +239,13 @@ const Dashboard = () => {
             const now = new Date();
             const last7Days = [];
 
-            for (let i = 6; i >= 0; i--) {
-                const d = new Date();
-                d.setDate(now.getDate() - i);
+            const sunday = new Date(now);
+            sunday.setDate(now.getDate() - now.getDay());
+            sunday.setHours(0, 0, 0, 0);
+
+            for (let i = 0; i < 7; i++) {
+                const d = new Date(sunday);
+                d.setDate(sunday.getDate() + i);
                 last7Days.push({
                     day: days[d.getDay()],
                     fullDate: d.toDateString(),
@@ -2585,9 +2589,10 @@ const Dashboard = () => {
                                                             dataKey="day" 
                                                             axisLine={false} 
                                                             tickLine={false} 
-                                                            tick={{ fill: '#94a3b8', fontSize: 10, fontWeight: 800 }} 
+                                                            tick={{ fill: '#1e293b', fontSize: 11, fontWeight: 900 }} 
                                                         />
-                                                        <YAxis hide={false} domain={['dataMin - 10', 'dataMax + 10']} tick={{ fill: '#94a3b8', fontSize: 10, fontWeight: 800 }} axisLine={false} tickLine={false} />
+                                                        <YAxis hide={false} domain={['dataMin - 10', 'dataMax + 10']} tick={{ fill: '#1e293b', fontSize: 11, fontWeight: 900 }} axisLine={false} tickLine={false} />
+                                                        <Legend verticalAlign="top" height={36} iconType="circle" wrapperStyle={{ fontWeight: 'black', textTransform: 'uppercase', fontSize: '10px', letterSpacing: '0.1em' }} />
                                                         <Tooltip
                                                             cursor={{ stroke: '#f43f5e', strokeWidth: 2, strokeDasharray: '5 5' }}
                                                             contentStyle={{ 
@@ -2603,6 +2608,7 @@ const Dashboard = () => {
                                                         <Area 
                                                             type="monotone" 
                                                             dataKey="sys" 
+                                                            name="Systolic (SYS)"
                                                             stroke="#f43f5e" 
                                                             strokeWidth={4} 
                                                             fill="url(#colorSysRedesign)" 
@@ -2615,6 +2621,7 @@ const Dashboard = () => {
                                                         <Area 
                                                             type="monotone" 
                                                             dataKey="dia" 
+                                                            name="Diastolic (DIA)"
                                                             stroke="#f43f5e" 
                                                             strokeWidth={2} 
                                                             strokeDasharray="5 5"
@@ -2714,9 +2721,9 @@ const Dashboard = () => {
                                                             dataKey="day" 
                                                             axisLine={false} 
                                                             tickLine={false} 
-                                                            tick={{ fill: '#94a3b8', fontSize: 10, fontWeight: 800 }} 
+                                                            tick={{ fill: '#1e293b', fontSize: 11, fontWeight: 900 }} 
                                                         />
-                                                        <YAxis hide={false} domain={['dataMin - 5', 'dataMax + 5']} tick={{ fill: '#94a3b8', fontSize: 10, fontWeight: 800 }} axisLine={false} tickLine={false} />
+                                                        <YAxis hide={false} domain={['dataMin - 5', 'dataMax + 5']} tick={{ fill: '#1e293b', fontSize: 11, fontWeight: 900 }} axisLine={false} tickLine={false} />
                                                         <Tooltip 
                                                             contentStyle={{ 
                                                                 borderRadius: '20px', 
@@ -2729,6 +2736,7 @@ const Dashboard = () => {
                                                         <Line 
                                                             type="monotone" 
                                                             dataKey="hr" 
+                                                            name="Pulse Rate (BPM)"
                                                             stroke="#14b8a6" 
                                                             strokeWidth={5} 
                                                             dot={{ r: 4, fill: '#14b8a6', strokeWidth: 0 }} 
@@ -2786,9 +2794,9 @@ const Dashboard = () => {
                                                             dataKey="day" 
                                                             axisLine={false} 
                                                             tickLine={false} 
-                                                            tick={{ fill: '#94a3b8', fontSize: 10, fontWeight: 800 }} 
+                                                            tick={{ fill: '#1e293b', fontSize: 11, fontWeight: 900 }} 
                                                         />
-                                                        <YAxis hide={false} domain={['dataMin - 5', 'dataMax + 5']} tick={{ fill: '#94a3b8', fontSize: 10, fontWeight: 800 }} axisLine={false} tickLine={false} />
+                                                        <YAxis hide={false} domain={['dataMin - 5', 'dataMax + 5']} tick={{ fill: '#1e293b', fontSize: 11, fontWeight: 900 }} axisLine={false} tickLine={false} />
                                                         <Tooltip 
                                                             contentStyle={{ 
                                                                 borderRadius: '20px', 
@@ -2801,6 +2809,7 @@ const Dashboard = () => {
                                                         <Line 
                                                             type="monotone" 
                                                             dataKey="g" 
+                                                            name="Blood Glucose (mg/dL)"
                                                             stroke="#6366f1" 
                                                             strokeWidth={4} 
                                                             dot={{ r: 4, fill: '#6366f1', strokeWidth: 2, stroke: '#fff' }} 
