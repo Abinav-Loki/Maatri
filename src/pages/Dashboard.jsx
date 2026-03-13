@@ -72,6 +72,7 @@ const Dashboard = () => {
     const [callStatus, setCallStatus] = useState('idle'); // 'idle', 'ringing', 'connected'
     const [incomingCall, setIncomingCall] = useState(null);
     const [connectedPartners, setConnectedPartners] = useState([]);
+    const [isDeleteChatConfirmOpen, setIsDeleteChatConfirmOpen] = useState(false);
     const [patientHealthData, setPatientHealthData] = useState({}); // { email: { latestLog, risk } }
     const [searchStatuses, setSearchStatuses] = useState({}); // { email: status }
     const [clinicalNotifications, setClinicalNotifications] = useState([]);
@@ -1019,12 +1020,18 @@ const Dashboard = () => {
         }
     };
 
-    const handleDeleteClinicalChat = async () => {
-        if (window.confirm(`Delete all messages with ${activeChatPartner.name}? This cannot be undone.`)) {
-            await storage.clearMessages(currentUser.email, activeChatPartner.email);
-            setChatMessages([]);
-            alert("Chat history deleted.");
-        }
+    const handleDeleteClinicalChat = () => {
+        setIsDeleteChatConfirmOpen(true);
+    };
+
+    const confirmDeleteChat = async () => {
+        if (!activeChatPartner || !currentUser) return;
+        await storage.clearMessages(currentUser.email, activeChatPartner.email);
+        setChatMessages([]);
+        setConnectedPartners(prev => prev.filter(p => p.email !== activeChatPartner.email));
+        setIsDeleteChatConfirmOpen(false);
+        setIsChatOpen(false);
+        setActiveChatPartner(null);
     };
 
     const handleDeleteMessage = async (messageId) => {
@@ -4147,6 +4154,50 @@ const Dashboard = () => {
                         </div>
                     )
                 }
+
+                {/* Delete Chat Confirmation Modal */}
+                <AnimatePresence>
+                    {isDeleteChatConfirmOpen && activeChatPartner && (
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="fixed inset-0 z-[110] flex items-center justify-center p-6 bg-slate-900/60 backdrop-blur-sm"
+                        >
+                            <motion.div
+                                initial={{ scale: 0.9, opacity: 0, y: 20 }}
+                                animate={{ scale: 1, opacity: 1, y: 0 }}
+                                exit={{ scale: 0.9, opacity: 0, y: 20 }}
+                                className="bg-white w-full max-w-sm rounded-3xl p-8 shadow-2xl"
+                            >
+                                <div className="flex flex-col items-center text-center">
+                                    <div className="w-16 h-16 bg-rose-50 rounded-2xl flex items-center justify-center mb-5 text-rose-500">
+                                        <Trash2 size={28} />
+                                    </div>
+                                    <h3 className="text-xl font-black text-slate-900 mb-2">Delete Conversation?</h3>
+                                    <p className="text-slate-500 text-sm mb-1">
+                                        All messages with <span className="font-bold text-slate-700">{activeChatPartner.name}</span> will be permanently deleted.
+                                    </p>
+                                    <p className="text-xs text-rose-400 font-bold uppercase tracking-widest mb-8">This cannot be undone.</p>
+                                    <div className="flex gap-3 w-full">
+                                        <button
+                                            onClick={() => setIsDeleteChatConfirmOpen(false)}
+                                            className="flex-1 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-2xl transition-colors"
+                                        >
+                                            Cancel
+                                        </button>
+                                        <button
+                                            onClick={confirmDeleteChat}
+                                            className="flex-1 py-3.5 bg-rose-500 hover:bg-rose-600 active:scale-95 text-white font-bold rounded-2xl transition-all shadow-lg shadow-rose-200"
+                                        >
+                                            Delete All
+                                        </button>
+                                    </div>
+                                </div>
+                            </motion.div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
 
                 {
                     isCalling && (
