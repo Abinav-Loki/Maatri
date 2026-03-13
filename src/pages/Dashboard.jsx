@@ -207,7 +207,7 @@ const Dashboard = () => {
     const handleAutoEmergencySOS = async (vitals) => {
         if (isSOSTriggered) return;
         setIsSOSTriggered(true);
-        const msg = `?? EMERGENCY: Maatri Shield detected critical vitals (BP: ${vitals.sys}/${vitals.dia}). Location: ${currentUser?.address || 'Saved Home Address'}. Help is being dispatched.`;
+        const msg = `EMERGENCY: Maatri Shield detected critical vitals (BP: ${vitals.sys}/${vitals.dia}). Location: ${currentUser?.address || 'Saved Home Address'}. Help is being dispatched.`;
 
         // Browser notification
         browserNotifications.send("CRITICAL EMERGENCY", msg);
@@ -220,8 +220,8 @@ const Dashboard = () => {
             twilioMock.sendSMS(currentUser.mobile, msg);
         }
         if (currentUser?.emergencyContact) {
-            twilioMock.sendSMS(currentUser.emergencyContact, `?? EMERGENCY ALERT for ${currentUser.name}: Critical vitals detected. ${msg}`);
-            twilioMock.sendWhatsApp(currentUser.emergencyContact, `?? EMERGENCY: ${currentUser.name} needs immediate help. Live Location: https://maps.google.com/?q=current+location. [ REPLY 'SAFE' TO CANCEL ]`);
+            twilioMock.sendSMS(currentUser.emergencyContact, `EMERGENCY ALERT for ${currentUser.name}: Critical vitals detected. ${msg}`);
+            twilioMock.sendWhatsApp(currentUser.emergencyContact, `EMERGENCY: ${currentUser.name} needs immediate help. Live Location: https://maps.google.com/?q=current+location. [ REPLY 'SAFE' TO CANCEL ]`);
         }
 
         const updated = await storage.getNotifications(currentUser.email);
@@ -594,7 +594,7 @@ const Dashboard = () => {
                 if (existingLogs.length > 0) {
                     const lastWater = await storage.getLastWaterReminder(currentUser.email);
                     if (!lastWater || (now - new Date(lastWater.timestamp)) > 7200000) {
-                        const message = "?? Time for your hydration! Staying consistent helps keep your Maatri Shield score in the green.";
+                        const message = "Time for your hydration! Staying consistent helps keep your Maatri Shield score in the green.";
                         await storage.addNotification(currentUser.email, 'water', message);
                         browserNotifications.send("Hydration Alert", message);
                         if (currentUser?.mobile) {
@@ -610,7 +610,7 @@ const Dashboard = () => {
                     const medTimes = currentUser.medicineTimes.split(',').map(t => t.trim());
 
                     if (medTimes.includes(currentHourMin)) {
-                        const message = "?? Time for your medicine! Staying consistent helps keep your Maatri Shield score in the green.";
+                        const message = "Time for your medicine! Staying consistent helps keep your Maatri Shield score in the green.";
                         // Avoid duplicates if checked multiple times in the same minute
                         const recentNotes = await storage.getNotifications(currentUser.email);
                         const isAlreadyNotified = recentNotes.some(n => n.type === 'medicine' && (now - new Date(n.timestamp)) < 120000);
@@ -736,7 +736,7 @@ const Dashboard = () => {
 
         setIsSOSTriggered(true);
         try {
-            const msg = `?? EMERGENCY: ${currentUser.name} is requesting immediate help via SOS Trigger.`;
+            const msg = `EMERGENCY: ${currentUser.name} is requesting immediate help via SOS Trigger.`;
             await storage.addSOS(currentUser.email, currentUser.name);
 
             // Twilio Alerts
@@ -869,7 +869,7 @@ const Dashboard = () => {
             await storage.saveMessage({
                 from: currentUser.email,
                 to: activeChatPartner.email,
-                text: `?? Started a ${type} call`,
+                text: `Started a ${type} call`,
                 type: 'call_log',
                 callType: type
             });
@@ -965,14 +965,16 @@ const Dashboard = () => {
 
                 // Send confirmation notifications via Twilio Mock
                 if (fixedForm.mobile) {
-                    const msg = `? Hello ${fixedForm.name || 'User'}, your Maatri Shield profile has been updated successfully. Your mobile notifications are now active.`;
+                    const msg = `Hello ${fixedForm.name || 'User'}, your Maatri Shield profile has been updated successfully. Your mobile notifications are now active.`;
+                    await storage.addNotification(currentUser.email, 'Profile Alert', msg);
                     twilioMock.sendSMS(fixedForm.mobile, msg);
                     twilioMock.sendWhatsApp(fixedForm.mobile, msg);
                 }
                 if (fixedForm.emergencyContact) {
-                    const msg = `?? Alert: You have been set as the Emergency Contact for ${fixedForm.name || 'a Maatri Shield user'}. You will receive alerts in case of clinical emergencies.`;
-                    twilioMock.sendSMS(fixedForm.emergencyContact, msg);
-                    twilioMock.sendWhatsApp(fixedForm.emergencyContact, msg);
+                    // Also notify emergency contact
+                    const msg2 = `Alert: You have been set as the Emergency Contact for ${fixedForm.name || 'a Maatri Shield user'}. You will receive alerts in case of clinical emergencies.`;
+                    twilioMock.sendSMS(fixedForm.emergencyContact, msg2);
+                    twilioMock.sendWhatsApp(fixedForm.emergencyContact, msg2);
                 }
 
                 alert('Profile updated successfully!');
@@ -1019,7 +1021,7 @@ const Dashboard = () => {
             await storage.saveAiHistory(currentUser.email, finalHistory);
         } catch (error) {
             console.error("Dashboard AI Error:", error);
-            const errorMsg = { role: 'model', parts: [{ text: "?? **System Error**: Something went wrong while processing your request. Please try again or refresh the page." }] };
+            const errorMsg = { role: 'model', parts: [{ text: "**System Error**: Something went wrong while processing your request. Please try again or refresh the page." }] };
             setAiChatHistory([...updatedHistory, errorMsg]);
         } finally {
             setIsAiLoading(false);
@@ -1289,7 +1291,7 @@ const Dashboard = () => {
                 setAppointmentForm({ date: '', time: '', reason: '' });
 
                 // Send automated chat message
-                const chatMsg = `?? New Appointment Scheduled:\nDate: ${appointmentForm.date}\nTime: ${appointmentForm.time}\nReason: ${appointmentForm.reason}\n\nPlease be prepared for the consultation.`;
+                const chatMsg = `New Appointment Scheduled:\nDate: ${appointmentForm.date}\nTime: ${appointmentForm.time}\nReason: ${appointmentForm.reason}\n\nPlease be prepared for the consultation.`;
                 await storage.saveMessage({
                     from: currentUser.email,
                     to: selectedPatient.email,
@@ -1307,7 +1309,7 @@ const Dashboard = () => {
 
                 // Send External Telegram/SMS alert
                 if (selectedPatient.mobile) {
-                    const smsMsg = `??? MaatriShield Alert: Dr. ${currentUser.name} scheduled an appointment on ${appointmentForm.date} at ${appointmentForm.time}. Reason: ${appointmentForm.reason}.`;
+                    const smsMsg = `MaatriShield Alert: Dr. ${currentUser.name} scheduled an appointment on ${appointmentForm.date} at ${appointmentForm.time}. Reason: ${appointmentForm.reason}.`;
                     twilioMock.sendSMS(selectedPatient.mobile, smsMsg);
                     twilioMock.sendWhatsApp(selectedPatient.mobile, smsMsg); // Sends via telegram actually
                 }
@@ -1465,7 +1467,7 @@ const Dashboard = () => {
                                                 transition={{ duration: 0.6 }}
                                                 className="inline-flex items-center gap-1.5 bg-gradient-to-r from-brand-50 to-purple-50 text-brand-700 px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider border border-brand-100 shadow-sm"
                                             >
-                                                ?? Welcome, {currentUser?.name?.split(' ')[0] || 'Mama'}! Every journey starts with one step.
+                                                Welcome, {currentUser?.name?.split(' ')[0] || 'Mama'}! Every journey starts with one step.
                                             </motion.span>
                                         ) : (
                                             <>
@@ -1476,7 +1478,7 @@ const Dashboard = () => {
                                                     transition={{ repeat: Infinity, repeatType: "reverse", duration: 1.5 }}
                                                     className="inline-flex items-center gap-1 bg-gradient-to-r from-teal-100 to-emerald-100 text-teal-800 px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider border border-teal-200 shadow-sm"
                                                 >
-                                                    ? Healthy today, happy tomorrow
+                                                    Healthy today, happy tomorrow
                                                 </motion.span>
                                             </>
                                         )}
