@@ -518,21 +518,33 @@ const storage = {
      */
     getConnectedPartners: async (email, role) => {
         const activeEmail = email.toLowerCase();
+        const partnerEmails = new Set();
 
-        // Only look at message history — so the sidebar only shows people you've chatted with
+        // 1. Get partners from message history (people you've chatted with)
         const { data: messages, error: msgError } = await supabase
             .from('messages')
             .select('from_email, to_email')
             .or(`from_email.eq.${activeEmail},to_email.eq.${activeEmail}`);
 
-        if (msgError || !messages || messages.length === 0) return [];
+        if (!msgError && messages && messages.length > 0) {
+            messages.forEach(m => {
+                const other = m.from_email.toLowerCase() === activeEmail ? m.to_email : m.from_email;
+                partnerEmails.add(other.toLowerCase());
+            });
+        }
 
-        // Collect unique partner emails
-        const partnerEmails = new Set();
-        messages.forEach(m => {
-            const other = m.from_email.toLowerCase() === activeEmail ? m.to_email : m.from_email;
-            partnerEmails.add(other.toLowerCase());
-        });
+        // 2. If doctor, also explicitly include all authorized patients
+        if (role === 'doctor') {
+            const { data: connections, error: connError } = await supabase
+                .from('connections')
+                .select('from_email')
+                .eq('to_email', activeEmail)
+                .eq('status', 'accepted');
+
+            if (!connError && connections && connections.length > 0) {
+                connections.forEach(c => partnerEmails.add(c.from_email.toLowerCase()));
+            }
+        }
 
         if (partnerEmails.size === 0) return [];
 

@@ -1398,7 +1398,7 @@ const Dashboard = () => {
                             {activeTab === item.id && (
                                 <motion.div layoutId="activeNav" className="absolute left-[-4px] w-1 h-5 bg-brand-500 rounded-r-full shadow-[2px_0_10px_rgba(99,102,241,0.8)]" />
                             )}
-                            {item.id === 'notifications' && clinicalNotifications.filter(n => !n.read && (role !== 'doctor' || n.type !== 'water')).length > 0 && (
+                            {item.id === 'notifications' && clinicalNotifications.filter(n => !n.read && (role === 'patient' || n.type !== 'water')).length > 0 && (
                                 <span className="absolute top-3 right-3 w-1.5 h-1.5 bg-rose-500 rounded-full shadow-[0_0_10px_rgba(244,63,94,0.6)] animate-pulse"></span>
                             )}
                         </button>
@@ -1536,9 +1536,9 @@ const Dashboard = () => {
                                     className={`p-4 bg-white border border-slate-200 rounded-2xl text-slate-400 hover:text-brand-600 hover:shadow-xl hover:shadow-brand-500/10 transition-all relative ${clinicalNotifications.some(n => !n.read) ? 'text-brand-500 border-brand-200' : ''}`}
                                 >
                                     <Bell size={24} />
-                                    {clinicalNotifications.filter(n => !n.read && (role !== 'doctor' || n.type !== 'water')).length > 0 && (
+                                    {clinicalNotifications.filter(n => !n.read && (role === 'patient' || n.type !== 'water')).length > 0 && (
                                         <span className="absolute -top-1 -right-1 w-6 h-6 bg-rose-500 text-white text-[10px] font-black rounded-lg flex items-center justify-center border-2 border-white shadow-lg shadow-rose-500/20">
-                                            {clinicalNotifications.filter(n => !n.read && (role !== 'doctor' || n.type !== 'water')).length}
+                                            {clinicalNotifications.filter(n => !n.read && (role === 'patient' || n.type !== 'water')).length}
                                         </span>
                                     )}
                                 </button>
@@ -1968,7 +1968,7 @@ const Dashboard = () => {
                             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                                 <div className="space-y-4">
                                     {clinicalNotifications.length > 0 ? (
-                                        clinicalNotifications.filter(n => role !== 'doctor' || n.type !== 'water').map((n) => (
+                                        clinicalNotifications.filter(n => role === 'patient' || n.type !== 'water').map((n) => (
                                             <motion.div
                                                 key={n.id}
                                                 initial={{ opacity: 0, x: -20 }}
@@ -3118,8 +3118,8 @@ const Dashboard = () => {
                             </div>
 
                             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                                {/* Patient Selection Sidebar for Reports (Doctor Only) */}
-                                {role === 'doctor' && (
+                                {/* Patient Selection Sidebar for Reports (Doctor & Guardian) */}
+                                {(role === 'doctor' || role === 'guardian') && (
                                     <div className="lg:col-span-1 space-y-4">
                                         <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest px-2">Select Patient</h3>
                                         <div className="space-y-2 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
@@ -3146,8 +3146,8 @@ const Dashboard = () => {
                                 )}
 
                                 {/* Report Content Area */}
-                                <div className={`${role === 'doctor' ? 'lg:col-span-2' : 'lg:col-span-3'} space-y-8`}>
-                                    {role === 'doctor' && selectedPatient && (
+                                <div className={`${(role === 'doctor' || role === 'guardian') ? 'lg:col-span-2' : 'lg:col-span-3'} space-y-8`}>
+                                    {(role === 'doctor' || role === 'guardian') && selectedPatient && (
                                         <div className="flex items-center gap-3 pb-2 border-b border-slate-100">
                                             <button
                                                 onClick={() => setSelectedPatient(null)}
