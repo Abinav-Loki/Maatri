@@ -1307,7 +1307,7 @@ const Dashboard = () => {
 
             <aside className={`fixed w-64 bg-[#0f172a] h-screen flex flex-col py-8 px-4 z-50 transition-transform duration-300 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'} shadow-[4px_0_24px_rgba(0,0,0,0.15)] border-r border-white/5`}>
                 <div className="py-1 flex flex-col items-center gap-1 mb-8 text-center select-none shrink-0 border-b border-white/5 pb-6">
-                    <div className="relative w-16 h-16 mb-2 group">
+                    <div className="relative w-20 h-20 mb-2 group">
                         <img 
                             src={logo} 
                             alt="Maatri Shield" 
@@ -1365,13 +1365,13 @@ const Dashboard = () => {
                                     setSelectedPatient(null);
                                 }
                             }}
-                            className={`flex items-center gap-3.5 w-full p-2.5 rounded-xl transition-all duration-300 group relative ${activeTab === item.id
+                            className={`flex items-center gap-3.5 w-full p-3.5 rounded-xl transition-all duration-300 group relative ${activeTab === item.id
                                 ? 'bg-brand-500/10 text-brand-400 border border-brand-500/20 shadow-[0_0_15px_rgba(99,102,241,0.1)]'
                                 : 'text-slate-500 hover:text-slate-200 hover:bg-white/5 border border-transparent'
                                 }`}
                         >
-                            <item.icon size={18} className={activeTab === item.id ? 'text-brand-400 group-hover:scale-110 transition-transform' : 'text-slate-500 group-hover:text-slate-300'} />
-                            <span className="hidden md:block text-[13px] font-bold tracking-tight">{item.label}</span>
+                            <item.icon size={22} className={activeTab === item.id ? 'text-brand-400 group-hover:scale-110 transition-transform' : 'text-slate-500 group-hover:text-slate-300'} />
+                            <span className="hidden md:block text-[15px] font-bold tracking-tight">{item.label}</span>
                             {activeTab === item.id && (
                                 <motion.div layoutId="activeNav" className="absolute left-[-4px] w-1 h-5 bg-brand-500 rounded-r-full shadow-[2px_0_10px_rgba(99,102,241,0.8)]" />
                             )}
@@ -1448,9 +1448,9 @@ const Dashboard = () => {
                                                     initial={{ opacity: 0.8, scale: 0.95 }}
                                                     animate={{ opacity: 1, scale: 1 }}
                                                     transition={{ repeat: Infinity, repeatType: "reverse", duration: 1.5 }}
-                                                    className="inline-flex items-center gap-1 bg-gradient-to-r from-teal-100 to-emerald-100 text-teal-800 px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider border border-teal-200 shadow-sm"
+                                                    className="inline-flex items-center gap-1 bg-gradient-to-r from-purple-100 to-indigo-100 text-purple-800 px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider border border-purple-200 shadow-sm"
                                                 >
-                                                    Healthy today, happy tomorrow
+                                                    A mother's care shapes Tomorrow
                                                 </motion.span>
                                             </>
                                         )}
@@ -3082,7 +3082,7 @@ const Dashboard = () => {
                                                     transition={{ repeat: Infinity, repeatType: "reverse", duration: 2 }}
                                                     className="inline-flex items-center gap-1 bg-gradient-to-r from-blue-100 to-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider border border-blue-200 shadow-sm w-fit"
                                                 >
-                                                    ?? Every week is progress
+                                                    Every week is progress
                                                 </motion.span>
                                             </>}
                                     </div>
