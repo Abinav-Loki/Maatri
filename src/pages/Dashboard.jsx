@@ -622,13 +622,21 @@ const Dashboard = () => {
 
     useEffect(() => {
         const fetchReports = async () => {
-            if (role === 'doctor' && activeTab === 'reports' && selectedPatient) {
-                const reports = await storage.getClinicalReports(selectedPatient.email);
-                setPatientReports(reports);
+            if (activeTab === 'reports') {
+                if (role === 'doctor' && selectedPatient) {
+                    const reports = await storage.getClinicalReports(selectedPatient.email);
+                    setPatientReports(reports);
+                } else if (role === 'patient') {
+                    const reports = await storage.getClinicalReports(currentUser.email);
+                    setPatientReports(reports);
+                } else if (role === 'guardian' && selectedPatient) {
+                    const reports = await storage.getClinicalReports(selectedPatient.email);
+                    setPatientReports(reports);
+                }
             }
         };
         fetchReports();
-    }, [role, activeTab, selectedPatient]);
+    }, [role, activeTab, selectedPatient, currentUser]);
 
     // Auto-scroll AI Chat
     useEffect(() => {
@@ -3100,8 +3108,8 @@ const Dashboard = () => {
                                                     key={p.email}
                                                     onClick={() => handleSelectPatient(p)}
                                                     className={`w-full p-4 rounded-2xl border-2 text-left transition-all flex items-center gap-4 ${selectedPatient?.email === p.email
-                                                        ? 'bg-[#F8F7FF] border-brand-400 shadow-md'
-                                                        : 'bg-white border-brand-200 hover:border-brand-400'
+                                                        ? 'bg-brand-50/50 backdrop-blur-sm border-brand-400 shadow-md'
+                                                        : 'bg-white/40 backdrop-blur-sm border-white/40 hover:border-brand-400'
                                                         }`}
                                                 >
                                                     <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold overflow-hidden border ${selectedPatient?.email === p.email ? 'bg-brand-600 text-white border-brand-400' : 'bg-brand-50 text-brand-600 border-brand-100'}`}>
@@ -3137,7 +3145,7 @@ const Dashboard = () => {
                                             {(patientReports && patientReports.length > 0) ? (
                                                 <div className="space-y-4">
                                                     <div className="flex justify-between items-end px-2">
-                                                        <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest">Report History</h3>
+                                                        <h3 className="text-xs font-black text-slate-900 uppercase tracking-widest">Report History</h3>
                                                         <span className="text-[10px] font-bold text-slate-300">{patientReports.length} Reports</span>
                                                     </div>
                                                     <div className="flex flex-col gap-3">
@@ -3149,7 +3157,7 @@ const Dashboard = () => {
                                                                     setSelectedReportTimestamp(report.timestamp);
                                                                     setIsReportModalOpen(true);
                                                                 }}
-                                                                className="bg-white p-4 rounded-2xl border-2 border-slate-50 hover:border-brand-500 transition-all text-left shadow-sm group hover:shadow-md flex items-center justify-between gap-6"
+                                                                className="bg-white/60 backdrop-blur-sm p-4 rounded-2xl border border-white/60 hover:border-brand-500 transition-all text-left shadow-sm group hover:shadow-md flex items-center justify-between gap-6"
                                                             >
                                                                 <div className="flex items-center gap-4">
                                                                     <div className="p-3 bg-[#F8F7FF] rounded-xl text-brand-600 group-hover:bg-brand-600 group-hover:text-white transition-colors">
@@ -3181,7 +3189,7 @@ const Dashboard = () => {
                                                     </div>
                                                 </div>
                                             ) : (
-                                                <div className="bg-white/40 p-8 rounded-2xl border-2 border-dashed border-slate-100 text-center">
+                                                <div className="bg-white/40 backdrop-blur-sm p-8 rounded-2xl border border-white/40 shadow-xl shadow-brand-500/5 text-center">
                                                     <Activity className="mx-auto mb-4 text-slate-200" size={32} />
                                                     <p className="text-slate-400 font-bold">No reports generated yet.</p>
                                                 </div>
