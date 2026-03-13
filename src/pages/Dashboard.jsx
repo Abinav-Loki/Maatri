@@ -2547,7 +2547,7 @@ const Dashboard = () => {
 
                                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                                         {/* Blood Pressure Card - Redesigned */}
-                                        <motion.div whileHover={{ y: -10, scale: 1.01 }} className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-500 group relative overflow-hidden">
+                                        <motion.div whileHover={{ y: -10, scale: 1.01 }} className="bg-white/70 backdrop-blur-md border border-white/30 p-6 rounded-2xl shadow-xl transition-all duration-500 group relative overflow-hidden">
                                             <div className="absolute top-0 left-0 w-1.5 h-full bg-rose-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                                             <div className="flex items-start justify-between mb-6">
                                                 <div>
@@ -2637,7 +2637,7 @@ const Dashboard = () => {
                                         </motion.div>
 
                                         {/* Risk Score Card - Redesigned */}
-                                        <motion.div whileHover={{ y: -10, scale: 1.01 }} className="bg-white p-8 rounded-3xl border border-slate-100 shadow-[0_10px_30px_rgba(0,0,0,0.02)] hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.08)] transition-all duration-500 flex flex-col items-center justify-center relative overflow-hidden group">
+                                        <motion.div whileHover={{ y: -10, scale: 1.01 }} className="bg-white/70 backdrop-blur-md border border-white/30 p-8 rounded-3xl shadow-xl transition-all duration-500 flex flex-col items-center justify-center relative overflow-hidden group">
                                             <div className="absolute top-0 right-0 w-32 h-32 bg-slate-50 rounded-full -mr-16 -mt-16 opacity-50 group-hover:scale-150 transition-transform duration-1000"></div>
                                             <div className="absolute top-8 left-8">
                                                 <div className="flex items-center gap-3 mb-2">
@@ -2681,7 +2681,7 @@ const Dashboard = () => {
                                         </motion.div>
 
                                         {/* Heart Rate Card - Redesigned */}
-                                        <motion.div whileHover={{ y: -10, scale: 1.01 }} className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-500 group relative">
+                                        <motion.div whileHover={{ y: -10, scale: 1.01 }} className="bg-white/70 backdrop-blur-md border border-white/30 p-6 rounded-2xl shadow-xl transition-all duration-500 group relative">
                                             <div className="flex items-start justify-between mb-6">
                                                 <div>
                                                     <div className="flex items-center gap-2 mb-1.5">
@@ -2752,7 +2752,7 @@ const Dashboard = () => {
                                         </motion.div>
 
                                         {/* Blood Sugar Card - Redesigned */}
-                                        <motion.div whileHover={{ y: -10, scale: 1.01 }} className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-500 group relative overflow-hidden">
+                                        <motion.div whileHover={{ y: -10, scale: 1.01 }} className="bg-white/70 backdrop-blur-md border border-white/30 p-6 rounded-2xl shadow-xl transition-all duration-500 group relative overflow-hidden">
                                             <div className="absolute top-0 left-0 w-1.5 h-full bg-indigo-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                                             <div className="flex items-start justify-between mb-6">
                                                 <div>
@@ -2824,7 +2824,7 @@ const Dashboard = () => {
                                         </motion.div>
 
                                         {/* Symptoms Card - Redesigned */}
-                                        <motion.div whileHover={{ y: -10, scale: 1.01 }} className="bg-white p-8 rounded-3xl border border-slate-100 shadow-[0_10px_30px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.05)] transition-all duration-500 group relative overflow-hidden">
+                                        <motion.div whileHover={{ y: -10, scale: 1.01 }} className="bg-white/70 backdrop-blur-md border border-white/30 p-8 rounded-3xl shadow-xl transition-all duration-500 group relative overflow-hidden">
                                             <div className="absolute top-0 right-0 w-32 h-32 bg-slate-50 rounded-full -mr-16 -mt-16 opacity-50 group-hover:scale-150 transition-transform duration-1000"></div>
                                             <div className="flex items-center gap-4 mb-8">
                                                 <div className="w-10 h-10 rounded-2xl bg-slate-950 text-white flex items-center justify-center shadow-lg shadow-slate-200">
@@ -2861,7 +2861,7 @@ const Dashboard = () => {
                                         </motion.div>
 
                                         {/* Quick Actions Card - Redesigned */}
-                                        <motion.div whileHover={{ y: -10, scale: 1.01 }} className="bg-slate-950 p-6 rounded-2xl text-white flex flex-col justify-between relative overflow-hidden group">
+                                        <motion.div whileHover={{ y: -10, scale: 1.01 }} className="bg-slate-950/80 backdrop-blur-md border border-white/10 p-6 rounded-2xl text-white flex flex-col justify-between relative overflow-hidden group">
                                             <div className="absolute top-0 right-0 w-24 h-24 bg-white/5 rounded-full -mr-12 -mt-12 group-hover:scale-150 transition-transform duration-700"></div>
                                             <div>
                                                 <h3 className="text-lg font-bold mb-1 tracking-tight">Clinical Decision Support</h3>
@@ -2889,7 +2889,7 @@ const Dashboard = () => {
 
 
                                     {/* Clinical Insight Banner - High-End Medical AI */}
-                                    <div className="bg-[#0f172a] text-white rounded-3xl p-8 relative overflow-hidden shadow-xl mt-8 group">
+                                    <div className="bg-[#0f172a]/90 backdrop-blur-lg border border-white/10 text-white rounded-3xl p-8 relative overflow-hidden shadow-2xl mt-8 group">
                                         <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-teal-500/10 rounded-full -mr-48 -mt-48 blur-[80px]"></div>
                                         <div className="relative z-10 flex flex-col xl:flex-row items-center justify-between gap-8">
                                             <div className="max-w-2xl">
@@ -3749,7 +3749,7 @@ const Dashboard = () => {
                 role !== 'doctor' && (
                     <button
                         onClick={() => setIsAiAssistantOpen(true)}
-                        className="fixed bottom-8 left-[18rem] z-40 hover:scale-110 active:scale-95 transition-all group flex items-center gap-3"
+                        className="fixed bottom-8 left-8 z-40 hover:scale-110 active:scale-95 transition-all group flex items-center gap-3"
                     >
                         <div className="relative">
                             <div className="bg-[linear-gradient(to_bottom,#6A4C93,#7C5BB3,#8E6BBF)] p-4 rounded-full shadow-2xl border-2 border-brand-400/50 text-white group-hover:border-brand-400 transition-all">
