@@ -1441,7 +1441,12 @@ const Dashboard = () => {
             </aside>
 
             {/* Main Content - Added ml-64 to compensate for fixed sidebar */}
-            <main className={`flex-1 min-w-0 transition-all duration-500 p-4 lg:p-8 lg:ml-64 bg-[#fbfbfe] min-h-screen relative overflow-x-hidden`}>
+            <main 
+                className={`flex-1 min-w-0 transition-all duration-500 p-4 lg:p-8 lg:ml-64 min-h-screen relative overflow-x-hidden bg-cover bg-fixed bg-center`}
+                style={{ backgroundImage: "url('/dashboard_bg.png')" }}
+            >
+                <div className="absolute inset-0 bg-white/20 backdrop-blur-[2px] pointer-events-none"></div>
+
                 <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-brand-500/5 rounded-full blur-[120px] -mr-80 -mt-80 pointer-events-none"></div>
                 <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-teal-500/5 rounded-full blur-[100px] -ml-60 -mb-60 pointer-events-none"></div>
                 
@@ -1721,7 +1726,7 @@ const Dashboard = () => {
                                             layout
                                             initial={{ opacity: 0, scale: 0.95 }}
                                             animate={{ opacity: 1, scale: 1 }}
-                                            className="bg-white p-4 rounded-2xl flex flex-col items-center text-center cursor-pointer border border-slate-100 hover:border-brand-300 transition-all hover:shadow-md group"
+                                            className="bg-white/40 backdrop-blur-xl p-4 rounded-2xl flex flex-col items-center text-center cursor-pointer border border-white/40 hover:border-brand-300 hover:bg-white/60 transition-all hover:shadow-2xl hover:shadow-brand-500/5 group"
                                             onClick={() => handleViewDoctorDetails(doc)}
                                         >
                                             <div className="w-20 h-20 rounded-2xl bg-blue-100 border-4 border-white shadow-md mb-3 flex items-center justify-center text-blue-600 text-2xl font-black overflow-hidden uppercase">
@@ -1791,19 +1796,18 @@ const Dashboard = () => {
                                 </div>
                             </div>
 
-                            <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+                            <div className="bg-white/40 backdrop-blur-xl rounded-2xl border border-white/40 shadow-xl shadow-brand-500/5 overflow-hidden">
                                 <div className="divide-y divide-slate-50">
                                     {(role === 'doctor' ? patients : connectedPartners)
                                         .filter(p => p.name.toLowerCase().includes(chatSearchQuery.toLowerCase()))
                                         .map(partner => (
                                             <motion.div
                                                 key={partner.email}
-                                                whileHover={{ bg: "rgba(248, 250, 252, 0.8)" }}
-                                                className="p-6 flex items-center gap-5 cursor-pointer group transition-all"
+                                                className="p-6 flex items-center gap-5 cursor-pointer group transition-all hover:bg-white/20"
                                                 onClick={() => openChat(partner)}
                                             >
                                                 <div className="relative shrink-0">
-                                                    <div className={`w-16 h-16 rounded-2xl flex items-center justify-center text-white text-2xl font-black border-2 transition-transform group-hover:scale-105 overflow-hidden ${partner.role === 'doctor' ? 'bg-blue-600 border-blue-100' : 'bg-brand-600 border-brand-100'}`}>
+                                                    <div className={`w-16 h-16 rounded-2xl flex items-center justify-center text-white text-2xl font-black border-2 transition-transform group-hover:scale-105 overflow-hidden ${partner.role === 'doctor' ? 'bg-blue-600 border-white/40' : 'bg-brand-600 border-white/40'}`}>
                                                         {partner.photo ? <img src={partner.photo} alt={partner.name} className="w-full h-full object-cover" /> : (partner.name?.[0] || 'P')}
                                                     </div>
                                                     <div className="absolute bottom-1 right-1 w-4 h-4 bg-green-500 rounded-full border-4 border-white"></div>
@@ -1822,7 +1826,7 @@ const Dashboard = () => {
                                                 </div>
 
                                                 <div className="flex items-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                    <div className="p-3 bg-slate-50 text-slate-400 rounded-2xl hover:text-brand-600 hover:bg-brand-50 transition-all">
+                                                    <div className="p-3 bg-white/20 text-slate-400 rounded-2xl hover:text-brand-600 hover:bg-white/40 transition-all">
                                                         <Camera size={20} />
                                                     </div>
                                                     <div className="p-3 bg-brand-600 text-white rounded-2xl shadow-lg shadow-brand-100 transform translate-x-4 group-hover:translate-x-0 transition-all duration-300">
@@ -1923,7 +1927,7 @@ const Dashboard = () => {
                                                         key={i}
                                                         initial={{ opacity: 0, y: 10 }}
                                                         animate={{ opacity: 1, y: 0 }}
-                                                        className="bg-white/60 backdrop-blur-xl p-6 rounded-3xl border-l-[6px] border-teal-500 shadow-sm"
+                                                        className="bg-white/40 backdrop-blur-xl p-6 rounded-3xl border-l-[6px] border-teal-500 shadow-xl shadow-teal-500/5"
                                                     >
                                                         <div className="flex justify-between items-start mb-3">
                                                             <div>
@@ -2013,7 +2017,7 @@ const Dashboard = () => {
                                             </motion.div>
                                         ))
                                     ) : (
-                                        <div className="py-20 text-center bg-white/50 rounded-3xl border-2 border-dashed border-slate-100">
+                                        <div className="py-20 text-center bg-white/20 backdrop-blur-sm rounded-3xl border-2 border-dashed border-white/20">
                                             <Bell size={48} className="mx-auto mb-4 text-slate-100" />
                                             <p className="text-slate-400 font-bold">No clinical notifications found.</p>
                                         </div>
@@ -2047,7 +2051,7 @@ const Dashboard = () => {
                                     <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                                         <div
                                             onClick={() => { setPatientFilter('urgent'); setActiveTab('patients-list'); }}
-                                            className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm cursor-pointer hover:shadow-md hover:border-rose-100 transition-all duration-300 group relative overflow-hidden"
+                                            className="bg-white/40 backdrop-blur-xl p-6 rounded-2xl border border-white/40 shadow-xl shadow-rose-500/5 cursor-pointer hover:shadow-2xl hover:bg-white/60 transition-all duration-300 group relative overflow-hidden"
                                         >
                                             <div className="absolute top-0 right-0 w-20 h-20 bg-rose-50 rounded-full -mr-10 -mt-10 opacity-40 group-hover:scale-125 transition-transform duration-500"></div>
                                             <div className="flex items-center gap-3 mb-4 relative z-10">
@@ -2061,7 +2065,7 @@ const Dashboard = () => {
                                         </div>
                                         <div
                                             onClick={() => { setPatientFilter('help'); setActiveTab('patients-list'); }}
-                                            className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm cursor-pointer hover:shadow-md hover:border-amber-100 transition-all duration-300 group relative overflow-hidden"
+                                            className="bg-white/40 backdrop-blur-xl p-6 rounded-2xl border border-white/40 shadow-xl shadow-amber-500/5 cursor-pointer hover:shadow-2xl hover:bg-white/60 transition-all duration-300 group relative overflow-hidden"
                                         >
                                             <div className="absolute top-0 right-0 w-20 h-20 bg-amber-50 rounded-full -mr-10 -mt-10 opacity-40 group-hover:scale-125 transition-transform duration-500"></div>
                                             <div className="flex items-center gap-3 mb-4 relative z-10">
@@ -2075,7 +2079,7 @@ const Dashboard = () => {
                                         </div>
                                         <div
                                             onClick={() => { setPatientFilter('normal'); setActiveTab('patients-list'); }}
-                                            className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm cursor-pointer hover:shadow-md hover:border-teal-100 transition-all duration-300 group relative overflow-hidden"
+                                            className="bg-white/40 backdrop-blur-xl p-6 rounded-2xl border border-white/40 shadow-xl shadow-teal-500/5 cursor-pointer hover:shadow-2xl hover:bg-white/60 transition-all duration-300 group relative overflow-hidden"
                                         >
                                             <div className="absolute top-0 right-0 w-20 h-20 bg-teal-50 rounded-full -mr-10 -mt-10 opacity-40 group-hover:scale-125 transition-transform duration-500"></div>
                                             <div className="flex items-center gap-3 mb-4 relative z-10">
@@ -2184,7 +2188,7 @@ const Dashboard = () => {
                                                 animate={{ opacity: 1, scale: 1 }}
                                                 whileHover={{ y: -8, scale: 1.02, boxShadow: "0 25px 50px -12px rgba(0,0,0,0.1)" }}
                                                  transition={{ delay: i * 0.1 }}
-                                                className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-all cursor-pointer group relative overflow-hidden"
+                                                className="bg-white/40 backdrop-blur-xl p-6 rounded-2xl border border-white/40 shadow-xl shadow-brand-500/5 hover:shadow-2xl hover:bg-white/60 transition-all cursor-pointer group relative overflow-hidden"
                                             >
                                                 <div className="flex items-center justify-between mb-4">
                                                     <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest">{stat.label}</p>
@@ -2209,7 +2213,7 @@ const Dashboard = () => {
                                     </div>
 
                                     <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-                                        <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm relative overflow-hidden group">
+                                        <div className="bg-white/40 backdrop-blur-xl p-8 rounded-3xl border border-white/40 shadow-xl shadow-brand-500/5 relative overflow-hidden group">
                                             <div className="absolute top-0 right-0 w-64 h-64 bg-slate-50 rounded-full -mr-32 -mt-32 opacity-50 group-hover:scale-110 transition-transform duration-700"></div>
                                             <h3 className="text-xl font-bold tracking-tight text-slate-900 mb-6 flex items-center gap-3 relative z-10">
                                                 <div className="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center shadow-md">
