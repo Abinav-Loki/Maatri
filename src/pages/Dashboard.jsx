@@ -2356,7 +2356,7 @@ const Dashboard = () => {
                                             <h2 className="text-3xl font-black text-slate-900 mb-2">Patient Select</h2>
                                             <p className="text-slate-500 font-medium">Select a patient below to view their real-time clinical vitals and analytics.</p>
                                         </div>
-                                        <div className="flex bg-white/50 backdrop-blur-sm p-1.5 rounded-2xl border border-slate-200">
+                                        <div className="flex bg-white/40 backdrop-blur-xl p-1.5 rounded-2xl border border-white/40 shadow-xl">
                                             {[
                                                 { id: 'all', label: 'All Patients' },
                                                 { id: 'urgent', label: 'High Risk', color: 'text-rose-600' },
@@ -2388,7 +2388,7 @@ const Dashboard = () => {
                                                     <div key={p.email} className="relative group/card">
                                                         <button
                                                             onClick={() => handleSelectPatient(p)}
-                                                            className={`p-5 rounded-2xl text-left transition-all border-2 w-full flex flex-col md:flex-row items-center gap-6 shadow-sm hover:shadow-xl bg-white text-slate-600 border-white shadow-slate-200/30`}
+                                                            className={`p-5 rounded-2xl text-left transition-all border border-white/40 w-full flex flex-col md:flex-row items-center gap-6 shadow-2xl hover:shadow-brand-200/50 bg-white/40 backdrop-blur-xl text-slate-600`}
                                                         >
                                                             <div className="flex items-center gap-6 flex-1 w-full">
                                                                 <div className={`w-16 h-16 rounded-2xl flex-shrink-0 flex items-center justify-center text-2xl font-black border-2 bg-brand-50 text-brand-600 border-brand-100 shadow-inner overflow-hidden`}>
@@ -2431,7 +2431,7 @@ const Dashboard = () => {
                                             })}
 
                                         {patients.length === 0 && (
-                                            <div className="col-span-full py-20 text-center bg-white/50 rounded-3xl border-2 border-dashed border-slate-200">
+                                            <div className="col-span-full py-20 text-center bg-white/30 backdrop-blur-xl rounded-3xl border-2 border-dashed border-white/40">
                                                 <UsersIcon size={48} className="mx-auto mb-4 text-slate-200" />
                                                 <p className="text-slate-400 font-bold">Your patient directory is empty.</p>
                                             </div>
@@ -2441,7 +2441,7 @@ const Dashboard = () => {
                             ) : (
                                 <div className="space-y-10">
                                      {/* Patient Profile Header - Elegant & Empathetic */}
-                                    <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-[0_20px_50px_rgba(0,0,0,0.03)] flex flex-col xl:flex-row items-center justify-between gap-10 relative overflow-hidden group">
+                                    <div className="bg-white/40 backdrop-blur-xl p-8 rounded-3xl border border-white/40 shadow-2xl flex flex-col xl:flex-row items-center justify-between gap-10 relative overflow-hidden group">
                                         <div className="absolute top-0 right-0 w-64 h-64 bg-slate-50 rounded-full -mr-32 -mt-32 opacity-50 group-hover:scale-110 transition-transform duration-700"></div>
                                         <div className="flex flex-col md:flex-row items-center gap-8 relative z-10 w-full xl:w-auto">
                                             <div className="relative">
@@ -2547,7 +2547,7 @@ const Dashboard = () => {
 
                                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                                         {/* Blood Pressure Card - Redesigned */}
-                                        <motion.div whileHover={{ y: -10, scale: 1.01 }} className="bg-white/70 backdrop-blur-md border border-white/30 p-6 rounded-2xl shadow-xl transition-all duration-500 group relative overflow-hidden">
+                                        <motion.div whileHover={{ y: -10, scale: 1.01 }} className="bg-white/40 backdrop-blur-xl border border-white/40 p-6 rounded-2xl shadow-2xl transition-all duration-500 group relative overflow-hidden">
                                             <div className="absolute top-0 left-0 w-1.5 h-full bg-rose-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                                             <div className="flex items-start justify-between mb-6">
                                                 <div>
@@ -2637,7 +2637,7 @@ const Dashboard = () => {
                                         </motion.div>
 
                                         {/* Risk Score Card - Redesigned */}
-                                        <motion.div whileHover={{ y: -10, scale: 1.01 }} className="bg-white/70 backdrop-blur-md border border-white/30 p-8 rounded-3xl shadow-xl transition-all duration-500 flex flex-col items-center justify-center relative overflow-hidden group">
+                                        <motion.div whileHover={{ y: -10, scale: 1.01 }} className="bg-white/40 backdrop-blur-xl border border-white/40 p-8 rounded-3xl shadow-2xl transition-all duration-500 flex flex-col items-center justify-center relative overflow-hidden group">
                                             <div className="absolute top-0 right-0 w-32 h-32 bg-slate-50 rounded-full -mr-16 -mt-16 opacity-50 group-hover:scale-150 transition-transform duration-1000"></div>
                                             <div className="absolute top-8 left-8">
                                                 <div className="flex items-center gap-3 mb-2">
@@ -2681,7 +2681,7 @@ const Dashboard = () => {
                                         </motion.div>
 
                                         {/* Heart Rate Card - Redesigned */}
-                                        <motion.div whileHover={{ y: -10, scale: 1.01 }} className="bg-white/70 backdrop-blur-md border border-white/30 p-6 rounded-2xl shadow-xl transition-all duration-500 group relative">
+                                        <motion.div whileHover={{ y: -10, scale: 1.01 }} className="bg-white/40 backdrop-blur-xl border border-white/40 p-6 rounded-2xl shadow-2xl transition-all duration-500 group relative">
                                             <div className="flex items-start justify-between mb-6">
                                                 <div>
                                                     <div className="flex items-center gap-2 mb-1.5">
@@ -2752,7 +2752,7 @@ const Dashboard = () => {
                                         </motion.div>
 
                                         {/* Blood Sugar Card - Redesigned */}
-                                        <motion.div whileHover={{ y: -10, scale: 1.01 }} className="bg-white/70 backdrop-blur-md border border-white/30 p-6 rounded-2xl shadow-xl transition-all duration-500 group relative overflow-hidden">
+                                        <motion.div whileHover={{ y: -10, scale: 1.01 }} className="bg-white/40 backdrop-blur-xl border border-white/40 p-6 rounded-2xl shadow-2xl transition-all duration-500 group relative overflow-hidden">
                                             <div className="absolute top-0 left-0 w-1.5 h-full bg-indigo-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                                             <div className="flex items-start justify-between mb-6">
                                                 <div>
@@ -2824,7 +2824,7 @@ const Dashboard = () => {
                                         </motion.div>
 
                                         {/* Symptoms Card - Redesigned */}
-                                        <motion.div whileHover={{ y: -10, scale: 1.01 }} className="bg-white/70 backdrop-blur-md border border-white/30 p-8 rounded-3xl shadow-xl transition-all duration-500 group relative overflow-hidden">
+                                        <motion.div whileHover={{ y: -10, scale: 1.01 }} className="bg-white/40 backdrop-blur-xl border border-white/40 p-8 rounded-3xl shadow-2xl transition-all duration-500 group relative overflow-hidden">
                                             <div className="absolute top-0 right-0 w-32 h-32 bg-slate-50 rounded-full -mr-16 -mt-16 opacity-50 group-hover:scale-150 transition-transform duration-1000"></div>
                                             <div className="flex items-center gap-4 mb-8">
                                                 <div className="w-10 h-10 rounded-2xl bg-slate-950 text-white flex items-center justify-center shadow-lg shadow-slate-200">
@@ -2842,7 +2842,7 @@ const Dashboard = () => {
                                                     { id: 'vision', label: 'Visual Disturbances', icon: Sparkles },
                                                     { id: 'nausea', label: 'Persistent Nausea', icon: Activity }
                                                 ].map((s) => (
-                                                    <label key={s.id} className="flex items-center gap-4 cursor-pointer group p-4 bg-slate-50 rounded-2xl border border-slate-100 hover:border-brand-200 hover:bg-brand-50/30 transition-all duration-300">
+                                                    <label key={s.id} className="flex items-center gap-4 cursor-pointer group p-4 bg-white/20 backdrop-blur-md rounded-2xl border border-white/20 hover:border-white/40 hover:bg-white/30 transition-all duration-300">
                                                         <div className="relative flex items-center justify-center">
                                                             <input
                                                                 type="checkbox"
@@ -2861,7 +2861,7 @@ const Dashboard = () => {
                                         </motion.div>
 
                                         {/* Quick Actions Card - Redesigned */}
-                                        <motion.div whileHover={{ y: -10, scale: 1.01 }} className="bg-slate-950/80 backdrop-blur-md border border-white/10 p-6 rounded-2xl text-white flex flex-col justify-between relative overflow-hidden group">
+                                        <motion.div whileHover={{ y: -10, scale: 1.01 }} className="bg-slate-900/60 backdrop-blur-xl border border-white/10 p-6 rounded-2xl text-white flex flex-col justify-between relative overflow-hidden group">
                                             <div className="absolute top-0 right-0 w-24 h-24 bg-white/5 rounded-full -mr-12 -mt-12 group-hover:scale-150 transition-transform duration-700"></div>
                                             <div>
                                                 <h3 className="text-lg font-bold mb-1 tracking-tight">Clinical Decision Support</h3>
@@ -2889,7 +2889,7 @@ const Dashboard = () => {
 
 
                                     {/* Clinical Insight Banner - High-End Medical AI */}
-                                    <div className="bg-[#0f172a]/90 backdrop-blur-lg border border-white/10 text-white rounded-3xl p-8 relative overflow-hidden shadow-2xl mt-8 group">
+                                    <div className="bg-[#0f172a]/60 backdrop-blur-xl border border-white/10 text-white rounded-3xl p-8 relative overflow-hidden shadow-2xl mt-8 group">
                                         <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-teal-500/10 rounded-full -mr-48 -mt-48 blur-[80px]"></div>
                                         <div className="relative z-10 flex flex-col xl:flex-row items-center justify-between gap-8">
                                             <div className="max-w-2xl">
@@ -2909,14 +2909,14 @@ const Dashboard = () => {
                                                 </p>
                                             </div>
                                             <div className="flex flex-col sm:flex-row gap-4 w-full xl:w-auto">
-                                                <div className="bg-white/5 backdrop-blur-2xl p-6 rounded-2xl border border-white/10 text-center min-w-[160px] shadow-xl">
+                                                <div className="bg-white/10 backdrop-blur-xl p-6 rounded-2xl border border-white/10 text-center min-w-[160px] shadow-2xl">
                                                     <div className="w-10 h-10 bg-teal-500/20 rounded-xl flex items-center justify-center mx-auto mb-4 text-teal-400">
                                                         <CheckCircle2 size={20} />
                                                     </div>
                                                     <p className="text-[9px] uppercase font-black tracking-widest text-slate-400 mb-1">Goal</p>
                                                     <p className="text-2xl font-black text-white">92.4%</p>
                                                 </div>
-                                                <div className="bg-white/5 backdrop-blur-2xl p-6 rounded-2xl border border-white/10 text-center min-w-[160px] shadow-xl">
+                                                <div className="bg-white/10 backdrop-blur-xl p-6 rounded-2xl border border-white/10 text-center min-w-[160px] shadow-2xl">
                                                     <div className="w-10 h-10 bg-brand-500/20 rounded-xl flex items-center justify-center mx-auto mb-4 text-brand-400">
                                                         <TrendingUp size={20} />
                                                     </div>
