@@ -386,6 +386,10 @@ const Dashboard = () => {
                 const authorizedPatients = await storage.getAuthorizedPatients(user.email);
                 setPatients(authorizedPatients);
 
+                // Fetch initial chat partners for doctor
+                const initialPartners = await storage.getConnectedPartners(user.email, 'doctor');
+                setConnectedPartners(initialPartners);
+
                 // Fetch health data for each patient
                 const healthInfo = {};
                 for (const p of authorizedPatients) {
@@ -1777,7 +1781,7 @@ const Dashboard = () => {
 
                             <div className="bg-white/40 backdrop-blur-sm rounded-2xl border border-white/40 shadow-xl shadow-brand-500/5 overflow-hidden">
                                 <div className="divide-y divide-slate-50">
-                                    {(role === 'doctor' ? patients : connectedPartners)
+                                    {connectedPartners
                                         .filter(p => p.name.toLowerCase().includes(chatSearchQuery.toLowerCase()))
                                         .map(partner => (
                                             <motion.div
@@ -1817,7 +1821,7 @@ const Dashboard = () => {
                                     }
                                 </div>
 
-                                {(role === 'doctor' ? patients : connectedPartners).length === 0 && (
+                                {connectedPartners.length === 0 && (
                                     <div className="py-24 text-center">
                                         <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-6 text-slate-200">
                                             <MessageSquare size={40} />

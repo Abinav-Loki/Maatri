@@ -411,6 +411,24 @@ const storage = {
             console.error('[Storage] Error fetching pending requests:', error);
             return [];
         }
+
+        // Batch resolve sender names
+        if (data && data.length > 0) {
+            const senderEmails = [...new Set(data.map(r => r.from_email.toLowerCase()))];
+            const { data: profiles } = await supabase
+                .from('profiles')
+                .select('email, name')
+                .in('email', senderEmails);
+
+            const nameMap = {};
+            (profiles || []).forEach(p => { nameMap[p.email.toLowerCase()] = p.name; });
+
+            return data.map(r => ({
+                ...r,
+                senderName: nameMap[r.from_email.toLowerCase()] || r.from_email.split('@')[0]
+            }));
+        }
+
         console.log(`[Storage] Found ${data?.length || 0} pending requests for ${activeEmail}`);
         return data || [];
     },
@@ -446,14 +464,27 @@ const storage = {
     },
 
     getAuthorizedPatients: async (doctorEmail) => {
+        const activeEmail = doctorEmail.toLowerCase();
+        
+        // 1. Fetch from accepted connections
         const { data: connections, error: connError } = await supabase
             .from('connections')
             .select('from_email')
-            .eq('to_email', doctorEmail)
+            .eq('to_email', activeEmail)
             .eq('status', 'accepted');
 
-        if (connError || !connections) return [];
-        const emails = connections.map(c => c.from_email);
+        // 2. Fetch from message history (as receiver)
+        const { data: messages, error: msgError } = await supabase
+            .from('messages')
+            .select('from_email')
+            .eq('to_email', activeEmail);
+
+        const emailSet = new Set();
+        if (!connError && connections) connections.forEach(c => emailSet.add(c.from_email.toLowerCase()));
+        if (!msgError && messages) messages.forEach(m => emailSet.add(m.from_email.toLowerCase()));
+
+        if (emailSet.size === 0) return [];
+        const emails = Array.from(emailSet);
 
         const { data, error } = await supabase
             .from('profiles')
@@ -478,6 +509,57 @@ const storage = {
             .select('*')
             .in('email', emails);
         if (error) console.error('Error fetching connected doctors:', error);
+        return (data || []).map(mapping.profileFromSupabase);
+    },
+
+    /**
+     * Optimized batch fetch for all connections (doctors for patients, patients for doctors)
+     */
+    getConnectedPartners: async (email, role) => {
+        const activeEmail = email.toLowerCase();
+        
+        // 1. Fetch connections where this user is involved and status is 'accepted'
+        const { data: connections, error: connError } = await supabase
+            .from('connections')
+            .select('from_email, to_email')
+            .or(`from_email.eq.${activeEmail},to_email.eq.${activeEmail}`)
+            .eq('status', 'accepted');
+
+        // 2. Fetch message history to include partners who have chatted but might not have accepted connections
+        const { data: messages, error: msgError } = await supabase
+            .from('messages')
+            .select('from_email, to_email')
+            .or(`from_email.eq.${activeEmail},to_email.eq.${activeEmail}`);
+
+        const partnerEmails = new Set();
+
+        if (!connError && connections) {
+            connections.forEach(c => {
+                const other = c.from_email.toLowerCase() === activeEmail ? c.to_email : c.from_email;
+                partnerEmails.add(other.toLowerCase());
+            });
+        }
+
+        if (!msgError && messages) {
+            messages.forEach(m => {
+                const other = m.from_email.toLowerCase() === activeEmail ? m.to_email : m.from_email;
+                partnerEmails.add(other.toLowerCase());
+            });
+        }
+
+        if (partnerEmails.size === 0) return [];
+
+        // 3. Fetch profiles for all partner emails in one batch
+        const { data, error } = await supabase
+            .from('profiles')
+            .select('*')
+            .in('email', Array.from(partnerEmails));
+
+        if (error) {
+            console.error('[Storage] Error fetching connected partners:', error);
+            return [];
+        }
+
         return (data || []).map(mapping.profileFromSupabase);
     },
 
