@@ -509,7 +509,7 @@ const Dashboard = () => {
                         .eq('from_email', user.email.toLowerCase());
 
                     const acceptedConn = (allConns || []).find(c => c.status === 'accepted');
-                    if (acceptedConn && guardianConnectionStatus === 'pending') {
+                    if (acceptedConn && guardianConnectionStatus !== 'accepted') {
                         setGuardianConnectionStatus('accepted');
                         setGuardianPatientEmail(acceptedConn.to_email);
                         const patient = await storage.getPatientByEmail(acceptedConn.to_email);

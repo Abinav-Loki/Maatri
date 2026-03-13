@@ -397,13 +397,8 @@ const storage = {
         let query = supabase
             .from('connections')
             .select('*')
-            .eq('status', 'pending');
-
-        if (user?.id) {
-            query = query.or(`to_email.eq.${activeEmail},to_user_id.eq.${user.id}`);
-        } else {
-            query = query.eq('to_email', activeEmail);
-        }
+            .eq('status', 'pending')
+            .eq('to_email', activeEmail);
 
         const { data, error } = await query;
 
