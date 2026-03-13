@@ -386,7 +386,8 @@ const AuthPage = () => {
                                     <input
                                         type={showPassword ? "text" : "password"}
                                         placeholder="••••••••"
-                                        className="w-full bg-white/[0.03] border border-white/10 focus:border-teal-500/50 focus:bg-white/[0.05] rounded-[1.5rem] py-5 pl-14 pr-14 outline-none transition-all placeholder:text-slate-700 text-white font-bold text-lg"
+                                        className="w-full bg-white/[0.03] border border-white/10 focus:border-teal-500/50 focus:bg-white/[0.05] rounded-[1.5rem] py-5 pl-14 pr-14 outline-none transition-all placeholder:text-slate-700 text-white font-bold text-lg [&::-ms-reveal]:hidden [&::-ms-clear]:hidden"
+                                        style={{ WebkitTextSecurity: showPassword ? 'none' : undefined }}
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
                                         required

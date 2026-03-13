@@ -1976,7 +1976,7 @@ const Dashboard = () => {
                                                 className={`p-6 rounded-3xl border shadow-sm transition-all flex items-start gap-4 ${n.type === 'SOS'
                                                     ? 'bg-rose-50 border-rose-200'
                                                     : (n.type === 'water' || n.type === 'medicine')
-                                                        ? 'bg-[#DBBCDF]/20 border-[#DBBCDF]/30'
+                                                        ? 'bg-indigo-50 border-indigo-200'
                                                         : 'bg-white border-slate-100 hover:border-slate-300'
                                                     }`}
                                             >
@@ -1993,10 +1993,10 @@ const Dashboard = () => {
                                                 </div>
                                                 <div className="flex-1 min-w-0">
                                                     <div className="flex items-center justify-between mb-1">
-                                                        <p className={`text-xs font-black uppercase tracking-widest ${n.type === 'SOS' ? 'text-rose-600' : 'text-slate-400'}`}>
-                                                            {n.type} Alert
+                                                        <p className={`text-xs font-black uppercase tracking-widest ${n.type === 'SOS' ? 'text-rose-600' : n.type === 'water' ? 'text-indigo-600' : n.type === 'medicine' ? 'text-purple-700' : 'text-slate-600'}`}>
+                                                            {n.type === 'water' ? 'Water Intake' : n.type === 'medicine' ? 'Medicine Reminder' : n.type === 'SOS' ? 'SOS Alert' : `${n.type} Alert`}
                                                         </p>
-                                                        <span className="text-[10px] font-bold text-slate-300">
+                                                        <span className="text-[10px] font-bold text-slate-500">
                                                             {new Date(n.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                                         </span>
                                                     </div>
@@ -3238,7 +3238,7 @@ const Dashboard = () => {
                                                         {isGeneratingReport ? (
                                                             <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Processing...</>
                                                         ) : (
-                                                            <><Activity size={18} /> Run AI Analysis</>
+                                                        <><Activity size={18} /> Generate Report</>
                                                         )}
                                                     </button>
                                                 </div>
