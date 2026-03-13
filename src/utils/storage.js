@@ -513,43 +513,30 @@ const storage = {
     },
 
     /**
-     * Optimized batch fetch for all connections (doctors for patients, patients for doctors)
+     * Returns only partners who have actually exchanged messages with this user.
+     * This is used for the "Active Conversations" list in the Messages tab.
      */
     getConnectedPartners: async (email, role) => {
         const activeEmail = email.toLowerCase();
-        
-        // 1. Fetch connections where this user is involved and status is 'accepted'
-        const { data: connections, error: connError } = await supabase
-            .from('connections')
-            .select('from_email, to_email')
-            .or(`from_email.eq.${activeEmail},to_email.eq.${activeEmail}`)
-            .eq('status', 'accepted');
 
-        // 2. Fetch message history to include partners who have chatted but might not have accepted connections
+        // Only look at message history — so the sidebar only shows people you've chatted with
         const { data: messages, error: msgError } = await supabase
             .from('messages')
             .select('from_email, to_email')
             .or(`from_email.eq.${activeEmail},to_email.eq.${activeEmail}`);
 
+        if (msgError || !messages || messages.length === 0) return [];
+
+        // Collect unique partner emails
         const partnerEmails = new Set();
-
-        if (!connError && connections) {
-            connections.forEach(c => {
-                const other = c.from_email.toLowerCase() === activeEmail ? c.to_email : c.from_email;
-                partnerEmails.add(other.toLowerCase());
-            });
-        }
-
-        if (!msgError && messages) {
-            messages.forEach(m => {
-                const other = m.from_email.toLowerCase() === activeEmail ? m.to_email : m.from_email;
-                partnerEmails.add(other.toLowerCase());
-            });
-        }
+        messages.forEach(m => {
+            const other = m.from_email.toLowerCase() === activeEmail ? m.to_email : m.from_email;
+            partnerEmails.add(other.toLowerCase());
+        });
 
         if (partnerEmails.size === 0) return [];
 
-        // 3. Fetch profiles for all partner emails in one batch
+        // Fetch profiles for all partner emails in one batch
         const { data, error } = await supabase
             .from('profiles')
             .select('*')
