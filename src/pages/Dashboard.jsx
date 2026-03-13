@@ -1583,10 +1583,10 @@ const Dashboard = () => {
                                                     </div>
                                                 )}
 
-                                                {clinicalNotifications.filter(n => !n.read).length > 0 && (
+                                                {clinicalNotifications.filter(n => !n.read && (role === 'patient' || n.type !== 'water')).length > 0 && (
                                                     <div className="space-y-2">
                                                         <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest mb-2 px-2">Health Reminders</p>
-                                                        {clinicalNotifications.filter(n => !n.read).slice(0, 3).map(note => (
+                                                        {clinicalNotifications.filter(n => !n.read && (role === 'patient' || n.type !== 'water')).slice(0, 3).map(note => (
                                                             <div key={note.id} className="bg-brand-50/50 p-3 rounded-2xl border border-brand-100 flex items-center gap-3">
                                                                 <div className="p-2 bg-brand-100 text-brand-600 rounded-xl">
                                                                     {note.type === 'water' ? <Droplets size={14} /> : <Activity size={14} />}
@@ -1597,7 +1597,7 @@ const Dashboard = () => {
                                                     </div>
                                                 )}
 
-                                                {pendingRequests.length === 0 && clinicalNotifications.filter(n => !n.read).length === 0 && (
+                                                {pendingRequests.length === 0 && clinicalNotifications.filter(n => !n.read && (role === 'patient' || n.type !== 'water')).length === 0 && (
                                                     <div className="py-8 text-center text-slate-400">
                                                         <Activity className="mx-auto mb-2 opacity-10" size={32} />
                                                         <p className="text-xs font-bold uppercase tracking-widest text-slate-300">All caught up</p>
@@ -3121,7 +3121,7 @@ const Dashboard = () => {
                                 {/* Patient Selection Sidebar for Reports (Doctor & Guardian) */}
                                 {(role === 'doctor' || role === 'guardian') && (
                                     <div className="lg:col-span-1 space-y-4">
-                                        <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest px-2">Select Patient</h3>
+                                        <h3 className="text-xs font-black text-slate-800 uppercase tracking-widest px-2">Select Patient</h3>
                                         <div className="space-y-2 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
                                             {patients.map((p) => (
                                                 <button
