@@ -3749,7 +3749,7 @@ const Dashboard = () => {
                 role !== 'doctor' && (
                     <button
                         onClick={() => setIsAiAssistantOpen(true)}
-                        className="fixed bottom-8 left-8 z-40 hover:scale-110 active:scale-95 transition-all group flex items-center gap-3"
+                        className="fixed bottom-8 left-[17rem] z-50 hover:scale-110 active:scale-95 transition-all group flex items-center gap-3"
                     >
                         <div className="relative">
                             <div className="bg-[linear-gradient(to_bottom,#6A4C93,#7C5BB3,#8E6BBF)] p-4 rounded-full shadow-2xl border-2 border-brand-400/50 text-white group-hover:border-brand-400 transition-all">
