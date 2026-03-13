@@ -406,12 +406,7 @@ const Dashboard = () => {
                 }
                 // Fetch pending requests for doctor
                 console.log('[Dashboard] Fetching initial pending requests for doctor');
-                const requests = await storage.getPendingRequests(user.email);
-                // Pre-resolve sender names for pending requests
-                const requestsWithNames = await Promise.all(requests.map(async r => {
-                    const sender = await storage.getUserByEmail(r.from_email);
-                    return { ...r, senderName: sender?.name || r.from_email.split('@')[0] };
-                }));
+                const requestsWithNames = await storage.getPendingRequests(user.email);
                 console.log(`[Dashboard] Fetched ${requestsWithNames.length} requests with names`);
                 setPendingRequests(requestsWithNames);
             } else if (role === 'guardian') {
@@ -459,23 +454,12 @@ const Dashboard = () => {
                 const reports = await storage.getClinicalReports(user.email);
                 setPatientReports(reports);
 
-                // Fetch initial pending requests instantly so user doesn't wait 5s
-                const pending = await storage.getPendingRequests(user.email);
-                const requestsWithNames = await Promise.all(pending.map(async r => {
-                    const sender = await storage.getUserByEmail(r.from_email);
-                    return { ...r, senderName: sender?.name || r.from_email.split('@')[0] };
-                }));
+                // Fetch initial pending requests instantly so user doesn't wait
+                const requestsWithNames = await storage.getPendingRequests(user.email);
                 setPendingRequests(requestsWithNames);
 
                 // Fetch connected partners (doctors) for chat
-                const allUsers = await storage.getUsers();
-                const partners = [];
-                for (const u of allUsers) {
-                    if (u.role === 'doctor') {
-                        const status = await storage.getConnectionStatus(user.email, u.email);
-                        if (status === 'accepted') partners.push(u);
-                    }
-                }
+                const partners = await storage.getConnectedPartners(user.email, 'patient');
                 setConnectedPartners(partners);
             }
 
@@ -502,24 +486,12 @@ const Dashboard = () => {
             const user = JSON.parse(userStr);
 
             if (user) {
-                const pending = await storage.getPendingRequests(user.email);
-                const requestsWithNames = await Promise.all(pending.map(async r => {
-                    const sender = await storage.getUserByEmail(r.from_email);
-                    return { ...r, senderName: sender?.name || r.from_email.split('@')[0] };
-                }));
-                setPendingRequests(requestsWithNames);
+                // Optimized batch fetch for requests and partners
+                const requestsWithNames = await storage.getPendingRequests(user.email);
+                setPendingRequests(prev => JSON.stringify(prev) === JSON.stringify(requestsWithNames) ? prev : requestsWithNames);
 
-                if (user.role === 'patient') {
-                    const allUsers = await storage.getUsers();
-                    const partners = [];
-                    for (const u of allUsers) {
-                        if (u.role === 'doctor') {
-                            const status = await storage.getConnectionStatus(user.email, u.email);
-                            if (status === 'accepted') partners.push(u);
-                        }
-                    }
-                    setConnectedPartners(partners);
-                }
+                const partners = await storage.getConnectedPartners(user.email, user.role);
+                setConnectedPartners(prev => JSON.stringify(prev) === JSON.stringify(partners) ? prev : partners);
 
                 if (user.role === 'guardian') {
                     const { data: allConns } = await supabase
@@ -559,7 +531,7 @@ const Dashboard = () => {
                 const partnerCounts = await storage.getUnreadMessagesCountPerPartner(user.email);
                 setPartnerUnreadCounts(partnerCounts);
             }
-        }, 5000);
+        }, 15000); // Increased polling interval to 15s for network stability
         return () => clearInterval(dataInterval);
     }, [role, navigate, activeChatPartner, updateDashboardData]);
 
@@ -695,12 +667,7 @@ const Dashboard = () => {
 
     const handleRequestAction = async (requestId, status) => {
         await storage.handleConnectionRequest(requestId, status);
-        const pending = await storage.getPendingRequests(currentUser.email);
-        // Pre-resolve sender names for pending requests
-        const requestsWithNames = await Promise.all(pending.map(async r => {
-            const sender = await storage.getUserByEmail(r.from_email);
-            return { ...r, senderName: sender?.name || r.from_email.split('@')[0] };
-        }));
+        const requestsWithNames = await storage.getPendingRequests(currentUser.email);
         setPendingRequests(requestsWithNames);
 
         if (role === 'doctor' && status === 'accepted') {
@@ -1445,10 +1412,10 @@ const Dashboard = () => {
                 className={`flex-1 min-w-0 transition-all duration-500 p-4 lg:p-8 lg:ml-64 min-h-screen relative overflow-x-hidden bg-cover bg-fixed bg-center`}
                 style={{ backgroundImage: "url('/dashboard_bg.png')" }}
             >
-                <div className="absolute inset-0 bg-white/20 backdrop-blur-[2px] pointer-events-none"></div>
+                <div className="absolute inset-0 bg-white/20 pointer-events-none"></div>
 
-                <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-brand-500/5 rounded-full blur-[120px] -mr-80 -mt-80 pointer-events-none"></div>
-                <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-teal-500/5 rounded-full blur-[100px] -ml-60 -mb-60 pointer-events-none"></div>
+                <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-brand-500/5 rounded-full blur-[40px] -mr-80 -mt-80 pointer-events-none"></div>
+                <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-teal-500/5 rounded-full blur-[40px] -ml-60 -mb-60 pointer-events-none"></div>
                 
                 <header className="flex justify-between items-center mb-8 gap-4 relative z-10">
                     <div className="flex items-center gap-4">
@@ -1524,7 +1491,7 @@ const Dashboard = () => {
                                             setShowRequestsDropdown(!showRequestsDropdown);
                                             setActiveTab('overview');
                                         }}
-                                        className={`p-4 bg-white/50 backdrop-blur-xl rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-white transition-all border border-slate-200 shadow-sm relative ${pendingRequests.length > 0 ? 'animate-pulse text-brand-500 border-brand-200' : ''}`}
+                                        className={`p-4 bg-white/50 backdrop-blur-sm rounded-2xl text-slate-400 hover:text-brand-600 hover:bg-white transition-all border border-slate-200 shadow-sm relative ${pendingRequests.length > 0 ? 'animate-pulse text-brand-500 border-brand-200' : ''}`}
                                     >
                                         <UserPlus size={24} />
                                         {pendingRequests.length > 0 && (
@@ -1561,7 +1528,7 @@ const Dashboard = () => {
                                             initial={{ opacity: 0, y: 10, scale: 0.95 }}
                                             animate={{ opacity: 1, y: 0, scale: 1 }}
                                             exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                                            className="absolute right-0 top-12 w-80 glass p-4 rounded-3xl shadow-2xl z-50 border border-white/40 backdrop-blur-xl"
+                                            className="absolute right-0 top-12 w-80 glass p-4 rounded-3xl shadow-2xl z-50 border border-white/40 backdrop-blur-sm"
                                         >
                                             <h4 className="text-sm font-black text-slate-900 mb-4 px-2 flex justify-between items-center">
                                                 Pending Requests
@@ -1650,7 +1617,7 @@ const Dashboard = () => {
                                         initial={{ opacity: 0, y: 10, scale: 0.95 }}
                                         animate={{ opacity: 1, y: 0, scale: 1 }}
                                         exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                                        className="absolute right-0 top-16 w-64 glass p-4 rounded-2xl shadow-xl z-50 border border-white/40 backdrop-blur-xl"
+                                        className="absolute right-0 top-16 w-64 glass p-4 rounded-2xl shadow-xl z-50 border border-white/40 backdrop-blur-sm"
                                     >
                                         <div className="flex flex-col items-center mb-4">
                                             <div className={`w-14 h-14 rounded-2xl mb-3 border-2 border-white shadow-md flex items-center justify-center text-white text-xl font-bold overflow-hidden ${role === 'doctor' ? 'bg-blue-600' :
@@ -1726,7 +1693,7 @@ const Dashboard = () => {
                                             layout
                                             initial={{ opacity: 0, scale: 0.95 }}
                                             animate={{ opacity: 1, scale: 1 }}
-                                            className="bg-white/40 backdrop-blur-xl p-4 rounded-2xl flex flex-col items-center text-center cursor-pointer border border-white/40 hover:border-brand-300 hover:bg-white/60 transition-all hover:shadow-2xl hover:shadow-brand-500/5 group"
+                                            className="bg-white/40 backdrop-blur-sm p-4 rounded-2xl flex flex-col items-center text-center cursor-pointer border border-white/40 hover:border-brand-300 hover:bg-white/60 transition-all hover:shadow-2xl hover:shadow-brand-500/5 group"
                                             onClick={() => handleViewDoctorDetails(doc)}
                                         >
                                             <div className="w-20 h-20 rounded-2xl bg-blue-100 border-4 border-white shadow-md mb-3 flex items-center justify-center text-blue-600 text-2xl font-black overflow-hidden uppercase">
@@ -1796,7 +1763,7 @@ const Dashboard = () => {
                                 </div>
                             </div>
 
-                            <div className="bg-white/40 backdrop-blur-xl rounded-2xl border border-white/40 shadow-xl shadow-brand-500/5 overflow-hidden">
+                            <div className="bg-white/40 backdrop-blur-sm rounded-2xl border border-white/40 shadow-xl shadow-brand-500/5 overflow-hidden">
                                 <div className="divide-y divide-slate-50">
                                     {(role === 'doctor' ? patients : connectedPartners)
                                         .filter(p => p.name.toLowerCase().includes(chatSearchQuery.toLowerCase()))
@@ -1870,7 +1837,7 @@ const Dashboard = () => {
 
                             <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
                                  {/* Large Calendar View */}
-                                <div className="lg:col-span-2 bg-white/40 backdrop-blur-xl p-6 rounded-3xl shadow-2xl shadow-indigo-100/10 border border-white/60">
+                                <div className="lg:col-span-2 bg-white/40 backdrop-blur-sm p-6 rounded-3xl shadow-2xl shadow-indigo-100/10 border border-white/60">
                                     <div className="flex items-center justify-between mb-8">
                                         <h3 className="text-2xl font-black text-slate-800">
                                             {viewDate.toLocaleString('default', { month: 'long', year: 'numeric' })}
@@ -1927,7 +1894,7 @@ const Dashboard = () => {
                                                         key={i}
                                                         initial={{ opacity: 0, y: 10 }}
                                                         animate={{ opacity: 1, y: 0 }}
-                                                        className="bg-white/40 backdrop-blur-xl p-6 rounded-3xl border-l-[6px] border-teal-500 shadow-xl shadow-teal-500/5"
+                                                        className="bg-white/40 backdrop-blur-sm p-6 rounded-3xl border-l-[6px] border-teal-500 shadow-xl shadow-teal-500/5"
                                                     >
                                                         <div className="flex justify-between items-start mb-3">
                                                             <div>
@@ -2025,7 +1992,7 @@ const Dashboard = () => {
                                 </div>
 
                                 <div className="space-y-6">
-                                    <div className="glass p-8 rounded-3xl bg-gradient-to-br from-brand-500 to-brand-600 text-white shadow-2xl shadow-brand-200">
+                                    <div className="glass p-8 rounded-3xl w-64 bg-gradient-to-br from-brand-500 to-brand-600 text-white shadow-2xl shadow-brand-200">
                                         <h3 className="text-xl font-black mb-4">Care Instructions</h3>
                                         <div className="space-y-4 text-sm font-medium text-brand-50 opacity-90">
                                             <div className="flex gap-3">
@@ -2051,7 +2018,7 @@ const Dashboard = () => {
                                     <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                                         <div
                                             onClick={() => { setPatientFilter('urgent'); setActiveTab('patients-list'); }}
-                                            className="bg-white/40 backdrop-blur-xl p-6 rounded-2xl border border-white/40 shadow-xl shadow-rose-500/5 cursor-pointer hover:shadow-2xl hover:bg-white/60 transition-all duration-300 group relative overflow-hidden"
+                                            className="bg-white/60 backdrop-blur-sm p-6 rounded-2xl border border-white/60 shadow-xl shadow-rose-500/5 cursor-pointer hover:shadow-2xl hover:bg-white/80 transition-all duration-300 group relative overflow-hidden"
                                         >
                                             <div className="absolute top-0 right-0 w-20 h-20 bg-rose-50 rounded-full -mr-10 -mt-10 opacity-40 group-hover:scale-125 transition-transform duration-500"></div>
                                             <div className="flex items-center gap-3 mb-4 relative z-10">
@@ -2065,7 +2032,7 @@ const Dashboard = () => {
                                         </div>
                                         <div
                                             onClick={() => { setPatientFilter('help'); setActiveTab('patients-list'); }}
-                                            className="bg-white/40 backdrop-blur-xl p-6 rounded-2xl border border-white/40 shadow-xl shadow-amber-500/5 cursor-pointer hover:shadow-2xl hover:bg-white/60 transition-all duration-300 group relative overflow-hidden"
+                                            className="bg-white/60 backdrop-blur-sm p-6 rounded-2xl border border-white/60 shadow-xl shadow-amber-500/5 cursor-pointer hover:shadow-2xl hover:bg-white/80 transition-all duration-300 group relative overflow-hidden"
                                         >
                                             <div className="absolute top-0 right-0 w-20 h-20 bg-amber-50 rounded-full -mr-10 -mt-10 opacity-40 group-hover:scale-125 transition-transform duration-500"></div>
                                             <div className="flex items-center gap-3 mb-4 relative z-10">
@@ -2079,7 +2046,7 @@ const Dashboard = () => {
                                         </div>
                                         <div
                                             onClick={() => { setPatientFilter('normal'); setActiveTab('patients-list'); }}
-                                            className="bg-white/40 backdrop-blur-xl p-6 rounded-2xl border border-white/40 shadow-xl shadow-teal-500/5 cursor-pointer hover:shadow-2xl hover:bg-white/60 transition-all duration-300 group relative overflow-hidden"
+                                            className="bg-white/60 backdrop-blur-sm p-6 rounded-2xl border border-white/60 shadow-xl shadow-teal-500/5 cursor-pointer hover:shadow-2xl hover:bg-white/80 transition-all duration-300 group relative overflow-hidden"
                                         >
                                             <div className="absolute top-0 right-0 w-20 h-20 bg-teal-50 rounded-full -mr-10 -mt-10 opacity-40 group-hover:scale-125 transition-transform duration-500"></div>
                                             <div className="flex items-center gap-3 mb-4 relative z-10">
@@ -2188,7 +2155,7 @@ const Dashboard = () => {
                                                 animate={{ opacity: 1, scale: 1 }}
                                                 whileHover={{ y: -8, scale: 1.02, boxShadow: "0 25px 50px -12px rgba(0,0,0,0.1)" }}
                                                  transition={{ delay: i * 0.1 }}
-                                                className="bg-white/40 backdrop-blur-xl p-6 rounded-2xl border border-white/40 shadow-xl shadow-brand-500/5 hover:shadow-2xl hover:bg-white/60 transition-all cursor-pointer group relative overflow-hidden"
+                                                className="bg-white/40 backdrop-blur-sm p-6 rounded-2xl border border-white/40 shadow-xl shadow-brand-500/5 hover:shadow-2xl hover:bg-white/60 transition-all cursor-pointer group relative overflow-hidden"
                                             >
                                                 <div className="flex items-center justify-between mb-4">
                                                     <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest">{stat.label}</p>
@@ -2213,7 +2180,7 @@ const Dashboard = () => {
                                     </div>
 
                                     <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-                                        <div className="bg-white/40 backdrop-blur-xl p-8 rounded-3xl border border-white/40 shadow-xl shadow-brand-500/5 relative overflow-hidden group">
+                                        <div className="bg-white/40 backdrop-blur-sm p-8 rounded-3xl border border-white/40 shadow-xl shadow-brand-500/5 relative overflow-hidden group">
                                             <div className="absolute top-0 right-0 w-64 h-64 bg-slate-50 rounded-full -mr-32 -mt-32 opacity-50 group-hover:scale-110 transition-transform duration-700"></div>
                                             <h3 className="text-xl font-bold tracking-tight text-slate-900 mb-6 flex items-center gap-3 relative z-10">
                                                 <div className="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center shadow-md">
@@ -2918,7 +2885,7 @@ const Dashboard = () => {
                                         <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-teal-500/10 rounded-full -mr-48 -mt-48 blur-[80px]"></div>
                                         <div className="relative z-10 flex flex-col xl:flex-row items-center justify-between gap-8">
                                             <div className="max-w-2xl">
-                                                <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/5 backdrop-blur-md text-teal-400 rounded-xl border border-white/10 mb-6">
+                                                <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/5 backdrop-blur-sm text-teal-400 rounded-xl border border-white/10 mb-6">
                                                     <Sparkles size={14} />
                                                     <span className="text-[9px] font-black uppercase tracking-widest">Analytical Insight Engine</span>
                                                 </div>
@@ -2966,7 +2933,7 @@ const Dashboard = () => {
                                     <h2 className="text-4xl font-black tracking-tight text-slate-900 mb-2">Patient Registry</h2>
                                     <p className="text-slate-500 font-medium">Comprehensive clinical directory of all connected patient accounts.</p>
                                 </div>
-                                <div className="flex bg-slate-100/50 backdrop-blur-md p-1.5 rounded-[1.5rem] border border-slate-200/50">
+                                <div className="flex bg-slate-100/50 backdrop-blur-sm p-1.5 rounded-[1.5rem] border border-slate-200/50">
                                     {[
                                         { id: 'all', label: 'All Cases' },
                                         { id: 'urgent', label: 'Critical', color: 'text-rose-600' },
@@ -3221,7 +3188,7 @@ const Dashboard = () => {
                                             )}
 
                                             {/* Generate Report Button - Premium CTA */}
-                                            <div className="bg-gradient-to-br from-white to-brand-50/30 backdrop-blur-xl rounded-3xl border border-white shadow-[0_20px_40px_-15px_rgba(99,102,241,0.1)] p-10 text-center h-fit flex flex-col items-center justify-center group hover:shadow-[0_40px_80px_-20px_rgba(99,102,241,0.2)] transition-all duration-700 max-w-2xl mx-auto relative overflow-hidden">
+                                            <div className="bg-gradient-to-br from-white to-brand-50/50 backdrop-blur-sm rounded-3xl border border-white shadow-[0_20px_40px_-15px_rgba(99,102,241,0.1)] p-10 text-center h-fit flex flex-col items-center justify-center group hover:shadow-[0_40px_80px_-20px_rgba(99,102,241,0.2)] transition-all duration-700 max-w-2xl mx-auto relative overflow-hidden">
                                                 <div className="absolute -top-20 -right-20 w-40 h-40 bg-brand-500/5 rounded-full blur-3xl group-hover:bg-brand-500/10 transition-colors"></div>
                                                 <div className="flex flex-col items-center relative z-10">
                                                     <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center text-brand-600 shadow-xl shadow-brand-100 mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500">
@@ -3250,7 +3217,7 @@ const Dashboard = () => {
                                             </div>
                                         </div>
                                     ) : (
-                                        <div className="bg-white/40 backdrop-blur-md p-10 rounded-2xl border-2 border-dashed border-slate-200 text-center flex flex-col items-center justify-center animate-in fade-in zoom-in duration-500">
+                                        <div className="bg-white/80 backdrop-blur-sm p-10 rounded-2xl border-2 border-dashed border-slate-200 text-center flex flex-col items-center justify-center animate-in fade-in zoom-in duration-500">
                                             <div className="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center text-slate-200 mb-4">
                                                 <UsersIcon size={32} />
                                             </div>
@@ -3792,7 +3759,7 @@ const Dashboard = () => {
 
             <AnimatePresence>
                 {isAiAssistantOpen && role !== 'doctor' && (
-                    <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 backdrop-blur-md bg-slate-900/60">
+                    <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 backdrop-blur-sm bg-slate-900/60">
                         <motion.div
                             initial={{ opacity: 0, scale: 0.9, y: 20 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -3803,7 +3770,7 @@ const Dashboard = () => {
                             <div className="p-6 bg-brand-600 text-white flex items-center justify-between shadow-lg relative overflow-hidden">
                                 <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-16 -mt-16 blur-3xl" />
                                 <div className="flex items-center gap-4 relative z-10">
-                                    <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-md">
+                                    <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
                                         <Bot size={24} />
                                     </div>
                                     <div>
@@ -3911,7 +3878,7 @@ const Dashboard = () => {
             <AnimatePresence>
                 {isReportModalOpen && (
                     <div className="fixed inset-0 z-[110] flex items-center justify-center p-4">
-                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setIsReportModalOpen(false)} className="absolute inset-0 bg-slate-900/60 backdrop-blur-md" />
+                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setIsReportModalOpen(false)} className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" />
                         <motion.div
                             initial={{ opacity: 0, scale: 0.9, y: 20 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -4134,7 +4101,7 @@ const Dashboard = () => {
 
                 {
                     incomingCall && (
-                        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 backdrop-blur-md bg-slate-900/60">
+                        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 backdrop-blur-sm bg-slate-900/60">
                             <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="bg-white w-full max-w-xs rounded-2xl p-8 text-center shadow-2xl relative overflow-hidden">
                                 <div className="absolute top-0 left-0 w-full h-1 bg-brand-500 animate-[loading_2s_infinite]" />
                                 <div className="w-20 h-20 rounded-2xl bg-brand-50 mx-auto mb-4 flex items-center justify-center relative">
@@ -4164,7 +4131,7 @@ const Dashboard = () => {
                     isCalling && (
                         <div className="fixed inset-0 z-[100] bg-slate-950 flex flex-col items-center justify-between p-12 text-white">
                             <div className="text-center space-y-4">
-                                <div className="w-28 h-28 rounded-3xl bg-white/10 p-1 mx-auto backdrop-blur-xl">
+                                <div className="w-28 h-28 rounded-3xl bg-white/10 p-1 mx-auto backdrop-blur-sm">
                                     <div className="w-full h-full rounded-2xl bg-brand-600 flex items-center justify-center text-4xl font-black">
                                         {activeChatPartner?.name?.[0] || '?'}
                                     </div>
@@ -4201,7 +4168,7 @@ const Dashboard = () => {
                         animate={{ y: 0, opacity: 1 }}
                         className="fixed bottom-6 right-6 w-80 max-h-[400px] z-50 flex flex-col"
                     >
-                        <div className="bg-slate-900/90 backdrop-blur-xl border border-slate-700 rounded-[2rem] shadow-2xl overflow-hidden flex flex-col">
+                        <div className="bg-slate-900/90 backdrop-blur-sm border border-slate-700 rounded-[2rem] shadow-2xl overflow-hidden flex flex-col">
                             <div className="p-4 bg-slate-800/50 border-b border-slate-700 flex justify-between items-center">
                                 <div className="flex items-center gap-2">
                                     <div className="w-2 h-2 rounded-full bg-teal-500 animate-pulse" />
@@ -4438,7 +4405,7 @@ const Dashboard = () => {
             <AnimatePresence>
                 {isHealthProfileOpen && (
                     <div className="fixed inset-0 z-[120] flex items-center justify-center p-4">
-                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setIsHealthProfileOpen(false)} className="absolute inset-0 bg-slate-900/50 backdrop-blur-md" />
+                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setIsHealthProfileOpen(false)} className="absolute inset-0 bg-slate-900/50 backdrop-blur-sm" />
                         <motion.div
                             initial={{ opacity: 0, scale: 0.9, y: 20 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -4448,7 +4415,7 @@ const Dashboard = () => {
                             {/* Header */}
                             <div className="p-8 bg-gradient-to-r from-brand-600 to-brand-700 text-white flex items-center justify-between shrink-0">
                                 <div className="flex items-center gap-4">
-                                    <div className="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-md">
+                                    <div className="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-sm">
                                         <Heart size={26} />
                                     </div>
                                     <div>

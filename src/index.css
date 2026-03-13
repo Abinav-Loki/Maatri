@@ -34,7 +34,7 @@
 
 @layer components {
   .glass {
-    @apply bg-[#F8F7FF] backdrop-blur-xl border border-white/60 border-l-4 border-l-brand-500 rounded-[2.5rem] transition-all duration-500;
+    @apply bg-[#F8F7FF] backdrop-blur-md border border-white/60 border-l-4 border-l-brand-500 rounded-[2.5rem] transition-all duration-500;
     box-shadow:
       10px 10px 20px rgba(0, 0, 0, 0.03),
       -10px -10px 20px rgba(255, 255, 255, 0.8),
