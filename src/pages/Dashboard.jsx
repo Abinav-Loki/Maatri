@@ -2242,7 +2242,7 @@ const Dashboard = () => {
                                             )}
                                         </div>
                                         <div className="space-y-6">
-                                            <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm relative overflow-hidden group">
+                                            <div className="bg-white/40 backdrop-blur-md p-8 rounded-3xl border border-white/40 shadow-xl shadow-brand-500/5 relative overflow-hidden group">
                                                 <div className="absolute bottom-0 left-0 w-64 h-64 bg-slate-50 rounded-full -ml-32 -mb-32 opacity-50 group-hover:scale-110 transition-transform duration-700"></div>
                                                 <h3 className="text-xl font-bold tracking-tight text-slate-900 mb-8 flex items-center gap-3 relative z-10">
                                                     <div className="w-10 h-10 rounded-xl bg-brand-500 text-white flex items-center justify-center shadow-md shadow-brand-500/10">
@@ -2256,7 +2256,7 @@ const Dashboard = () => {
                                                         <p className="font-bold uppercase tracking-widest text-[10px]">Access Encrypted</p>
                                                     </div>
                                                 ) : (selectedPatient || role === 'patient') ? (
-                                                    <div className={`p-6 rounded-2xl border-2 relative overflow-hidden transition-all duration-300 z-10 ${getRiskStatus(logs[0]).bg} ${getRiskStatus(logs[0]).border}`}>
+                                                    <div className={`p-6 rounded-2xl border-2 relative overflow-hidden transition-all duration-300 z-10 bg-white/30 backdrop-blur-sm ${getRiskStatus(logs[0]).border}`}>
                                                         <div className="relative z-10">
                                                             <div className="flex items-center gap-2 mb-4">
                                                                 <div className="relative flex items-center justify-center">
@@ -2295,7 +2295,7 @@ const Dashboard = () => {
                                                                     Schedule Intervention <Calendar size={16} />
                                                                 </button>
                                                             ) : (
-                                                                <button className={`w-full py-5 rounded-2xl border-2 font-black text-xs uppercase tracking-[0.2em] flex items-center justify-center gap-3 transition-all ${getRiskStatus(logs[0]).color} ${getRiskStatus(logs[0]).border} bg-white hover:bg-slate-50`}>
+                                                                <button className={`w-full py-5 rounded-2xl border-2 font-black text-xs uppercase tracking-[0.2em] flex items-center justify-center gap-3 transition-all ${getRiskStatus(logs[0]).color} ${getRiskStatus(logs[0]).border} bg-white/60 backdrop-blur-sm hover:bg-white/80 shadow-lg shadow-brand-500/5`}>
                                                                     Full Clinical Assessment <ChevronRight size={18} />
                                                                 </button>
                                                             )}
