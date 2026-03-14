@@ -2019,21 +2019,23 @@ const Dashboard = () => {
                                     )}
                                 </div>
 
-                                <div className="space-y-6">
-                                    <div className="glass p-8 rounded-3xl w-64 bg-gradient-to-br from-brand-500 to-brand-600 text-white shadow-2xl shadow-brand-200">
-                                        <h3 className="text-xl font-black mb-4">Care Instructions</h3>
-                                        <div className="space-y-4 text-sm font-medium text-brand-50 opacity-90">
-                                            <div className="flex gap-3">
-                                                <div className="w-2 h-2 rounded-full bg-white mt-1.5 shrink-0"></div>
-                                                <p>Maintain your 2-hourly water intake for optimal hydration.</p>
-                                            </div>
-                                            <div className="flex gap-3">
-                                                <div className="w-2 h-2 rounded-full bg-white mt-1.5 shrink-0"></div>
-                                                <p>Notifications will appear here when your doctor sets a medicine schedule.</p>
+                                {role !== 'doctor' && (
+                                    <div className="space-y-6">
+                                        <div className="glass p-8 rounded-3xl w-64 bg-gradient-to-br from-brand-500 to-brand-600 text-white shadow-2xl shadow-brand-200">
+                                            <h3 className="text-xl font-black mb-4">Care Instructions</h3>
+                                            <div className="space-y-4 text-sm font-medium text-brand-50 opacity-90">
+                                                <div className="flex gap-3">
+                                                    <div className="w-2 h-2 rounded-full bg-white mt-1.5 shrink-0"></div>
+                                                    <p>Maintain your 2-hourly water intake for optimal hydration.</p>
+                                                </div>
+                                                <div className="flex gap-3">
+                                                    <div className="w-2 h-2 rounded-full bg-white mt-1.5 shrink-0"></div>
+                                                    <p>Notifications will appear here when your doctor sets a medicine schedule.</p>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                )}
                             </div >
                         </motion.div >
                     )
