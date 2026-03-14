@@ -3342,10 +3342,12 @@ const Dashboard = () => {
                                      </div>
  
                                      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8 border-t border-slate-50">
-                                         <div>
-                                             <label className="block text-[11px] font-black text-slate-400 mb-3 uppercase tracking-widest px-0.5">Medicine Intake Schedule (24h)</label>
-                                             <input type="text" className="w-full h-14 px-6 bg-slate-50 border border-slate-100 rounded-2xl font-bold text-slate-700 focus:bg-white focus:border-brand-500 transition-all shadow-sm" value={profileForm.medicineTimes} onChange={e => setProfileForm({ ...profileForm, medicineTimes: e.target.value })} placeholder="08:00, 14:00, 20:00" />
-                                         </div>
+                                         {role !== 'doctor' && (
+                                             <div>
+                                                 <label className="block text-[11px] font-black text-slate-400 mb-3 uppercase tracking-widest px-0.5">Medicine Intake Schedule (24h)</label>
+                                                 <input type="text" className="w-full h-14 px-6 bg-slate-50 border border-slate-100 rounded-2xl font-bold text-slate-700 focus:bg-white focus:border-brand-500 transition-all shadow-sm" value={profileForm.medicineTimes} onChange={e => setProfileForm({ ...profileForm, medicineTimes: e.target.value })} placeholder="08:00, 14:00, 20:00" />
+                                             </div>
+                                         )}
                                          {role === 'patient' && (
                                              <div>
                                                  <label className="block text-[11px] font-black text-slate-400 mb-3 uppercase tracking-widest px-0.5">Biological Pregnancy Stage</label>
