@@ -1398,8 +1398,8 @@ const Dashboard = () => {
                             {activeTab === item.id && (
                                 <motion.div layoutId="activeNav" className="absolute left-[-4px] w-1 h-5 bg-brand-500 rounded-r-full shadow-[2px_0_10px_rgba(99,102,241,0.8)]" />
                             )}
-                            {item.id === 'notifications' && clinicalNotifications.filter(n => !n.read && (role === 'patient' || n.type !== 'water')).length > 0 && (
-                                <span className="absolute top-3 right-3 w-1.5 h-1.5 bg-rose-500 rounded-full shadow-[0_0_10px_rgba(244,63,94,0.6)] animate-pulse"></span>
+                            {item.id === 'notifications' && clinicalNotifications.filter(n => !n.read && n.type !== 'water').length > 0 && (
+                                <span className={`absolute top-2.5 right-2 w-2 h-2 rounded-full ${item.id === 'notifications' ? 'bg-brand-500 animate-pulse' : 'bg-red-500'}`}></span>
                             )}
                         </button>
                     ))}
@@ -1536,10 +1536,10 @@ const Dashboard = () => {
                                     className={`p-4 bg-white border border-slate-200 rounded-2xl text-slate-400 hover:text-brand-600 hover:shadow-xl hover:shadow-brand-500/10 transition-all relative ${clinicalNotifications.some(n => !n.read) ? 'text-brand-500 border-brand-200' : ''}`}
                                 >
                                     <Bell size={24} />
-                                    {clinicalNotifications.filter(n => !n.read && (role === 'patient' || n.type !== 'water')).length > 0 && (
-                                        <span className="absolute -top-1 -right-1 w-6 h-6 bg-rose-500 text-white text-[10px] font-black rounded-lg flex items-center justify-center border-2 border-white shadow-lg shadow-rose-500/20">
-                                            {clinicalNotifications.filter(n => !n.read && (role === 'patient' || n.type !== 'water')).length}
-                                        </span>
+                                    {clinicalNotifications.filter(n => !n.read && n.type !== 'water').length > 0 && (
+                                        <div className="absolute -top-1 -right-1 w-5 h-5 bg-brand-500 text-white text-[10px] font-bold flex items-center justify-center rounded-full border-2 border-white">
+                                            {clinicalNotifications.filter(n => !n.read && n.type !== 'water').length}
+                                        </div>
                                     )}
                                 </button>
                             </div>
@@ -1583,24 +1583,21 @@ const Dashboard = () => {
                                                     </div>
                                                 )}
 
-                                                {clinicalNotifications.filter(n => !n.read && (role === 'patient' || n.type !== 'water')).length > 0 && (
-                                                    <div className="space-y-2">
-                                                        <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest mb-2 px-2">Health Reminders</p>
-                                                        {clinicalNotifications.filter(n => !n.read && (role === 'patient' || n.type !== 'water')).slice(0, 3).map(note => (
-                                                            <div key={note.id} className="bg-brand-50/50 p-3 rounded-2xl border border-brand-100 flex items-center gap-3">
-                                                                <div className="p-2 bg-brand-100 text-brand-600 rounded-xl">
-                                                                    {note.type === 'water' ? <Droplets size={14} /> : <Activity size={14} />}
-                                                                </div>
-                                                                <p className="text-xs font-bold text-slate-700 leading-tight">{note.message}</p>
+                                                {clinicalNotifications.filter(n => !n.read && n.type !== 'water').length > 0 && (
+                                                    <div className="mt-4 pt-4 border-t border-slate-100">
+                                                        {clinicalNotifications.filter(n => !n.read && n.type !== 'water').slice(0, 3).map(note => (
+                                                            <div key={note.id} className="flex items-start gap-3 mb-3 last:mb-0">
+                                                                <div className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${note.type === 'SOS' ? 'bg-rose-500' : note.type === 'water' ? 'bg-blue-500' : 'bg-brand-500'}`}></div>
+                                                                <p className="text-sm text-slate-600 line-clamp-2">{note.message}</p>
                                                             </div>
                                                         ))}
                                                     </div>
                                                 )}
 
-                                                {pendingRequests.length === 0 && clinicalNotifications.filter(n => !n.read && (role === 'patient' || n.type !== 'water')).length === 0 && (
-                                                    <div className="py-8 text-center text-slate-400">
-                                                        <Activity className="mx-auto mb-2 opacity-10" size={32} />
-                                                        <p className="text-xs font-bold uppercase tracking-widest text-slate-300">All caught up</p>
+                                                {pendingRequests.length === 0 && clinicalNotifications.filter(n => !n.read && n.type !== 'water').length === 0 && (
+                                                    <div className="text-center py-6 text-slate-400">
+                                                        <Activity className="mx-auto mb-2 opacity-20" size={24} />
+                                                        <p className="text-xs font-bold uppercase tracking-widest">No New Alerts</p>
                                                     </div>
                                                 )}
                                             </div>
