@@ -241,6 +241,23 @@ const storage = {
         localStorage.removeItem('currentUser');
     },
 
+    // --- Password Reset ---
+    sendPasswordResetEmail: async (email) => {
+        const { error } = await supabase.auth.resetPasswordForEmail(email.toLowerCase(), {
+            redirectTo: `${window.location.origin}/reset-password`,
+        });
+        if (error) throw new Error(error.message);
+        return true;
+    },
+
+    updatePassword: async (newPassword) => {
+        const { error } = await supabase.auth.updateUser({
+            password: newPassword
+        });
+        if (error) throw new Error(error.message);
+        return true;
+    },
+
     // --- Patient Data ---
     getPatientData: async (email) => {
         const { data, error } = await supabase

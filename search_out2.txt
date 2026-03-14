@@ -1,0 +1,167 @@
+10: MessageSquare, Sparkles, Bot, Trash2,
+24: import browserNotifications from '../utils/notifications';
+63: const [chatMessages, setChatMessages] = useState([]);
+65: const [newMessage, setNewMessage] = useState('');
+78: const [clinicalNotifications, setClinicalNotifications] = useState([]);
+84: const [aiNewMessage, setAiNewMessage] = useState('');
+97: const [simMessages, setSimMessages] = useState([]);
+104: // Unread Messages State
+105: const [unreadMessageCount, setUnreadMessageCount] = useState(0);
+154: browserNotifications.requestPermission();
+213: // Browser notification
+214: browserNotifications.send("CRITICAL EMERGENCY", msg);
+216: // Storage Notification
+217: await storage.addNotification(currentUser.email, 'SOS', msg);
+228: const updated = await storage.getNotifications(currentUser.email);
+229: setClinicalNotifications(updated);
+406: // Do not auto-select patient for doctors to keep analytics clean
+491: // Periodic check for requests and messages
+523: // Real-time message/call polling
+525: await storage.markMessagesAsRead(activeChatPartner.email, user.email);
+526: const msgs = await storage.getMessages(user.email, activeChatPartner.email);
+527: setChatMessages(msgs);
+529: // Check for incoming calls in messages
+537: const finalUnreadCount = await storage.getUnreadMessagesCount(user.email);
+538: setUnreadMessageCount(finalUnreadCount);
+540: const partnerCounts = await storage.getUnreadMessagesCountPerPartner(user.email);
+549: const unsubscribe = twilioMock.onMessage((newMsg) => {
+550: setSimMessages(prev => [newMsg, ...prev].slice(0, 10));
+555: // Clinical Reminders & Notification Fetching
+559: const syncNotifications = async () => {
+560: const notes = await storage.getNotifications(currentUser.email);
+561: setClinicalNotifications(notes);
+564: syncNotifications();
+565: const notificationInterval = setInterval(syncNotifications, 10000); // Polling every 10s for real-time SOS/reminders
+572: // 2 Hour Water Reminder (7200000 ms)
+576: const lastWater = await storage.getLastWaterReminder(currentUser.email);
+577: if (!lastWater || (now - new Date(lastWater.timestamp)) > 7200000) {
+578: const message = "Time for your hydration! Staying consistent helps keep your Maatri Shield score in the green.";
+579: await storage.addNotification(currentUser.email, 'water', message);
+580: browserNotifications.send("Hydration Alert", message);
+582: twilioMock.sendWhatsApp(currentUser.mobile, message);
+584: syncNotifications();
+594: const message = "Time for your medicine! Staying consistent helps keep your Maatri Shield score in the green.";
+596: const recentNotes = await storage.getNotifications(currentUser.email);
+600: await storage.addNotification(currentUser.email, 'medicine', message);
+601: browserNotifications.send("Medicine Reminder", message);
+603: twilioMock.sendWhatsApp(currentUser.mobile, message);
+605: syncNotifications();
+616: clearInterval(notificationInterval);
+622: if (activeTab === 'notifications' && currentUser) {
+624: await storage.markNotificationsAsRead(currentUser.email);
+625: const updated = await storage.getNotifications(currentUser.email);
+626: setClinicalNotifications(updated);
+662: }, [chatMessages, isChatOpen]);
+706: // Do not auto-select patient for doctors
+732: const updated = await storage.getNotifications(currentUser.email);
+733: setClinicalNotifications(updated);
+748: await storage.clearAllNotifications(currentUser.email);
+749: const updated = await storage.getNotifications(currentUser.email);
+750: setClinicalNotifications(updated);
+751: console.log("[Dashboard] Demo and Notifications Reset");
+770: const handleSendMessage = async (e) => {
+772: if (!newMessage.trim() || !activeChatPartner) return;
+774: await storage.saveMessage({
+777: text: newMessage,
+780: setNewMessage('');
+781: const msgs = await storage.getMessages(currentUser.email, activeChatPartner.email);
+782: setChatMessages(msgs);
+791: await storage.saveMessage({
+797: const msgs = await storage.getMessages(currentUser.email, activeChatPartner.email);
+798: setChatMessages(msgs);
+814: await storage.saveMessage({
+820: const msgs = await storage.getMessages(currentUser.email, activeChatPartner.email);
+821: setChatMessages(msgs);
+853: await storage.saveMessage({
+869: await storage.updateMessageStatus(incomingCall.id, 'accepted');
+895: setUnreadMessageCount(prev => Math.max(0, prev - 1)); // Optimistic decrement if we know they have unread
+904: await storage.markMessagesAsRead(partner.email, currentUser.email);
+905: const msgs = await storage.getMessages(currentUser.email, partner.email);
+906: setChatMessages(msgs);
+909: const freshCount = await storage.getUnreadMessagesCount(currentUser.email);
+910: setUnreadMessageCount(freshCount);
+911: const freshPartnerCounts = await storage.getUnreadMessagesCountPerPartner(currentUser.email);
+950: // Send confirmation notifications via Twilio Mock
+952: const msg = `Hello ${fixedForm.name || 'User'}, your Maatri Shield profile has been updated successfully. Your mobile notifications are now active.`;
+953: await storage.addNotification(currentUser.email, 'Profile Alert', msg);
+970: alert(`Failed to update profile: ${err.message}`);
+977: if (!aiNewMessage.trim()) return;
+979: const originalMessage = aiNewMessage;
+980: const userMsg = { role: 'user', parts: [{ text: originalMessage }] };
+984: setAiNewMessage('');
+998: aiChatHistory, // Send existing history excluding the new message (context injection handles the current one)
+999: originalMessage
+1029: await storage.clearMessages(currentUser.email, activeChatPartner.email);
+1030: setChatMessages([]);
+1037: const handleDeleteMessage = async (messageId) => {
+1039: setChatMessages(prev => prev.filter(m => m.id !== messageId));
+1041: await storage.deleteMessage(messageId);
+1140: alert(`Failed to save log: ${err.message || 'Unknown error'}`);
+1200: doctorChat = await storage.getMessages(currentUser.email, targetUser.email);
+1205: const msgs = await storage.getMessages(targetUser.email, partner.email);
+1209: console.log(`Clinical Scribe: Found ${doctorChat.length} clinical messages.`);
+1217: alert("The AI service needs at least some clinical data (vitals, chat, or AI history) to generate a report. Please ensure there are logs or messages from the last week.");
+1245: alert("Digital Scribe Error: " + (error.message || "Unknown error"));
+1283: // Send automated chat message
+1285: await storage.saveMessage({
+1293: // Send In-App Notification
+1294: await storage.addNotification(
+1307: alert('Appointment scheduled successfully and notifications sent!');
+1370: { id: 'chat', icon: MessageSquare, label: "Messages" },
+1375: { id: 'notifications', icon: Bell, label: "Notifications" },
+1382: if (item.id === 'notifications') {
+1383: setClinicalNotifications(prev => prev.map(n => ({ ...n, read: true })));
+1384: if (currentUser) storage.markNotificationsAsRead(currentUser.email);
+1401: {item.id === 'notifications' && clinicalNotifications.filter(n => !n.read && (role !== 'doctor' || n.type !== 'water')).length > 0 && (
+1531: setActiveTab('notifications');
+1533: setClinicalNotifications(prev => prev.map(n => ({ ...n, read: true })));
+1534: if (currentUser) await storage.markNotificationsAsRead(currentUser.email);
+1539: {clinicalNotifications.filter(n => !n.read && (role !== 'doctor' || n.type !== 'water')).length > 0 && (
+1541: {clinicalNotifications.filter(n => !n.read && (role !== 'doctor' || n.type !== 'water')).length}
+1586: {clinicalNotifications.filter(n => !n.read).length > 0 && (
+1589: {clinicalNotifications.filter(n => !n.read).slice(0, 3).map(note => (
+1592: {note.type === 'water' ? <Droplets size={14} /> : <Activity size={14} />}
+1594: <p className="text-xs font-bold text-slate-700 leading-tight">{note.message}</p>
+1600: {pendingRequests.length === 0 && clinicalNotifications.filter(n => !n.read).length === 0 && (
+1608: onClick={() => { setShowRequestsDropdown(false); setActiveTab('notifications'); }}
+1611: View All Notifications
+1774: <h2 className="text-2xl font-bold tracking-tight text-slate-900 mb-1">Messages</h2>
+1834: <MessageSquare size={40} />
+1949: activeTab === 'notifications' && (
+1953: <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 mb-2">Clinical Notifications</h2>
+1958: await storage.deleteReadNotifications(currentUser.email);
+1959: const updated = await storage.getNotifications(currentUser.email);
+1960: setClinicalNotifications(updated);
+1970: {clinicalNotifications.length > 0 ? (
+1971: clinicalNotifications.filter(n => role !== 'doctor' || n.type !== 'water').map((n) => (
+1978: : (n.type === 'water' || n.type === 'medicine')
+1985: : (n.type === 'water' || n.type === 'medicine')
+1990: n.type === 'water' ? <Droplets size={20} /> :
+1997: {n.type === 'water' ? 'Water Intake' : n.type === 'medicine' ? 'Medicine Reminder' : n.type === 'SOS' ? 'SOS Alert' : `${n.type} Alert`}
+2004: {n.message}
+2012: <p className="text-slate-400 font-bold">No clinical notifications found.</p>
+2023: <p>Maintain your 2-hourly water intake for optimal hydration.</p>
+2027: <p>Notifications will appear here when your doctor sets a medicine schedule.</p>
+3061: title="Secure Message"
+3063: <MessageSquare size={20} className="group-hover/btn:rotate-12 transition-transform" />
+3124: <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest px-2">Select Patient</h3>
+3847: onClick={() => setAiNewMessage(q)}
+3888: value={aiNewMessage}
+3889: onChange={e => setAiNewMessage(e.target.value)}
+4011: {/* Messages Area - Instagram Style */}
+4024: {chatMessages.map((msg, idx) => {
+4037: onClick={() => handleDeleteMessage(msg.id)}
+4039: title="Delete message"
+4076: <p className={`text-[9px] font-bold ${isMine ? 'text-white/70' : 'text-slate-400'}`}>Voice Message</p>
+4095: <form onSubmit={handleSendMessage} className="flex items-center gap-3 bg-white border border-slate-200 rounded-full px-5 py-2 group focus-within:ring-2 focus-within:ring-brand-500/20 transition-all">
+4112: placeholder="Message..."
+4114: value={newMessage}
+4115: onChange={e => setNewMessage(e.target.value)}
+4119: disabled={!newMessage.trim()}
+4120: className={`font-bold text-sm transition-all ${newMessage.trim() ? 'text-brand-600 scale-100' : 'text-brand-300 scale-95 cursor-default'}`}
+4144: await storage.updateMessageStatus(incomingCall.id, 'declined');
+4179: All messages with <span className="font-bold text-slate-700">{activeChatPartner.name}</span> will be permanently deleted.
+4237: {showSimLogs && simMessages.length > 0 && (
+4251: onClick={() => setSimMessages([])}
+4268: {simMessages.map((msg) => (
+4285: <p className="text-[11px] text-slate-200 leading-relaxed italic">"{msg.message}"</p>

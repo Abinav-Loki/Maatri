@@ -10,6 +10,8 @@ const AuthPage = () => {
     const { role } = useParams();
     const navigate = useNavigate();
     const [isLogin, setIsLogin] = useState(true);
+    const [isForgotPassword, setIsForgotPassword] = useState(false);
+    const [forgotPasswordSuccess, setForgotPasswordSuccess] = useState('');
 
     // Registration States
     const [email, setEmail] = useState('');
@@ -77,6 +79,25 @@ const AuthPage = () => {
                     setAuthError('Account created! Please check your email to confirm your account, then log in.');
                 }
             }
+        } catch (error) {
+            setAuthError(error.message);
+        }
+    };
+
+    const handleForgotPassword = async (e) => {
+        e.preventDefault();
+        setAuthError('');
+        setForgotPasswordSuccess('');
+
+        const err = validateEmail(email);
+        if (err) {
+            setEmailError(err);
+            return;
+        }
+
+        try {
+            await storage.sendPasswordResetEmail(email);
+            setForgotPasswordSuccess('Password reset link sent! Please check your email.');
         } catch (error) {
             setAuthError(error.message);
         }
@@ -190,29 +211,29 @@ const AuthPage = () => {
                                 </motion.div>
                             </div>
                             <h2 className="text-4xl font-black tracking-tighter text-white capitalize mb-4">
-                                {role} {isLogin ? 'Console' : 'Registration'}
+                                {isForgotPassword ? 'Recovery' : `${role} ${isLogin ? 'Console' : 'Registration'}`}
                             </h2>
                             <p className="text-slate-400 font-medium tracking-tight text-lg">
-                                {isLogin ? `Secure access to the Maatri Neural ${role} interface.` : `Initialize your clinical ${role} profile.`}
+                                {isForgotPassword ? 'Reset your biometric password.' : isLogin ? `Secure access to the Maatri Neural ${role} interface.` : `Initialize your clinical ${role} profile.`}
                             </p>
                         </div>
 
                         <div className="flex p-2 bg-white/[0.02] rounded-[2rem] mb-12 border border-white/10 backdrop-blur-md">
                             <button
-                                onClick={() => { setIsLogin(true); setAuthError(''); setEmail(''); setPassword(''); }}
-                                className={`flex-1 py-4 rounded-[1.5rem] font-black text-sm uppercase tracking-[0.2em] transition-all duration-500 ${isLogin ? 'bg-white text-[#020617] shadow-2xl scale-[1.02]' : 'text-slate-500 hover:text-slate-300'}`}
+                                onClick={() => { setIsForgotPassword(false); setIsLogin(true); setAuthError(''); setEmail(''); setPassword(''); setForgotPasswordSuccess(''); }}
+                                className={`flex-1 py-4 rounded-[1.5rem] font-black text-sm uppercase tracking-[0.2em] transition-all duration-500 ${isLogin && !isForgotPassword ? 'bg-white text-[#020617] shadow-2xl scale-[1.02]' : 'text-slate-500 hover:text-slate-300'}`}
                             >
                                 Authenticate
                             </button>
                             <button
-                                onClick={() => { setIsLogin(false); setAuthError(''); setEmail(''); setPassword(''); }}
-                                className={`flex-1 py-4 rounded-[1.5rem] font-black text-sm uppercase tracking-[0.2em] transition-all duration-500 ${!isLogin ? 'bg-white text-[#020617] shadow-2xl scale-[1.02]' : 'text-slate-500 hover:text-slate-300'}`}
+                                onClick={() => { setIsForgotPassword(false); setIsLogin(false); setAuthError(''); setEmail(''); setPassword(''); setForgotPasswordSuccess(''); }}
+                                className={`flex-1 py-4 rounded-[1.5rem] font-black text-sm uppercase tracking-[0.2em] transition-all duration-500 ${!isLogin && !isForgotPassword ? 'bg-white text-[#020617] shadow-2xl scale-[1.02]' : 'text-slate-500 hover:text-slate-300'}`}
                             >
                                 Register
                             </button>
                         </div>
 
-                        <form onSubmit={handleSubmit} className="space-y-8">
+                        <form onSubmit={isForgotPassword ? handleForgotPassword : handleSubmit} className="space-y-8">
                             <AnimatePresence>
                                 {authError && (
                                     <motion.div
@@ -225,9 +246,20 @@ const AuthPage = () => {
                                         {authError}
                                     </motion.div>
                                 )}
+                                {forgotPasswordSuccess && (
+                                    <motion.div
+                                        initial={{ opacity: 0, y: -20, scale: 0.95 }}
+                                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                                        exit={{ opacity: 0, scale: 0.95 }}
+                                        className="bg-teal-500/10 border border-teal-500/20 p-5 rounded-[1.5rem] text-teal-400 text-sm flex items-center gap-4 font-bold mb-8 backdrop-blur-xl"
+                                    >
+                                        <CheckCircle2 size={20} className="shrink-0" />
+                                        {forgotPasswordSuccess}
+                                    </motion.div>
+                                )}
                             </AnimatePresence>
 
-                            {!isLogin && (
+                            {!isLogin && !isForgotPassword && (
                                 <motion.div
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
@@ -379,30 +411,43 @@ const AuthPage = () => {
                                 </div>
                             </div>
 
-                            <div className="group">
-                                <label className="block text-[10px] font-black text-teal-500 uppercase tracking-[0.3em] mb-3 px-4">Biometric Password</label>
-                                <div className="relative">
-                                    <Lock className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-teal-400 transition-colors" size={20} />
-                                    <input
-                                        type={showPassword ? "text" : "password"}
-                                        placeholder="••••••••"
-                                        className="w-full bg-white/[0.03] border border-white/10 focus:border-teal-500/50 focus:bg-white/[0.05] rounded-[1.5rem] py-5 pl-14 pr-14 outline-none transition-all placeholder:text-slate-700 text-white font-bold text-lg [&::-ms-reveal]:hidden [&::-ms-clear]:hidden"
-                                        style={{ WebkitTextSecurity: showPassword ? 'none' : undefined }}
-                                        value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
-                                        required
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={() => setShowPassword(!showPassword)}
-                                        className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-500 hover:text-teal-400 transition-colors p-2"
-                                    >
-                                        {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                                    </button>
+                            {!isForgotPassword && (
+                                <div className="group">
+                                    <label className="block text-[10px] font-black text-teal-500 uppercase tracking-[0.3em] mb-3 px-4">Biometric Password</label>
+                                    <div className="relative">
+                                        <Lock className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-teal-400 transition-colors" size={20} />
+                                        <input
+                                            type={showPassword ? "text" : "password"}
+                                            placeholder="••••••••"
+                                            className="w-full bg-white/[0.03] border border-white/10 focus:border-teal-500/50 focus:bg-white/[0.05] rounded-[1.5rem] py-5 pl-14 pr-14 outline-none transition-all placeholder:text-slate-700 text-white font-bold text-lg [&::-ms-reveal]:hidden [&::-ms-clear]:hidden"
+                                            style={{ WebkitTextSecurity: showPassword ? 'none' : undefined }}
+                                            value={password}
+                                            onChange={(e) => setPassword(e.target.value)}
+                                            required
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowPassword(!showPassword)}
+                                            className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-500 hover:text-teal-400 transition-colors p-2"
+                                        >
+                                            {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                                        </button>
+                                    </div>
+                                    {isLogin && (
+                                        <div className="flex justify-end mt-4 px-4">
+                                            <button
+                                                type="button"
+                                                onClick={() => { setIsForgotPassword(true); setAuthError(''); setForgotPasswordSuccess(''); }}
+                                                className="text-[10px] font-black text-teal-400 hover:text-teal-300 uppercase tracking-[0.2em] transition-colors"
+                                            >
+                                                Forgot Password?
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
-                            </div>
+                            )}
 
-                            {!isLogin && (
+                            {!isLogin && !isForgotPassword && (
                                 <motion.div
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
@@ -419,21 +464,38 @@ const AuthPage = () => {
                                 type="submit"
                                 className="w-full py-6 bg-gradient-to-r from-teal-500 to-indigo-600 text-white rounded-[2rem] font-black text-lg shadow-[0_20px_40px_-10px_rgba(20,184,166,0.3)] transition-all uppercase tracking-[0.3em] mt-6"
                             >
-                                {isLogin ? 'Initialize Uplink' : 'Activate Profile'}
+                                {isForgotPassword ? 'Send Recovery Link' : isLogin ? 'Initialize Uplink' : 'Activate Profile'}
                             </motion.button>
                         </form>
 
-                        <div className="text-center mt-12">
-                            <p className="text-slate-500 text-sm font-bold tracking-tight">
-                                {isLogin ? "Neural records not found?" : "Already registered on the platform?"}
-                                <button
-                                    onClick={() => { setIsLogin(!isLogin); setAuthError(''); setEmail(''); setPassword(''); }}
-                                    className="ml-3 text-teal-400 hover:text-teal-300 transition-all font-black uppercase tracking-widest text-xs border-b border-teal-500/20 hover:border-teal-400 pb-0.5"
-                                >
-                                    {isLogin ? 'Join Neural Network' : 'System Uplink'}
-                                </button>
-                            </p>
-                        </div>
+                        {!isForgotPassword && (
+                            <div className="text-center mt-12">
+                                <p className="text-slate-500 text-sm font-bold tracking-tight">
+                                    {isLogin ? "Neural records not found?" : "Already registered on the platform?"}
+                                    <button
+                                        type="button"
+                                        onClick={() => { setIsLogin(!isLogin); setAuthError(''); setEmail(''); setPassword(''); }}
+                                        className="ml-3 text-teal-400 hover:text-teal-300 transition-all font-black uppercase tracking-widest text-xs border-b border-teal-500/20 hover:border-teal-400 pb-0.5"
+                                    >
+                                        {isLogin ? 'Join Neural Network' : 'System Uplink'}
+                                    </button>
+                                </p>
+                            </div>
+                        )}
+                        {isForgotPassword && (
+                            <div className="text-center mt-12">
+                                <p className="text-slate-500 text-sm font-bold tracking-tight">
+                                    Remembered your password?
+                                    <button
+                                        type="button"
+                                        onClick={() => { setIsForgotPassword(false); setIsLogin(true); setAuthError(''); setForgotPasswordSuccess(''); }}
+                                        className="ml-3 text-teal-400 hover:text-teal-300 transition-all font-black uppercase tracking-widest text-xs border-b border-teal-500/20 hover:border-teal-400 pb-0.5"
+                                    >
+                                        Return to Login
+                                    </button>
+                                </p>
+                            </div>
+                        )}
 
                         <div className="mt-16 pt-10 border-t border-white/5">
                             <div className="flex flex-wrap items-center justify-center gap-6">
