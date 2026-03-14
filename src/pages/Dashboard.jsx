@@ -1127,6 +1127,14 @@ const Dashboard = () => {
 
     const handleSaveLog = async (e) => {
         e.preventDefault();
+        
+        // Custom validation: at least 2 data fields must be populated
+        const filledFields = [logForm.heartRate, logForm.glucose, logForm.systolic, logForm.diastolic].filter(val => val && val.toString().trim() !== '').length;
+        if (filledFields < 2) {
+            alert("Please enter at least 2 health data points (Heart Rate, Glucose, BP Sys, or BP Dia) to save the log.");
+            return;
+        }
+
         console.log('[Dashboard] Attempting to save log:', logForm);
         try {
             await storage.saveLog(currentUser.email, logForm);
@@ -3397,25 +3405,25 @@ const Dashboard = () => {
                                         <label className="block text-[9px] font-black text-slate-400 mb-1 uppercase px-1 flex items-center gap-2">
                                             <div className="p-1 bg-rose-100 text-rose-600 rounded-lg group-hover:scale-110 transition-transform"><Activity size={14} /></div> Heart Rate
                                         </label>
-                                        <input type="number" placeholder="72" className="input-field bg-white border-none shadow-none focus:ring-0 py-1" value={logForm.heartRate} onChange={e => setLogForm({ ...logForm, heartRate: e.target.value })} required />
+                                        <input type="number" placeholder="72" className="input-field bg-white border-none shadow-none focus:ring-0 py-1" value={logForm.heartRate} onChange={e => setLogForm({ ...logForm, heartRate: e.target.value })} />
                                     </div>
                                     <div className="bg-slate-50 p-3 rounded-2xl border border-slate-100 transition-all hover:border-indigo-200 group">
                                         <label className="block text-[9px] font-black text-slate-400 mb-1 uppercase px-1 flex items-center gap-2">
                                             <div className="p-1 bg-indigo-100 text-indigo-600 rounded-lg group-hover:scale-110 transition-transform"><Droplets size={14} /></div> Glucose
                                         </label>
-                                        <input type="number" placeholder="95" className="input-field bg-white border-none shadow-none focus:ring-0 py-1" value={logForm.glucose} onChange={e => setLogForm({ ...logForm, glucose: e.target.value })} required />
+                                        <input type="number" placeholder="95" className="input-field bg-white border-none shadow-none focus:ring-0 py-1" value={logForm.glucose} onChange={e => setLogForm({ ...logForm, glucose: e.target.value })} />
                                     </div>
                                     <div className="bg-slate-50 p-3 rounded-2xl border border-slate-100 transition-all hover:border-brand-200 group">
                                         <label className="block text-[9px] font-black text-slate-400 mb-1 uppercase px-1 flex items-center gap-2">
                                             <div className="p-1 bg-brand-100 text-brand-600 rounded-lg group-hover:scale-110 transition-transform"><Heart size={14} /></div> BP (Sys)
                                         </label>
-                                        <input type="number" placeholder="120" className="input-field bg-white border-none shadow-none focus:ring-0 py-1" value={logForm.systolic} onChange={e => setLogForm({ ...logForm, systolic: e.target.value })} required />
+                                        <input type="number" placeholder="120" className="input-field bg-white border-none shadow-none focus:ring-0 py-1" value={logForm.systolic} onChange={e => setLogForm({ ...logForm, systolic: e.target.value })} />
                                     </div>
                                     <div className="bg-slate-50 p-3 rounded-2xl border border-slate-100 transition-all hover:border-brand-200 group">
                                         <label className="block text-[9px] font-black text-slate-400 mb-1 uppercase px-1 flex items-center gap-2">
                                             <div className="p-1 bg-brand-100 text-brand-400 rounded-lg group-hover:scale-110 transition-transform"><Heart size={14} /></div> BP (Dia)
                                         </label>
-                                        <input type="number" placeholder="80" className="input-field bg-white border-none shadow-none focus:ring-0 py-1" value={logForm.diastolic} onChange={e => setLogForm({ ...logForm, diastolic: e.target.value })} required />
+                                        <input type="number" placeholder="80" className="input-field bg-white border-none shadow-none focus:ring-0 py-1" value={logForm.diastolic} onChange={e => setLogForm({ ...logForm, diastolic: e.target.value })} />
                                     </div>
                                 </div>
                                 <div>
