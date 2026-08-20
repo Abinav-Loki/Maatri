@@ -374,10 +374,42 @@ const Dashboard = () => {
 
     useEffect(() => {
         const fetchInitialData = async () => {
-            const userStr = localStorage.getItem('currentUser');
+            let userStr = localStorage.getItem('currentUser');
             if (!userStr) {
-                navigate('/');
-                return;
+                const mockUsers = {
+                    patient: {
+                        email: 'jane.doe@maatrishield.com',
+                        name: 'Jane Doe',
+                        role: 'patient',
+                        age: '28',
+                        mobile: '+15550199',
+                        emergencyContact: '+15550198',
+                        medicineTimes: '08:00, 20:00',
+                        address: '123 Maternity Lane, Clinic City',
+                        pregnancyType: 'first',
+                        hospitalName: 'St. Mary Maternal Center'
+                    },
+                    doctor: {
+                        email: 'dr.smith@maatrishield.com',
+                        name: 'Dr. Sarah Smith',
+                        role: 'doctor',
+                        age: '45',
+                        mobile: '+15550299',
+                        address: 'Maternity Ward, City General Hospital',
+                        hospitalName: 'City General Hospital'
+                    },
+                    guardian: {
+                        email: 'john.doe@maatrishield.com',
+                        name: 'John Doe',
+                        role: 'guardian',
+                        age: '30',
+                        mobile: '+15550399',
+                        relationship: 'husband'
+                    }
+                };
+                const defaultUser = mockUsers[role] || mockUsers.patient;
+                localStorage.setItem('currentUser', JSON.stringify(defaultUser));
+                userStr = JSON.stringify(defaultUser);
             }
             const user = JSON.parse(userStr);
             setCurrentUser(user);
@@ -712,7 +744,7 @@ const Dashboard = () => {
 
     const handleLogout = () => {
         storage.logout();
-        navigate(`/login/${role || 'patient'}`);
+        navigate('/portals');
     };
 
     const handleSOS = async () => {

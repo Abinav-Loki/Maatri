@@ -27,7 +27,7 @@ const PortalCard = ({ role, title, description, icon: Icon, colorClass, delay })
             </p>
             <div className="mt-auto w-full">
                 <Link
-                    to={`/auth/${role}`}
+                    to={`/dashboard/${role}`}
                     className="block w-full bg-white text-[#0f172a] font-black py-5 px-8 rounded-[2rem] transition-all duration-500 transform group-hover:bg-teal-400 group-hover:scale-105 shadow-2xl uppercase tracking-[0.2em] text-xs"
                 >
                     Initialize Workspace
